@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.cityManage.dao.CityManageDao" >
+  <sql id="Base_Column_List" >
+    city_manage_id as cityManageId,
+    parent_city_manage_id as parentCityManageId,
+    province_name as provinceName,
+    province_code as provinceCode,
+    city_name as cityName,
+    city_code as cityCode,
+    city_sign as citySign,
+    order_no as orderNo,
+    is_delete as isDelete,
+    create_time as createTime,
+    create_user_id as createUserId
+  </sql>
+  <sql id="Search_Query_Sql">
+    <where>
+      <if test="cityManageId != null">and city_manage_id = #{cityManageId}</if>
+      <if test="parentCityManageId != null">and parent_city_manage_id = #{parentCityManageId}</if>
+      <if test="provinceName != null and provinceName != ''">and province_name = #{provinceName}</if>
+      <if test="provinceCode != null and provinceCode != ''">and province_code = #{provinceCode}</if>
+      <if test="cityName != null and cityName != ''">and city_name = #{cityName}</if>
+      <if test="cityCode != null and cityCode != ''">and city_code = #{cityCode}</if>
+      <if test="citySign != null">and city_sign = #{citySign}</if>
+      <if test="orderNo != null">and order_no = #{orderNo}</if>
+    </where>
+  </sql>
+  <sql id="SearchWhereSql">
+    <where>
+      <if test="filters != null">
+        <if test="filters.provinceName != '' and filters.provinceName != null">
+          and province_name like concat('%',#{filters.provinceName},'%')
+        </if>
+        <if test="filters.provinceCode != '' and filters.provinceCode != null">
+          and province_code like concat('%',#{filters.provinceCode},'%')
+        </if>
+        <if test="filters.cityName != '' and filters.cityName != null">
+          and city_name like concat('%',#{filters.cityName},'%')
+        </if>
+        <if test="filters.cityCode != '' and filters.cityCode != null">
+          and city_code like concat('%',#{filters.cityCode},'%')
+        </if>
+        <if test="filters.parentCityManageId != null">
+          and parent_city_manage_id = #{filters.parentCityManageId}
+        </if>
+        <if test="filters.citySign != null">
+          and city_sign = #{filters.citySign}
+          <if test="filters.citySign == 2">
+            and parent_city_manage_id != 0
+          </if>
+        </if>
+        <if test="filters.isDelete != null">
+          and is_delete = #{filters.isDelete}
+        </if>
+        <if test="filters.regionCodesList != null">
+          and left(city_code, 5) IN
+          <foreach collection="filters.regionCodesList" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+      </if>
+    </where>
+  </sql>
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by order_no asc
+        </when>
+        <otherwise>
+            order by ${orderBy}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+  <!-- 根据ID获取 -->
+  <select id="get" resultType="cityManage" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from city_manage
+    where city_manage_id = #{cityManageId}
+  </select>
+  <!-- 删除 -->
+  <delete id="delete" parameterType="cityManage" >
+    update city_manage
+	set is_delete = true, last_update_time = now(), last_update_user_id = #{lastUpdateUserId}
+    where city_manage_id = #{cityManageId}
+  </delete>
+  <!-- 添加 -->
+  <insert id="insert" parameterType="cityManage" useGeneratedKeys="true" keyProperty="cityManageId">
+    insert into city_manage (parent_city_manage_id, province_name, province_code, city_name, city_code, city_sign, order_no, is_delete, create_time, create_user_id)
+    values (#{parentCityManageId}, #{provinceName}, #{provinceCode}, #{cityName}, #{cityCode}, #{citySign}, #{orderNo}, false, now(), #{createUserId})
+  </insert>
+  <!-- 修改 -->
+  <update id="update" parameterType="cityManage" >
+    update city_manage
+      <set>
+      <if test="parentCityManageId != null">
+        parent_city_manage_id = #{parentCityManageId},
+      </if>
+      <if test="provinceName != null">
+        province_name = #{provinceName},
+      </if>
+      <if test="provinceCode != null">
+        province_code = #{provinceCode},
+      </if>
+      <if test="cityName != null">
+        city_name = #{cityName},
+      </if>
+      <if test="cityCode != null">
+        city_code = #{cityCode},
+      </if>
+      <if test="citySign != null">
+        city_sign = #{citySign},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete},
+      </if>
+      last_update_time = now(),
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId},
+      </if>
+      </set>
+      where city_manage_id = #{cityManageId}
+  </update>
+  <!-- 获取所有启用的城市管理列表 -->
+  <select id="loadAll" resultType="cityManage">
+  	select 
+    <include refid="Base_Column_List" />
+    from city_manage
+    where is_delete = false
+  </select>
+  <!-- 根据标识城市管理列表 -->
+  <select id="findBySign" resultType="cityManage">
+  	select 
+    <include refid="Base_Column_List" />
+    from city_manage
+    where is_delete = false
+    and city_sign = #{citySign}
+    order by order_no asc
+  </select>
+  <!-- 根据条件获取城市管理列表 -->
+  <select id="findByExample" resultType="cityManage" parameterType="cityManage">
+  	select 
+    <include refid="Base_Column_List" />
+    from city_manage
+    <include refid="Search_Query_Sql" />
+    order by order_no asc
+  </select>
+  <!-- 根据条件分页获取城市管理数据 -->
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="cityManage">
+    select
+    <include refid="Base_Column_List"></include>
+    from city_manage
+    <include refid="SearchWhereSql"></include>
+    <include refid="searchorderByAndLimitSql"></include>
+  </select>
+  <!-- 根据条件获取城市管理总数 -->
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.giants.common.tools.PageCondition">
+    select count(1) from city_manage
+    <include refid="SearchWhereSql" />
+  </select>
+  <!-- 根据ID获取父数据 -->
+  <select id="getParentListByIds" resultType="cityManage" parameterType="java.util.Map">
+    SELECT 
+      <include refid="Base_Column_List"></include>
+    FROM
+      city_manage
+      <where>
+        and city_sign = 2
+        and parent_city_manage_id = 0
+        <if test="list != null">
+          and city_manage_id IN
+          <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+      </where>
+      order by order_no desc
+  </select>
+  <!-- 根据父ID与ID获取数据 -->
+  <select id="getCityManageListByMap" resultType="cityManage" parameterType="java.util.Map">
+    select
+    <include refid="Base_Column_List"></include>
+    from city_manage
+    <where>
+      <if test="parentId != null">
+        and parent_city_manage_id = #{parentId}
+      </if>
+      <if test="citySign != null">
+        and city_sign = #{citySign}
+      </if>
+      <if test="provinceListFlag">
+        and province_code IS NOT NULL
+      </if>
+    </where>
+    <if test="provinceListFlag">
+      group by province_code
+    </if>
+  </select>
+  <!-- 根据条件获取最大的排序号 -->
+  <select id="findMaxOederNo" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select max(order_no) from city_manage
+    <where>
+      and city_sign = #{citySign}
+    </where>
+  </select>
+  <!-- 根据ID获取CITYCODE列表 -->
+  <select id="findCityCodeByIds" resultType="java.lang.String" parameterType="java.util.List">
+  	select 
+    city_code
+    from city_manage
+    <where>
+      and city_manage_id in
+      <foreach collection="list" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </where>
+  </select>
+</mapper>

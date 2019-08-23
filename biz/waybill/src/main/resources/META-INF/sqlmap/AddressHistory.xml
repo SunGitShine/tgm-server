@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.AddressHistoryDao">
+  <sql id="QUERY_COLUMN_LIST">
+    address_id AS addressId, 
+    region_code AS regionCode,
+    address_name AS addressName, 
+    address_detail AS addressDetail, 
+    location AS location, 
+    address_type AS addressType, 
+    user_id AS userId, 
+    create_time AS createTime,
+    last_update_time AS lastUpdateTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM address_history]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="addressId != null"><![CDATA[AND address_id = #{addressId}]]></if>
+      <if test="regionCode != null"><![CDATA[AND region_code = #{regionCode}]]></if>
+      <if test="addressName != null"><![CDATA[AND address_name = #{addressName}]]></if>
+      <if test="addressDetail != null"><![CDATA[AND address_detail = #{addressDetail}]]></if>
+      <if test="addressType != null"><![CDATA[AND address_type = #{addressType}]]></if>
+      <if test="userId != null"><![CDATA[AND user_id = #{userId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.addressId != null"><![CDATA[AND address_id=#{filters.addressId}]]></if>
+      <if test="filters.regionCode != null"><![CDATA[AND region_code like CONCAT(#{filters.regionCode}, '%')]]></if>
+      <if test="filters.addressName != null"><![CDATA[AND address_name=#{filters.addressName}]]></if>
+      <if test="filters.addressDetail != null"><![CDATA[AND address_detail=#{filters.addressDetail}]]></if>
+      <if test="filters.addressType != null"><![CDATA[AND address_type = #{filters.addressType}]]></if>
+      <if test="filters.userId != null"><![CDATA[AND user_id = #{filters.userId}]]></if>
+    </where>
+  </sql>
+  <sql id="SEARCH_ORDER_BY_AND_LIMIT">
+    <choose>
+        <when test="orderBy == null">
+            order by last_update_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy}
+        </otherwise>
+    </choose>
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="addressId != null"><![CDATA[address_id = #{addressId},]]></if>
+      <if test="regionCode != null"><![CDATA[region_code = #{regionCode},]]></if>
+      <if test="addressName != null"><![CDATA[address_name = #{addressName},]]></if>
+      <if test="addressDetail != null"><![CDATA[address_detail = #{addressDetail},]]></if>
+      <if test="location != null"><![CDATA[location = #{location},]]></if>
+      <if test="addressType != null"><![CDATA[address_type = #{addressType},]]></if>
+      <if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="addressHistory" useGeneratedKeys = "true" keyProperty ="id">
+    <![CDATA[
+      insert into address_history
+		(address_id, region_code,address_name, address_detail, location, address_type, user_id,create_time,last_update_time)
+	values
+		(#{addressId}, #{regionCode},#{addressName},#{addressDetail}, #{location}, #{addressType}, #{userId}, now(),now())
+	]]>
+	<selectKey resultType="java.lang.Integer" keyProperty="addressId" >
+	        select last_insert_id()
+	 </selectKey>
+  </insert>
+  <select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+  <update id="deleteAll" parameterType="java.lang.reflect.Array" >
+    <![CDATA[update address_history set is_delete=1,last_update_time=now() WHERE id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </update>
+  <update id="delete" parameterType="addressHistory" >
+  	<![CDATA[DELETE ]]>
+  	<include refid="QUERY_FROM_TABLE"/>
+  	<include refid="QUERY_WHERE_CLAUSE"/>
+  </update>
+  <update id="update" parameterType="addressHistory" >
+    <![CDATA[UPDATE address_history ]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE address_id = #{addressId}]]>
+  </update>
+  <select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="addressHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE address_id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </select>
+  <select id="get" parameterType="java.lang.Integer" resultType="addressHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where address_id=#{addressId}]]>
+  </select>
+  <select id="loadAll" resultType="addressHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="addressHistory" resultType="addressHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="selectEntryListCount" parameterType="addressHistory" resultType="int">
+    <![CDATA[SELECT COUNT(address_id) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="search" resultType="addressHistory" parameterType="com.giants.common.tools.PageCondition">
+  	select
+  	<include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+    <include refid="SEARCH_ORDER_BY_AND_LIMIT"/>
+  </select>
+</mapper>

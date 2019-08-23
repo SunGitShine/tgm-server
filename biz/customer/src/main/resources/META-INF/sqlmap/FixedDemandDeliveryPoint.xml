@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.customerManager.dao.FixedDemandDeliveryPointDao">
+  <sql id="QUERY_COLUMN_LIST">
+    fixed_demand_delivery_point_id AS fixedDemandDeliveryPointId, 
+    fixed_demand_id AS fixedDemandId, 
+    start_point AS startPoint, 
+    region_code AS regionCode, 
+    address_name AS addressName, 
+    address_detail AS addressDetail, 
+    contact_name AS contactName, 
+    contact_phone AS contactPhone, 
+    coordinates AS coordinates, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM fixed_demand_delivery_point]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="fixedDemandDeliveryPointId != null"><![CDATA[AND fixed_demand_delivery_point_id = #{fixedDemandDeliveryPointId}]]></if>
+      <if test="fixedDemandId != null"><![CDATA[AND fixed_demand_id = #{fixedDemandId}]]></if>
+      <if test="startPoint != null"><![CDATA[AND start_point = #{startPoint}]]></if>
+      <if test="regionCode != null and regionCode != ''"><![CDATA[AND region_code = #{regionCode}]]></if>
+      <if test="addressName != null and addressName != ''"><![CDATA[AND address_name = #{addressName}]]></if>
+      <if test="addressDetail != null and addressDetail != ''"><![CDATA[AND address_detail = #{addressDetail}]]></if>
+      <if test="contactName != null and contactName != ''"><![CDATA[AND contact_name = #{contactName}]]></if>
+      <if test="contactPhone != null and contactPhone != ''"><![CDATA[AND contact_phone = #{contactPhone}]]></if>
+      <if test="coordinates != null and coordinates != ''"><![CDATA[AND coordinates = #{coordinates}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[AND last_update_time = #{lastUpdateTime}]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.fixedDemandDeliveryPointId != null"><![CDATA[AND fixed_demand_delivery_point_id = #{filters.fixedDemandDeliveryPointId}]]></if>
+      <if test="filters.fixedDemandId != null"><![CDATA[AND fixed_demand_id = #{filters.fixedDemandId}]]></if>
+      <if test="filters.startPoint != null"><![CDATA[AND start_point = #{filters.startPoint}]]></if>
+      <if test="filters.regionCode != null and regionCode != ''"><![CDATA[AND region_code = #{filters.regionCode}]]></if>
+      <if test="filters.addressName != null and addressName != ''"><![CDATA[AND address_name = #{filters.addressName}]]></if>
+      <if test="filters.addressDetail != null and addressDetail != ''"><![CDATA[AND address_detail = #{filters.addressDetail}]]></if>
+      <if test="filters.contactName != null and contactName != ''"><![CDATA[AND contact_name = #{filters.contactName}]]></if>
+      <if test="filters.contactPhone != null and contactPhone != ''"><![CDATA[AND contact_phone = #{filters.contactPhone}]]></if>
+      <if test="filters.coordinates != null and coordinates != ''"><![CDATA[AND coordinates = #{filters.coordinates}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="fixedDemandId != null"><![CDATA[fixed_demand_id = #{fixedDemandId},]]></if>
+      <if test="startPoint != null"><![CDATA[start_point = #{startPoint},]]></if>
+      <if test="regionCode != null and regionCode != ''"><![CDATA[region_code = #{regionCode},]]></if>
+      <if test="addressName != null and addressName != ''"><![CDATA[address_name = #{addressName},]]></if>
+      <if test="addressDetail != null and addressDetail != ''"><![CDATA[address_detail = #{addressDetail},]]></if>
+      <if test="contactName != null and contactName != ''"><![CDATA[contact_name = #{contactName},]]></if>
+      <if test="contactPhone != null and contactPhone != ''"><![CDATA[contact_phone = #{contactPhone},]]></if>
+      <if test="coordinates != null and coordinates != ''"><![CDATA[coordinates = #{coordinates},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[last_update_time = #{lastUpdateTime},]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="fixedDemandDeliveryPoint" useGeneratedKeys = "true" keyProperty ="fixed_demand_delivery_point_id">
+    <![CDATA[
+      insert into fixed_demand_delivery_point
+		(fixed_demand_id, start_point, region_code, address_name, address_detail, contact_name, contact_phone, coordinates, create_time, create_user_id, last_update_time, last_update_user_id)
+	values
+		(#{fixedDemandId}, #{startPoint}, #{regionCode}, #{addressName}, #{addressDetail}, #{contactName}, #{contactPhone}, #{coordinates}, now(),#{createUserId}, #{lastUpdateTime}, #{lastUpdateUserId})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="fixedDemandDeliveryPoint" >
+    <![CDATA[UPDATE fixed_demand_delivery_point]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE fixed_demand_delivery_point_id = #{fixedDemandDeliveryPointId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="fixedDemandDeliveryPoint">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE fixed_demand_delivery_point_id = #{fixedDemandDeliveryPointId}]]>
+  </select>
+  <select id="loadAll" resultType="fixedDemandDeliveryPoint">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="fixedDemandDeliveryPoint" resultType="fixedDemandDeliveryPoint">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchDetails" parameterType="com.giants.common.tools.PageCondition" resultType="fixedDemandDeliveryPoint">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+
+  <delete id="delete" parameterType="fixedDemandDeliveryPoint">
+    DELETE
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/>
+  </delete>
+</mapper>

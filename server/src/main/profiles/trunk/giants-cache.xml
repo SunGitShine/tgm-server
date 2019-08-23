@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cacheConfig name="tgm">
+
+	<methodCacheModel name="dao">
+		<!--<cacheElement name="com.juma.tgm.project.dao.ProjectFreightRuleDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement>
+
+		<cacheElement name="com.juma.tgm.project.dao.ValuationWayDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement>
+
+		<cacheElement name="com.juma.tgm.customer.dao.TruckCustomerDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement>-->
+	<!-- 
+		<cacheElement name="com.juma.tgm.customer.dao.TruckCustomerDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement>
+		
+		<cacheElement name="com.juma.tgm.waybill.dao.TruckRequireDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement>
+		<cacheElement name="com.juma.tgm.crm.dao.CustomerOrderDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement>
+		 
+		<cacheElement name="com.juma.tgm.waybill.dao.WaybillParamDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement>
+		-->
+		
+		<!-- <cacheElement name="com.juma.tgm.truck.dao.TruckTypeDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement> -->
+		
+		<!-- <cacheElement name="com.juma.tgm.truck.dao.TruckLengthDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement> -->
+		
+		<!-- <cacheElement name="com.juma.tgm.truck.dao.TruckAdditionalFunctionDao" timeToLive="-1">
+			<cleanMethod name="insert"/>
+			<cleanMethod name="update"/>
+			<cleanMethod name="delete"/>
+		</cacheElement> -->
+		
+		
+	</methodCacheModel>
+	
+</cacheConfig>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.crm.dao.IncomeStatisticsDao">
+  <sql id="QUERY_COLUMN_LIST">
+    statistics_id AS statisticsId,
+    driver_id AS driverId,
+    statistics_key AS statisticsKey,
+    statistics_name AS statisticsName,
+    statistics_count AS statisticsCount,
+    rank_percentage AS rankPercentage,
+    order_no AS orderNo,
+    is_delete as isDelete,
+    create_time as createTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM income_statistics]]></sql>
+
+  <insert id="insert" parameterType="incomeStatistics">
+    <![CDATA[
+      insert into income_statistics
+		(driver_id, statistics_key, statistics_name, statistics_count, rank_percentage, order_no, is_delete, create_time)
+	values
+		(#{driverId}, #{statisticsKey}, #{statisticsName}, #{statisticsCount}, #{rankPercentage}, false, #{orderNo}, now())
+	]]>
+  </insert>
+  <insert id="insertAll" parameterType="java.util.List">
+    <![CDATA[
+      insert into income_statistics
+		(driver_id, statistics_key, statistics_name, statistics_count, rank_percentage, order_no, is_delete, create_time)
+	values
+	]]>
+	<foreach collection="list" item="item" separator=",">
+		(#{item.driverId}, #{item.statisticsKey}, #{item.statisticsName}, #{item.statisticsCount}, #{item.rankPercentage}, #{item.orderNo}, false, now())
+	</foreach>
+  </insert>
+  <delete id="delete">
+  	<![CDATA[update income_statistics set is_delete=true, last_update_time=now() where is_delete=false]]>
+  </delete>
+  <select id="get" parameterType="java.lang.Integer" resultType="incomeStatistics">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where driver_id = #{driverId} and is_delete=false]]>
+  </select>
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.ext.TaskScheduledExtMapper">
+
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskScheduled">
+    <id column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="task_no" jdbcType="VARCHAR" property="taskNo" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="road_map_id" jdbcType="INTEGER" property="roadMapId" />
+    <result column="vendor_id" jdbcType="INTEGER" property="vendorId" />
+    <result column="truck_id" jdbcType="INTEGER" property="truckId" />
+    <result column="driver_id" jdbcType="INTEGER" property="driverId" />
+    <result column="depot_id" jdbcType="INTEGER" property="depotId" />
+    <result column="is_fixed_delivery" jdbcType="TINYINT" property="isFixedDelivery" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="end_date" jdbcType="DATE" property="endDate" />
+    <result column="task_status" jdbcType="INTEGER" property="taskStatus" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ts.task_id, ts.task_no, ts.tenant_id, ts.area_code, ts.project_id, ts.road_map_id, ts.vendor_id, ts.truck_id,
+    ts.driver_id, ts.depot_id, ts.is_fixed_delivery, ts.start_date, ts.end_date, ts.task_status, ts.is_delete,
+    ts.create_user_id, ts.create_time, ts.last_update_user_id, ts.last_update_time, ta.ack_status
+  </sql>
+
+  <sql id="where">
+    <where>
+      <if test="filters != null">
+        <if test="filters.tenantId != null"><![CDATA[ and tenant_id = #{filters.tenantId} ]]></if>
+        <if test="filters.vendorId != null"><![CDATA[ and vendor_id = #{filters.vendorId} ]]></if>
+        <if test="filters.taskStatus != null"><![CDATA[ and task_status = #{filters.taskStatus} ]]></if>
+      </if>
+    </where>
+  </sql>
+
+  <sql id="find_page_where">
+    <where>
+      <if test="filters != null">
+        <if test="filters.taskNo != null"><![CDATA[ and ts.task_no = #{filters.taskNo} ]]></if>
+        <if test="filters.tenantId != null"><![CDATA[ and ts.tenant_id = #{filters.tenantId} ]]></if>
+        <if test="filters.vendorId != null"><![CDATA[ and ts.vendor_id = #{filters.vendorId} ]]></if>
+        <if test="filters.customerId != null"><![CDATA[ and ts.customer_id = #{filters.customerId} ]]></if>
+        <if test="filters.projectId != null"><![CDATA[ and ts.project_id = #{filters.projectId} ]]></if>
+        <if test="filters.taskStatus != null"><![CDATA[ and ts.task_status = #{filters.taskStatus} ]]></if>
+        <if test="filters.ackStatus != null"><![CDATA[ and ta.ack_status = #{filters.ackStatus} ]]></if>
+        <if test="filters.areaCodeList != null">
+          <![CDATA[ AND ]]>
+          <foreach collection="filters.areaCodeList" item="code" open="("
+                   separator=" or" close=")">
+            ts.area_code like concat(#{code},'%')
+          </foreach>
+        </if>
+      </if>
+    </where>
+  </sql>
+
+  <select id="groupTaskByProject" parameterType="com.juma.tgm.common.query.QueryCond" resultType="com.juma.tgm.task.domain.ext.GroupTaskByProject">
+    <![CDATA[
+      select project_id projectId,count from (
+      select project_id,count(1) count
+      from task_scheduled
+      ]]>
+    <include refid="where"></include>
+    <![CDATA[
+      group by project_id
+    ]]>
+    limit #{startOffset}, #{pageSize}) A order by count desc;
+  </select>
+
+  <select id="groupTaskCount" resultType="com.juma.tgm.task.vo.gateway.GroupTaskCount">
+      <![CDATA[
+        select task_status taskStatus,count(1) count from task_scheduled
+        where project_id in
+      ]]>
+        <foreach collection="list" item="projectId" index="index"
+            open="(" close=")" separator=",">
+            #{projectId}
+        </foreach>
+      <![CDATA[
+        group by task_status
+      ]]>
+  </select>
+
+  <select id="groupTaskByProjectTotal" parameterType="com.juma.tgm.common.query.QueryCond" resultType="int">
+    <![CDATA[
+      select count(1) from (
+        select count(1)
+        from task_scheduled
+     ]]>
+    <include refid="where"></include>
+    <![CDATA[
+        group by project_id
+      ) as A
+    ]]>
+  </select>
+
+  <select id="findTaskCount" parameterType="com.juma.tgm.common.query.QueryCond" resultType="int">
+    SELECT count(1)
+    FROM task_scheduled ts
+    LEFT JOIN
+    (
+      SELECT * FROM task_ack WHERE ack_id IN
+      (
+        select MAX(ack_id) from task_ack group by task_id
+      )
+    ) AS ta
+    ON ts.task_id = ta.task_id
+    <include refid="find_page_where"/>
+  </select>
+
+  <select id="findTaskByPage" parameterType="com.juma.tgm.common.query.QueryCond" resultType="com.juma.tgm.task.vo.manage.Task">
+    SELECT <include refid="Base_Column_List"/>
+    FROM task_scheduled ts
+    LEFT JOIN
+      (
+        SELECT * FROM task_ack WHERE ack_id IN
+        (
+          select MAX(ack_id) from task_ack group by task_id
+        )
+      ) AS ta
+    ON ts.task_id = ta.task_id
+    <include refid="find_page_where"/>
+    ORDER BY ts.task_id DESC
+    limit #{startOffset}, #{pageSize}
+  </select>
+
+</mapper>

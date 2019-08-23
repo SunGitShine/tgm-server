@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.crm.dao.CustomerInfoDao">
+
+    <sql id="Base_Column_List">
+    old_id as oldId,
+    customer_id as customerId,
+    customer_name as customerName,
+    company as company,
+    is_delete as isDelete,
+    create_time as createTime,
+    create_user_id as createUserId,
+    employee_id as employeeId,
+    link_man as linkMan,
+    customer_manager_user_id as customerManagerUserId,
+    link_tel as linkTel, 
+    link_tel2 as linkTel2,
+    is_receive_daily_sms as isReceiveDailySms,
+    industry as industry,
+    location as location,
+    storage as storage,
+    detail_address as detailAddress,
+    contract_no as contractNo,
+    is_project_check_out as isProjectCheckOut, 
+    license as license,
+    org_code_certificate as orgCodeCertificate,
+    tax_reg_certificate as taxRegCertificate,
+    crm_customer_id as crmCustomerId,
+    waybill_count as waybillCount,
+    customer_type AS customerType,
+    status AS status,
+    region_code as regionCode,
+	area_code as areaCode,
+	tenant_code as tenantCode,
+	tenant_id as tenantId
+  </sql>
+
+    <sql id="QUERY_FROM_TABLE"><![CDATA[
+
+         FROM customer_info
+
+        ]]></sql>
+
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="oldId != null"><![CDATA[ and old_id = #{oldId}]]></if>
+            <if test="customerId != null"><![CDATA[ and customer_id = #{customerId}]]></if>
+            <if test="employeeId != null"><![CDATA[ and employee_id = #{employeeId}]]></if>
+            <if test="crmCustomerId != null"><![CDATA[ and crm_customer_id = #{crmCustomerId}]]></if>
+            <if test="customerName != null and customerName != ''"><![CDATA[ and customer_name = #{customerName}]]></if>
+            <if test="tenantCode != null"><![CDATA[ AND tenant_code = #{tenantCode} ]]></if>
+            <if test="tenantId != null"><![CDATA[ AND tenant_id = #{tenantId} ]]></if>
+            <if test="customerManagerUserId != null">
+                <![CDATA[ and customer_manager_user_id = #{customerManagerUserId}]]></if>
+            <if test="isDelete != null"><![CDATA[ and is_delete = #{isDelete}]]></if>
+            <if test="customerType != null"><![CDATA[ and customer_type = #{customerType}]]></if>
+            <if test="status != null"><![CDATA[ and status = #{status}]]></if>
+        </where>
+    </sql>
+
+    <sql id="SEARCH_WHERE_CLAUSE">
+        <where>
+            <if test="filters != null">
+                <if test="filters.employeeId != null"><![CDATA[ and employee_id = #{filters.employeeId}]]></if>
+                <if test="filters.customerManagerUserId != null">
+                    <![CDATA[ and customer_manager_user_id = #{filters.customerManagerUserId}]]></if>
+                <if test="filters.customerType != null"><![CDATA[ and customer_type = #{filters.customerType}]]></if>
+                <if test="filters.tenantCode != null"><![CDATA[ AND tenant_code = #{filters.tenantCode} ]]></if>
+                <if test="filters.tenantId != null"><![CDATA[ AND tenant_id = #{filters.tenantId} ]]></if>
+                <if test="filters.customerName != null and filters.customerName != ''">
+                    <![CDATA[ and customer_name like concat('%', #{filters.customerName},'%')]]></if>
+                <if test="filters.company != null"><![CDATA[ and company like concat(#{filters.company},'%')]]></if>
+                <if test="filters.linkTel != null">
+                    <![CDATA[ and link_tel like concat(#{filters.linkTel},'%')]]></if>
+                <if test="filters.isDelete != null"><![CDATA[ and is_delete = #{filters.isDelete}]]></if>
+                <if test="filters.statusNotEquals != null"><![CDATA[ and status != #{filters.statusNotEquals}]]></if>
+                <if test="filters.sourceChanelCodeList != null">
+                    and source_chanel_code IN
+                    <foreach collection="filters.sourceChanelCodeList" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="filters.areaCodeList != null">
+                    and
+                    <foreach collection="filters.areaCodeList" item="code" open="(" close=")" separator=" or">
+                        area_code like concat(#{code},'%')
+                    </foreach>
+                </if>
+                <if test="filters.statusList != null">
+                    and status IN
+                    <foreach collection="filters.statusList" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="filters.type != null and filters.type == 1">/*已成单*/
+                    AND (waybill_count > 0)
+                </if>
+                <if test="filters.type != null and filters.type == 2">/*未成单*/
+                    AND (waybill_count = 0 OR waybill_count is NULL)
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="searchorderByAndLimitSql">
+        <choose>
+            <when test="orderBy == null">
+                order by create_time desc
+            </when>
+            <otherwise>
+                order by ${orderBy} ${orderSort}
+            </otherwise>
+        </choose>
+        limit #{startOffSet}, #{endOffSet}
+    </sql>
+
+    <select id="get" resultType="customerInfo" parameterType="java.lang.Integer">
+        <![CDATA[ select]]>
+        <include refid="Base_Column_List"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[ where customer_id = #{customerId}]]>
+    </select>
+
+    <delete id="delete" parameterType="customerInfo">
+    <![CDATA[
+
+         delete from customer_info where customer_id = #{customerId}
+
+        ]]>
+  </delete>
+
+    <insert id="insert" parameterType="customerInfo" useGeneratedKeys="true" keyProperty="customerId">
+    <![CDATA[
+
+         insert into customer_info (old_id,customer_name, company, is_delete, create_time,
+      create_user_id, last_update_time, last_update_user_id,  employee_id,customer_manager_user_id, link_man, link_tel, 
+      is_receive_daily_sms, link_tel2, industry, location,  storage, detail_address, contract_no, 
+      is_project_check_out, license, org_code_certificate,  tax_reg_certificate,crm_customer_id,waybill_count,customer_type, status, region_code, area_code, tenant_code, tenant_id,source_chanel_code)
+    values (#{oldId},#{customerName}, #{company}, #{isDelete}, now(), 
+      #{createUserId}, #{lastUpdateTime}, #{lastUpdateUserId}, #{employeeId},#{customerManagerUserId}, #{linkMan}, #{linkTel}, 
+      #{isReceiveDailySms}, #{linkTel2}, #{industry}, #{location},  #{storage}, #{detailAddress}, #{contractNo}, 
+      #{isProjectCheckOut}, #{license}, #{orgCodeCertificate}, #{taxRegCertificate}, #{crmCustomerId}, 0, #{customerType}, #{status}, #{regionCode}, #{areaCode}, #{tenantCode}, #{tenantId},#{sourceChanelCode})
+
+        ]]>
+  </insert>
+
+    <update id="update" parameterType="customerInfo">
+        <![CDATA[ update customer_info]]>
+        <set>
+            <if test="oldId != null"><![CDATA[ old_id = #{oldId},]]></if>
+            <if test="customerName != null"><![CDATA[ customer_name = #{customerName},]]></if>
+            <if test="company != null"><![CDATA[ company = #{company},]]></if>
+            <if test="isDelete != null"><![CDATA[ is_delete = #{isDelete},]]></if>
+            <![CDATA[ last_update_time = now(),]]>
+            <if test="lastUpdateUserId != null"><![CDATA[ last_update_user_id = #{lastUpdateUserId},]]></if>
+            <if test="customerManagerUserId != null">
+                <![CDATA[ customer_manager_user_id = #{customerManagerUserId},]]></if>
+            <if test="linkMan != null"><![CDATA[ link_man = #{linkMan},]]></if>
+            <if test="linkTel != null"><![CDATA[ link_tel = #{linkTel},]]></if>
+            <if test="isReceiveDailySms != null"><![CDATA[ is_receive_daily_sms = #{isReceiveDailySms},]]></if>
+            <if test="linkTel2 != null"><![CDATA[ link_tel2 = #{linkTel2},]]></if>
+            <if test="industry != null"><![CDATA[ industry = #{industry},]]></if>
+            <if test="location != null"><![CDATA[ location = #{location},]]></if>
+            <if test="storage != null"><![CDATA[ storage = #{storage},]]></if>
+            <if test="detailAddress != null"><![CDATA[ detail_address = #{detailAddress},]]></if>
+            <if test="contractNo != null"><![CDATA[ contract_no = #{contractNo},]]></if>
+            <if test="isProjectCheckOut != null"><![CDATA[ is_project_check_out = #{isProjectCheckOut},]]></if>
+            <if test="license != null"><![CDATA[ license = #{license},]]></if>
+            <if test="orgCodeCertificate != null"><![CDATA[ org_code_certificate = #{orgCodeCertificate},]]></if>
+            <if test="taxRegCertificate != null"><![CDATA[ tax_reg_certificate = #{taxRegCertificate},]]></if>
+            <if test="crmCustomerId != null"><![CDATA[ crm_customer_id = #{crmCustomerId},]]></if>
+            <if test="waybillCount != null"><![CDATA[ waybill_count = #{waybillCount},]]></if>
+            <if test="customerType != null"><![CDATA[ customer_type = #{customerType},]]></if>
+            <if test="status != null"><![CDATA[ status = #{status},]]></if>
+            <if test="regionCode != null"><![CDATA[ region_code = #{regionCode},]]></if>
+            <if test="areaCode != null"><![CDATA[ area_code = #{areaCode},]]></if>
+            <if test="tenantCode != null"><![CDATA[ tenant_code = #{tenantCode},]]></if>
+            <if test="tenantId != null"><![CDATA[ tenant_id = #{tenantId},]]></if>
+            <if test="sourceChanelCode != null"><![CDATA[ source_chanel_code = #{sourceChanelCode},]]></if>
+        </set>
+        <![CDATA[ where customer_id = #{customerId}]]>
+    </update>
+
+    <select id="loadAll" resultType="customerInfo">
+        <![CDATA[ select]]>
+        <include refid="Base_Column_List"/>
+        <include refid="QUERY_FROM_TABLE"/>
+    </select>
+
+    <select id="findByExample" resultType="customerInfo" parameterType="customerInfo">
+        <![CDATA[ select]]>
+        <include refid="Base_Column_List"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </select>
+
+    <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="customerInfo">
+        <![CDATA[ select ]]>
+        <include refid="Base_Column_List"></include>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="SEARCH_WHERE_CLAUSE"></include>
+        <include refid="searchorderByAndLimitSql"></include>
+    </select>
+
+    <select id="searchCount" resultType="java.lang.Integer" parameterType="com.giants.common.tools.PageCondition">
+        <![CDATA[ select count(1) ]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="SEARCH_WHERE_CLAUSE"/>
+    </select>
+
+    <update id="increaseWaybillCount">
+    <![CDATA[
+
+         UPDATE customer_info ci SET ci.waybill_count = ci.waybill_count + #{count} WHERE ci.customer_id=#{customerId}
+
+        ]]>
+  </update>
+
+    <!--通过source code 获取企业客户-->
+    <select id="findBySourceChanelCode" resultType="customerInfo">
+        <![CDATA[ select ]]>
+        <include refid="Base_Column_List"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <where>
+            is_delete = 0
+            <if test="chanel != null and chanel.size > 0">
+                AND source_chanel_code IN
+                <foreach collection="chanel" open="(" close=")" item="ch" separator=",">
+                    #{ch.code}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="countByCustomerIdAndManagerId" resultType="int">
+    SELECT COUNT(1) FROM customer_info WHERE customer_id = #{customerId} AND customer_manager_user_id = #{managerId} AND is_delete = 0 AND status != 2
+  </select>
+
+    <select id="searchEnterpriseUserAndCargoOwner" parameterType="com.giants.common.tools.PageCondition"
+            resultType="com.juma.tgm.customer.domain.vo.SearchEnterpriseUserAndCargoOwner">
+        SELECT * FROM (
+        SELECT
+        c.customer_name AS customerName,
+        c.customer_id AS customerId,
+        c.source_chanel_code AS sourceCode,
+        1 AS type,
+        "客户" AS typeName
+        FROM
+        customer_info c
+        LEFT JOIN project p
+        ON c.customer_id = p.customer_id
+        WHERE
+        p.project_status != 4
+        AND c.customer_type = 2
+        AND c.is_delete = 0
+        <if test="filters.name != null">AND c. customer_name LIKE concat(#{filters.name}, '%')
+            AND c.`status` IN
+        </if>
+        <if test="filters.statusList != null">
+            <foreach collection="filters.statusList" item="status" open="(" separator="," close=")">
+                #{status}
+            </foreach>
+        </if>
+        <if test=" filters.allChanels != null">
+            AND c.source_chanel_code IN
+            <foreach collection="filters.allChanels" item="channel" open="(" separator="," close=")">
+                #{channel.code}
+            </foreach>
+        </if>
+        <if test="filters.projectIdList != null">
+            AND p.project_id IN
+            <foreach collection="filters.projectIdList" item="projectId" open="(" separator="," close=")">
+                #{projectId}
+            </foreach>
+        </if>
+        UNION ALL
+        SELECT
+        pjt.name AS customerName,
+        pjt.project_id AS
+        customerId,
+        "" AS
+        sourceCode,
+        3 AS type,
+        "项目" AS typeName
+        FROM
+        project pjt
+
+        LEFT JOIN customer_info ci ON ci.customer_id = pjt.customer_id
+        WHERE
+        pjt.project_status != 4
+        <if test="filters.name != null">
+            AND
+            pjt.name LIKE concat(#{filters.name}, '%')
+        </if>
+        <if test="filters.projectIdList != null">
+            AND pjt.project_id IN
+            <foreach collection="filters.projectIdList" item="projectId" open="(" separator="," close=")">
+                #{projectId}
+            </foreach>
+        </if>
+        ) tmp
+        GROUP BY
+        customerName,
+        customerId,
+        type
+        limit #{startOffSet}, #{endOffSet}
+    </select>
+
+
+    <select id="scatteredCustomerSearch" parameterType="com.giants.common.tools.PageCondition" resultType="customerInfo">
+        <if test="filters.type != null and filters.type == 1">/*已成单*/
+            SELECT ci.* FROM customer_info ci LEFT JOIN waybill w ON w.customer_id = ci.customer_id
+            WHERE ci.customer_manager_user_id = #{filters.customerManagerUserId}
+            AND ci.customer_type = 2
+            AND w.status_view = 5
+            AND w.is_delete = 0
+            GROUP BY ci.customer_id
+        </if>
+
+        <if test="filters.type != null and filters.type == 2">/*未成单*/
+            SELECT ci.* FROM (
+            SELECT ci.* FROM customer_info ci LEFT JOIN waybill w ON w.customer_id = ci.customer_id
+            WHERE ci.customer_manager_user_id = #{filters.customerManagerUserId}
+            AND ci.customer_type = 2
+
+            and (w.status_view != 5 OR w.status_view is null) GROUP BY ci.customer_id) ci
+            WHERE customer_id not in(SELECT w.customer_id FROM waybill w WHERE w.customer_id = ci.customer_id AND (w.status_view = 5 and w.is_delete = 0))
+        </if>
+        <include refid="searchorderByAndLimitSql"/>
+    </select>
+
+
+    <select id="scatteredCustomerSearchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+        <if test="filters.type != null and filters.type == 1">/*已成单*/
+            SELECT COUNT(DISTINCT ci.customer_id) FROM customer_info ci LEFT JOIN waybill w ON w.customer_id = ci.customer_id
+            WHERE ci.customer_manager_user_id = #{filters.customerManagerUserId}
+            AND ci.customer_type = 2
+            AND w.status_view = 5
+            AND w.is_delete = 0
+        </if>
+
+        <if test="filters.type != null and filters.type == 2">/*未成单*/
+            SELECT COUNT(1) FROM (
+            SELECT ci.customer_id FROM customer_info ci LEFT JOIN waybill w ON w.customer_id = ci.customer_id
+            WHERE ci.customer_manager_user_id = #{filters.customerManagerUserId}
+            AND ci.customer_type = 2
+
+            and (w.status_view != 5 OR w.status_view is null) GROUP BY ci.customer_id) tmp
+            WHERE customer_id not in(SELECT w.customer_id FROM waybill w WHERE w.customer_id = tmp.customer_id AND (w.status_view = 5 and w.is_delete = 0))
+        </if>
+
+    </select>
+
+    <update id="updateBatch" parameterType="java.util.List">
+      <foreach collection="example" separator=";" item="item">
+        <![CDATA[ update customer_info ]]>
+        <set>
+          <if test="item.areaCode != null"><![CDATA[ area_code =#{item.areaCode}, ]]></if>
+          <if test="item.customerManagerUserId != null"><![CDATA[ customer_manager_user_id =#{item.customerManagerUserId}, ]]></if>
+        </set>
+        <where>
+          <![CDATA[ and crm_customer_id = #{item.crmCustomerId}]]>
+        </where>
+      </foreach>
+    </update>
+
+    <update id="updateByAreaOrManager">
+        <![CDATA[ update customer_info ]]>
+        <set>
+          <if test="toCustomerInfo.areaCode != null"><![CDATA[ area_code =#{toCustomerInfo.areaCode}, ]]></if>
+          <if test="toCustomerInfo.customerManagerUserId != null"><![CDATA[ customer_manager_user_id =#{toCustomerInfo.customerManagerUserId}, ]]></if>
+        </set>
+        <where>
+          <![CDATA[ and tenant_id = #{fromCustomerInfo.tenantId}]]>
+          <if test="fromCustomerInfo.areaCode != null"><![CDATA[ and area_code =#{fromCustomerInfo.areaCode} ]]></if>
+          <if test="fromCustomerInfo.customerManagerUserId != null"><![CDATA[ and customer_manager_user_id =#{fromCustomerInfo.customerManagerUserId} ]]></if>
+        </where>
+    </update>
+
+</mapper>

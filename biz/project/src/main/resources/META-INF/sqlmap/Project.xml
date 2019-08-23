@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.project.dao.ProjectDao">
+    <sql id="QUERY_COLUMN_LIST">
+    project_id AS projectId, 
+    tenant_id AS tenantId, 
+    tenant_code AS tenantCode,
+    area_code AS areaCode,
+    name AS name, 
+    customer_id AS customerId,
+    truck_customer_id AS truckCustomerId, 
+    manager_id AS managerId,
+    goods_type AS goodsType, 
+    tax_rate_value AS taxRateValue,
+    rebate_rate AS rebateRate,
+    estimate_time_consumption AS estimateTimeConsumption,
+    truck_require_remark AS truckRequireRemark,
+    additional_function_ids AS additionalFunctionIds,
+    only_load_cargo AS onlyLoadCargo,
+    need_delivery_point_note AS needDeliveryPointNote,
+    fixed_no as fixedNo,
+    is_enable AS isEnable,
+    create_time AS createTime, 
+    create_user_id AS createUserId,
+    is_receivable_first AS isReceivableFirst,
+    logistics_label AS logisticsLabel,
+    project_end_date AS projectEndDate,
+    project_start_date AS projectStartDate,
+    bill_period AS billPeriod,
+    project_status AS projectStatus
+  </sql>
+
+    <sql id="QUERY_JOIN_COLUMN_LIST">
+        p.project_id AS projectId,
+        p.name AS name,
+        p.customer_id AS customerId,
+        p.truck_customer_id AS truckCustomerId,
+        p.manager_id AS managerId,
+        p.goods_type AS goodsType,
+        p.tax_rate_value AS taxRateValue,
+        p.rebate_rate AS rebateRate,
+        p.truck_require_remark AS truckRequireRemark,
+    	p.additional_function_ids AS additionalFunctionIds,
+    	p.only_load_cargo AS onlyLoadCargo,
+        p.need_delivery_point_note AS needDeliveryPointNote,
+    	p.fixed_no as fixedNo,
+        p.is_enable AS isEnable,
+        p.area_code AS areaCode,
+        p.create_time AS createTime,
+        p.create_user_id AS createUserId,
+        ci.customer_name as customerName,
+        p.is_receivable_first AS isReceivableFirst,
+        p.logistics_label AS logisticsLabel,
+        p.bill_period AS billPeriod
+    </sql>
+
+    <sql id="QUERY_FROM_TABLE"><![CDATA[
+
+
+        FROM project
+
+
+        ]]></sql>
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="projectId != null"><![CDATA[AND project_id = #{projectId}]]></if>
+            <if test="name != null"><![CDATA[AND name = #{name}]]></if>
+            <if test="tenantId != null"><![CDATA[AND tenant_id = #{tenantId}]]></if>
+            <if test="tenantCode != null"><![CDATA[AND tenant_code = #{tenantCode}]]></if>
+            <if test="areaCode != null"><![CDATA[AND area_code = #{areaCode}]]></if>
+            <if test="customerId != null"><![CDATA[AND customer_id = #{customerId}]]></if>
+            <if test="truckCustomerId != null"><![CDATA[AND truck_customer_id = #{truckCustomerId}]]></if>
+            <if test="managerId != null"><![CDATA[AND manager_id = #{managerId}]]></if>
+            <if test="goodsType != null"><![CDATA[AND goods_type = #{goodsType}]]></if>
+            <if test="onlyLoadCargo != null"><![CDATA[AND only_load_cargo = #{onlyLoadCargo}]]></if>
+            <if test="logisticsLabel != null"><![CDATA[AND logistics_label = #{logisticsLabel}]]></if>
+            <if test="needDeliveryPointNote != null"><![CDATA[AND need_delivery_point_note = #{needDeliveryPointNote}]]></if>
+            <if test="isEnable != null"><![CDATA[AND is_enable = #{isEnable}]]></if>
+            <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+            <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+        </where>
+    </sql>
+
+    <sql id="SEARCH_WHERE_CLAUSE">
+        <where>
+            <if test="filters.projectId != null"><![CDATA[AND project_id = #{filters.projectId}]]></if>
+            <if test="filters.tenantId != null"><![CDATA[AND tenant_id = #{filters.tenantId}]]></if>
+            <if test="filters.tenantCode != null"><![CDATA[AND tenant_code = #{filters.tenantCode}]]></if>
+            <if test="filters.name != null"><![CDATA[AND name = #{filters.name}]]></if>
+            <if test="filters.customerId != null"><![CDATA[AND customer_id = #{filters.customerId}]]></if>
+            <if test="filters.managerId != null"><![CDATA[AND manager_id = #{filters.managerId}]]></if>
+            <if test="filters.onlyLoadCargo != null"><![CDATA[AND only_load_cargo = #{filters.onlyLoadCargo}]]></if>
+            <if test="filters.logisticsLabel != null"><![CDATA[AND logistics_label = #{filters.logisticsLabel}]]></if>
+            <if test="filters.needDeliveryPointNote != null"><![CDATA[AND need_delivery_point_note = #{filters.needDeliveryPointNote}]]></if>
+            <if test="filters.truckCustomerId != null">
+                <![CDATA[AND truck_customer_id = #{filters.truckCustomerId}]]></if>
+            <if test="filters.goodsType != null">
+                <![CDATA[AND goods_type = #{filters.goodsType}]]></if>
+            <if test="filters.isEnable != null"><![CDATA[AND is_enable = #{filters.isEnable}]]></if>
+            <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+            <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+            <if test="filters.customerIds != null and !filters.customerIds.isEmpty">
+                AND customerId IN
+                <foreach collection="filters.customerIds" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="SEARCH_JOIN_WHERE_CLAUSE">
+        <where>
+            <if test="filters.tenantId != null"><![CDATA[AND p.tenant_id = #{filters.tenantId}]]></if>
+            <if test="filters.projectId != null"><![CDATA[AND p.project_id = #{filters.projectId}]]></if>
+            <if test="filters.managerId != null"><![CDATA[AND p.manager_id = #{filters.managerId}]]></if>
+            <if test="filters.customerId != null"><![CDATA[AND p.customer_id = #{filters.customerId}]]></if>
+            <if test="filters.crmCustomerId != null"><![CDATA[AND ci.crm_customer_id = #{filters.crmCustomerId}]]></if>
+            <if test="filters.truckCustomerId != null">
+                <![CDATA[AND p.truck_customer_id = #{filters.truckCustomerId}]]></if>
+            <if test="filters.customerManagerId != null">
+                <![CDATA[AND ci.customer_manager_user_id = #{filters.customerManagerId}]]></if>
+            <if test="filters.customerName != null">
+                <![CDATA[AND ci.customer_name like concat(#{filters.customerName}, '%')]]></if>
+            <if test="filters.name != null"><![CDATA[AND p.name like concat(#{filters.name}, '%')]]></if>
+            <if test="filters.goodsType != null">
+                <![CDATA[AND p.goods_type = #{filters.goodsType}]]></if>
+            <if test="filters.onlyLoadCargo != null"><![CDATA[AND p.only_load_cargo = #{filters.onlyLoadCargo}]]></if>
+            <if test="filters.logisticsLabel != null"><![CDATA[AND p.logistics_label = #{filters.logisticsLabel}]]></if>
+            <if test="filters.needDeliveryPointNote != null"><![CDATA[AND need_delivery_point_note = #{filters.needDeliveryPointNote}]]></if>
+            <if test="filters.createTime != null"><![CDATA[AND p.create_time = #{filters.createTime}]]></if>
+            <if test="filters.createUserId != null"><![CDATA[AND p.create_user_id = #{filters.createUserId}]]></if>
+            <if test="filters.customerIds != null and !filters.customerIds.isEmpty">
+                AND ci.customer_id IN
+                <foreach collection="filters.customerIds" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            
+            <if test="filters.customerManagerIdList != null">
+                and ci.customer_manager_user_id in
+                <foreach collection="filters.customerManagerIdList" item="code" open="(" close=")" separator=",">
+                    #{code}
+                </foreach>
+            </if>
+            <if test="filters.customerAreaCodeList != null">
+                <foreach collection="filters.customerAreaCodeList" item="code" separator="or" open="and (" close=")">
+                    ci.area_code like concat(#{code},'%')
+                </foreach>
+            </if>
+            <if test="filters.areaCodeList != null">
+                and
+                <foreach collection="filters.areaCodeList" item="code" open="(" close=")" separator="or">
+                    p.area_code like concat(#{code},'%')
+                </foreach>
+            </if>
+            <if test="filters.isEnable != null"><![CDATA[AND p.is_enable = #{filters.isEnable}]]></if>
+        </where>
+    </sql>
+
+    <sql id="SEARCH_ORDERBY_LIMIT">
+        <choose>
+            <when test="orderBy == null">
+                order by project_id desc
+            </when>
+            <otherwise>
+                order by ${orderBy} ${orderSort}
+            </otherwise>
+        </choose>
+        limit #{startOffSet}, #{endOffSet}
+    </sql>
+    <sql id="UPDATE_COLUMN_SET">
+        <set>
+            <if test="name != null and name != ''"><![CDATA[name = #{name},]]></if>
+            <if test="customerId != null"><![CDATA[customer_id = #{customerId},]]></if>
+            <if test="truckCustomerId != null"><![CDATA[truck_customer_id = #{truckCustomerId},]]></if>
+            <if test="tenantId != null"><![CDATA[tenant_id = #{tenantId},]]></if>
+            <if test="tenantCode != null"><![CDATA[tenant_code = #{tenantCode},]]></if>
+            <if test="areaCode != null"><![CDATA[area_code = #{areaCode},]]></if>
+            
+            <if test="rebateRate != null"><![CDATA[rebate_rate = #{rebateRate},]]></if>
+            <if test="estimateTimeConsumption != null"><![CDATA[estimate_time_consumption = #{estimateTimeConsumption},]]></if>
+            <if test="truckRequireRemark != null"><![CDATA[truck_require_remark = #{truckRequireRemark},]]></if>
+            <if test="additionalFunctionIds != null"><![CDATA[additional_function_ids = #{additionalFunctionIds},]]></if>
+            <if test="fixedNo != null"><![CDATA[fixed_no = #{fixedNo},]]></if>
+            <if test="onlyLoadCargo != null"><![CDATA[only_load_cargo = #{onlyLoadCargo},]]></if>
+            <if test="needDeliveryPointNote != null"><![CDATA[need_delivery_point_note = #{needDeliveryPointNote},]]></if>
+            <if test="managerId != null"><![CDATA[manager_id = #{managerId},]]></if>
+            <if test="taxRateValue != null"><![CDATA[tax_rate_value = #{taxRateValue},]]></if>
+            <if test="isEnable != null"><![CDATA[is_enable = #{isEnable},]]></if>
+            <if test="isReceivableFirst != null"><![CDATA[is_receivable_first = #{isReceivableFirst},]]></if>
+            <if test="goodsType != null and goodsType != ''"><![CDATA[goods_type = #{goodsType},]]></if>
+            <if test="billPeriod != null"><![CDATA[bill_period = #{billPeriod},]]></if>
+        </set>
+    </sql>
+    <insert id="insert" parameterType="project" useGeneratedKeys="true" keyProperty="project_id">
+
+        <selectKey resultType="java.lang.Integer" keyProperty="projectId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        <![CDATA[
+      insert into project
+		(name, customer_id, truck_customer_id, manager_id,goods_type,tax_rate_value,rebate_rate,estimate_time_consumption,truck_require_remark,additional_function_ids, is_enable,create_time, create_user_id, tenant_id, tenant_code, fixed_no, area_code, only_load_cargo, need_delivery_point_note, is_receivable_first, logistics_label)
+	values
+		(#{name}, #{customerId}, #{truckCustomerId},#{managerId}, #{goodsType},#{taxRateValue},#{rebateRate},#{estimateTimeConsumption},#{truckRequireRemark},#{additionalFunctionIds}, #{isEnable},now(),#{createUserId},#{tenantId},#{tenantCode}, #{fixedNo}, #{areaCode}, #{onlyLoadCargo}, #{needDeliveryPointNote}, #{isReceivableFirst}, #{logisticsLabel})
+
+	]]>
+    </insert>
+    <update id="update" parameterType="project">
+        <![CDATA[UPDATE project]]>
+        <include refid="UPDATE_COLUMN_SET"/>
+        <![CDATA[WHERE project_id = #{projectId}]]>
+    </update>
+    <select id="get" parameterType="int" resultType="project">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[WHERE project_id = #{projectId}]]>
+    </select>
+    <select id="loadAll" resultType="project">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+    </select>
+    <select id="findByExample" parameterType="project" resultType="project">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </select>
+    <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+        <![CDATA[SELECT COUNT(1)]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="SEARCH_WHERE_CLAUSE"/>
+    </select>
+    <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="project">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="SEARCH_WHERE_CLAUSE"/>
+        <include refid="SEARCH_ORDERBY_LIMIT"/>
+    </select>
+
+    <!-- 重名验证 -->
+    <select id="checkName" parameterType="map" resultType="int">
+        SELECT COUNT(1)
+        <include refid="QUERY_FROM_TABLE"/>
+        <where>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+            <if test="projectId != null">
+                AND project_id != #{projectId}
+            </if>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+            <if test="isEnable != null">
+                <![CDATA[AND is_enable = #{isEnable}]]>
+            </if>
+        </where>
+    </select>
+
+
+    <select id="joinSearch" parameterType="com.giants.common.tools.PageCondition" resultType="project">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_JOIN_COLUMN_LIST"/>
+        FROM
+        project p
+        <include refid="PROJECT_jOIN_TABLE"/>
+        <include refid="SEARCH_JOIN_WHERE_CLAUSE"/>
+        GROUP BY p.project_id
+        order by p.project_id desc
+        limit #{startOffSet}, #{endOffSet}
+    </select>
+
+    <select id="joinSearchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+        SELECT COUNT(1) FROM (
+        SELECT COUNT(1) FROM
+        project p
+        <include refid="PROJECT_jOIN_TABLE"/>
+        <include refid="SEARCH_JOIN_WHERE_CLAUSE"/>
+        GROUP BY p.project_id
+        ) tmp
+    </select>
+
+    <sql id="PROJECT_jOIN_TABLE">
+        LEFT JOIN customer_info ci ON ci.customer_id = p.customer_id
+    </sql>
+</mapper>

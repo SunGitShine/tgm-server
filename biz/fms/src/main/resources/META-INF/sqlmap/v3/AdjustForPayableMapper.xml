@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.fms.dao.v3.AdjustForPayableMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.AdjustForPayable" >
+    <id column="adjust_id" property="adjustId" jdbcType="INTEGER" />
+    <result column="waybill_id" property="waybillId" jdbcType="INTEGER" />
+    <result column="waybill_no" property="waybillNo" jdbcType="VARCHAR" />
+    <result column="payable_with_tax" property="payableWithTax" jdbcType="DECIMAL" />
+    <result column="payable_with_tax_adjust" property="payableWithTaxAdjust" jdbcType="DECIMAL" />
+    <result column="driver_transport_fee" property="driverTransportFee" jdbcType="DECIMAL" />
+    <result column="driver_transport_fee_adjust" property="driverTransportFeeAdjust" jdbcType="DECIMAL" />
+    <result column="temporary_transport_fee" property="temporaryTransportFee" jdbcType="DECIMAL" />
+    <result column="temporary_transport_fee_adjust" property="temporaryTransportFeeAdjust" jdbcType="DECIMAL" />
+    <result column="adjust_remark" property="adjustRemark" jdbcType="VARCHAR" />
+    <result column="adjust_user_id" property="adjustUserId" jdbcType="INTEGER" />
+    <result column="adjust_time" property="adjustTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    adjust_id, waybill_id, waybill_no, payable_with_tax, payable_with_tax_adjust, driver_transport_fee, 
+    driver_transport_fee_adjust, temporary_transport_fee, temporary_transport_fee_adjust, 
+    adjust_remark, adjust_user_id, adjust_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.juma.tgm.fms.domain.v3.AdjustForPayableExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from adjust_for_payable
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null" >
+      <if test="startOffSet>=0" >
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.fms.domain.v3.AdjustForPayableExample" >
+    delete from adjust_for_payable
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.juma.tgm.fms.domain.v3.AdjustForPayable" >
+    <selectKey resultType="java.lang.Integer" keyProperty="adjustId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into adjust_for_payable
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="waybillId != null" >
+        waybill_id,
+      </if>
+      <if test="waybillNo != null" >
+        waybill_no,
+      </if>
+      <if test="payableWithTax != null" >
+        payable_with_tax,
+      </if>
+      <if test="payableWithTaxAdjust != null" >
+        payable_with_tax_adjust,
+      </if>
+      <if test="driverTransportFee != null" >
+        driver_transport_fee,
+      </if>
+      <if test="driverTransportFeeAdjust != null" >
+        driver_transport_fee_adjust,
+      </if>
+      <if test="temporaryTransportFee != null" >
+        temporary_transport_fee,
+      </if>
+      <if test="temporaryTransportFeeAdjust != null" >
+        temporary_transport_fee_adjust,
+      </if>
+      <if test="adjustRemark != null" >
+        adjust_remark,
+      </if>
+      <if test="adjustUserId != null" >
+        adjust_user_id,
+      </if>
+      <if test="adjustTime != null" >
+        adjust_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="waybillId != null" >
+        #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillNo != null" >
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="payableWithTax != null" >
+        #{payableWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="payableWithTaxAdjust != null" >
+        #{payableWithTaxAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="driverTransportFee != null" >
+        #{driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="driverTransportFeeAdjust != null" >
+        #{driverTransportFeeAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="temporaryTransportFee != null" >
+        #{temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="temporaryTransportFeeAdjust != null" >
+        #{temporaryTransportFeeAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustRemark != null" >
+        #{adjustRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustUserId != null" >
+        #{adjustUserId,jdbcType=INTEGER},
+      </if>
+      <if test="adjustTime != null" >
+        #{adjustTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.fms.domain.v3.AdjustForPayableExample" resultType="java.lang.Integer" >
+    select count(*) from adjust_for_payable
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update adjust_for_payable
+    <set >
+      <if test="record.adjustId != null" >
+        adjust_id = #{record.adjustId,jdbcType=INTEGER},
+      </if>
+      <if test="record.waybillId != null" >
+        waybill_id = #{record.waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="record.waybillNo != null" >
+        waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payableWithTax != null" >
+        payable_with_tax = #{record.payableWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payableWithTaxAdjust != null" >
+        payable_with_tax_adjust = #{record.payableWithTaxAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="record.driverTransportFee != null" >
+        driver_transport_fee = #{record.driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.driverTransportFeeAdjust != null" >
+        driver_transport_fee_adjust = #{record.driverTransportFeeAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="record.temporaryTransportFee != null" >
+        temporary_transport_fee = #{record.temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.temporaryTransportFeeAdjust != null" >
+        temporary_transport_fee_adjust = #{record.temporaryTransportFeeAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adjustRemark != null" >
+        adjust_remark = #{record.adjustRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustUserId != null" >
+        adjust_user_id = #{record.adjustUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.adjustTime != null" >
+        adjust_time = #{record.adjustTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update adjust_for_payable
+    set adjust_id = #{record.adjustId,jdbcType=INTEGER},
+      waybill_id = #{record.waybillId,jdbcType=INTEGER},
+      waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      payable_with_tax = #{record.payableWithTax,jdbcType=DECIMAL},
+      payable_with_tax_adjust = #{record.payableWithTaxAdjust,jdbcType=DECIMAL},
+      driver_transport_fee = #{record.driverTransportFee,jdbcType=DECIMAL},
+      driver_transport_fee_adjust = #{record.driverTransportFeeAdjust,jdbcType=DECIMAL},
+      temporary_transport_fee = #{record.temporaryTransportFee,jdbcType=DECIMAL},
+      temporary_transport_fee_adjust = #{record.temporaryTransportFeeAdjust,jdbcType=DECIMAL},
+      adjust_remark = #{record.adjustRemark,jdbcType=VARCHAR},
+      adjust_user_id = #{record.adjustUserId,jdbcType=INTEGER},
+      adjust_time = #{record.adjustTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.fms.domain.v3.AdjustForPayable" >
+    update adjust_for_payable
+    <set >
+      <if test="waybillId != null" >
+        waybill_id = #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillNo != null" >
+        waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="payableWithTax != null" >
+        payable_with_tax = #{payableWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="payableWithTaxAdjust != null" >
+        payable_with_tax_adjust = #{payableWithTaxAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="driverTransportFee != null" >
+        driver_transport_fee = #{driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="driverTransportFeeAdjust != null" >
+        driver_transport_fee_adjust = #{driverTransportFeeAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="temporaryTransportFee != null" >
+        temporary_transport_fee = #{temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="temporaryTransportFeeAdjust != null" >
+        temporary_transport_fee_adjust = #{temporaryTransportFeeAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustRemark != null" >
+        adjust_remark = #{adjustRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustUserId != null" >
+        adjust_user_id = #{adjustUserId,jdbcType=INTEGER},
+      </if>
+      <if test="adjustTime != null" >
+        adjust_time = #{adjustTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where adjust_id = #{adjustId,jdbcType=INTEGER}
+  </update>
+</mapper>

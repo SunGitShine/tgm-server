@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.truck.dao.AdditionalFunctionDao">
+  <sql id="QUERY_COLUMN_LIST">
+    additional_function_id AS additionalFunctionId, 
+    parent_function_id AS parentFunctionId, 
+    function_key AS functionKey, 
+    function_name AS functionName, 
+    prefix_name AS prefixName, 
+    suffix_name AS suffixName, 
+    function_description AS functionDescription, 
+    order_no AS orderNo, 
+    is_delete AS isDelete, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId,
+    additional_function_sign as additionalFunctionSign
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM additional_function]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="additionalFunctionId != null"><![CDATA[AND additional_function_id = #{additionalFunctionId}]]></if>
+      <if test="parentFunctionId != null">
+        <choose>
+          <when test="parentFunctionId == 0">
+            AND parent_function_id != 0
+          </when>
+          <otherwise>
+            AND parent_function_id = #{parentFunctionId}
+          </otherwise>
+        </choose>
+      </if>
+      <if test="functionKey != null and functionKey != ''"><![CDATA[AND function_key = #{functionKey}]]></if>
+      <if test="functionName != null and functionName != ''"><![CDATA[AND function_name = #{functionName}]]></if>
+      <if test="functionDescription != null and functionDescription != ''"><![CDATA[AND function_description = #{functionDescription}]]></if>
+      <if test="additionalFunctionSign != null"><![CDATA[ AND additional_function_sign = #{additionalFunctionSign}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+    </where>
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="additionalFunctionId != null"><![CDATA[additional_function_id = #{additionalFunctionId},]]></if>
+      <if test="parentFunctionId != null"><![CDATA[parent_function_id = #{parentFunctionId},]]></if>
+      <if test="functionName != null"><![CDATA[function_name = #{functionName},]]></if>
+      <if test="prefixName != null"><![CDATA[prefix_name = #{prefixName},]]></if>
+      <if test="suffixName != null"><![CDATA[suffix_name = #{suffixName},]]></if>
+      <if test="functionKey != null"><![CDATA[function_key = #{functionKey},]]></if>
+      <if test="functionDescription != null"><![CDATA[function_description = #{functionDescription},]]></if>
+      <if test="orderNo != null"><![CDATA[order_no = #{orderNo},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+      <if test="additionalFunctionSign != null"><![CDATA[additional_function_sign = #{additionalFunctionSign},]]></if>
+    </set>
+  </sql>
+
+  <insert id="insert" parameterType="additionalFunction" useGeneratedKeys = "true" keyProperty ="additionalFunctionId">
+    <![CDATA[
+      insert into additional_function
+        (parent_function_id, function_key, function_name, prefix_name,suffix_name, function_description, order_no, is_delete, create_time, create_user_id, additional_function_sign)
+    values
+        (#{parentFunctionId}, #{functionKey}, #{functionName}, #{prefixName}, #{suffixName}, #{functionDescription}, #{orderNo}, false, now(),#{createUserId},#{additionalFunctionSign})
+    ]]>
+  </insert>
+
+  <update id="update" parameterType="additionalFunction" >
+    <![CDATA[UPDATE ]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE additional_function_id = #{additionalFunctionId}]]>
+  </update>
+
+  <select id="get" parameterType="int" resultType="additionalFunction">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where additional_function_id=#{additionalFunctionId}]]>
+  </select>
+
+  <select id="loadAll" resultType="additionalFunction">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <where>
+      is_delete = false and parent_function_id != 0
+    </where>
+  </select>
+
+  <select id="findByExample" parameterType="additionalFunction" resultType="additionalFunction">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/>
+    order by order_no asc
+  </select>
+
+  <select id="findByIds" parameterType="java.util.List" resultType="additionalFunction">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <where>
+      and additional_function_id in
+      <foreach collection="list" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </where>
+    order by order_no asc
+  </select>
+</mapper>

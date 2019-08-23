@@ -1,0 +1,31 @@
+package drools.rules;
+
+import com.juma.tgm.waybill.domain.drools.*;
+dialect "mvel"
+//税后运费
+rule "总费用"
+	lock-on-active
+	salience 20
+	when
+		$p : PriceAfterTaxProxy()
+	then
+		$p.finalAfterTaxPrice = $p.finalPrice;
+end
+
+rule "税后费用"
+	lock-on-active
+	salience 16
+	when
+		$p : PriceAfterTaxProxy(taxRateInfo.flag)
+	then
+		$p.finalAfterTaxPrice = $p.finalPrice/(1+$p.taxRateInfo.rate);
+end
+
+rule "更改搬运费后系统报价"
+	lock-on-active
+	salience 15
+	when
+		$p : PriceAfterTaxProxy(waybillParamInfo.flag)
+	then
+		$p.finalAfterTaxPrice = ($p.finalAfterTaxPrice + $p.waybillParamInfo.driverHandlingCost + $p.waybillParamInfo.laborerHandlingCost - $p.waybillParamInfo.oldDriverHandlingCost - $p.waybillParamInfo.oldLaborerHandlingCost)*(1+$p.waybillParamInfo.rate);
+end

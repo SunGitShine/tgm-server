@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillExceptionDao">
+  <sql id="QUERY_COLUMN_LIST">
+    exception_id AS exceptionId, 
+    waybill_id AS waybillId, 
+    exception_type AS exceptionType, 
+    status AS status, 
+    note AS note, 
+    operator_user_id AS operatorUserId, 
+    is_delete AS isDelete, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM waybill_exception]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="exceptionId != null"><![CDATA[AND exception_id = #{exceptionId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="exceptionType != null"><![CDATA[AND exception_type = #{exceptionType}]]></if>
+      <if test="note != null and note != ''"><![CDATA[AND note = #{note}]]></if>
+      <if test="operatorUserId != null"><![CDATA[AND operator_user_id = #{operatorUserId}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+  <![CDATA[AND status != -1]]>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      is_delete = false
+      <if test="filters.waybillId != null"><![CDATA[AND waybill_id = #{filters.waybillId}]]></if>
+    </where>
+  </sql>
+  
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by create_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <sql id="QUERY_ORDER_LIMIT_CONDTION">
+    <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+    <if test="orderField == null and orderFieldType == null"><![CDATA[ORDER BY id DESC]]></if>
+    <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="waybillId != null"><![CDATA[waybill_id = #{waybillId},]]></if>
+      <if test="exceptionType != null"><![CDATA[exception_type = #{exceptionType},]]></if>
+      <if test="note != null and note != ''"><![CDATA[note = #{note},]]></if>
+      <if test="operatorUserId != null"><![CDATA[operator_user_id = #{operatorUserId},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="waybillException" useGeneratedKeys = "true" keyProperty ="id">
+    <![CDATA[
+      insert into waybill_exception
+		(exception_id, waybill_id, exception_type, status, note, operator_user_id, is_delete, create_time, create_user_id, last_update_time, last_update_user_id)
+	values
+		(#{exceptionId}, #{waybillId}, #{exceptionType}, #{status}, #{note}, #{operatorUserId}, #{isDelete}, now(),#{createUserId}, #{lastUpdateTime}, #{lastUpdateUserId})
+
+	]]>
+  </insert>
+  
+  <insert id="insertAll" parameterType="java.util.List">
+    INSERT INTO waybill_exception (waybill_id, exception_type, status, note, operator_user_id, is_delete, create_time, create_user_id)
+    VALUES 
+    <foreach collection="list" item="item" index="index" separator="," >
+        (#{item.waybillId},#{item.exceptionType},#{item.status},#{item.note},#{item.operatorUserId},0,now(),#{item.createUserId})
+    </foreach>
+</insert>
+  
+  <select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+  <update id="deleteAll" parameterType="java.lang.reflect.Array" >
+    <![CDATA[update waybill_exception set is_delete=1,last_update_time=now() WHERE id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </update>
+  <update id="delete" parameterType="waybillException" >
+    update waybill_exception set is_delete=true,last_update_time=now(),last_update_user_id=#{lastUpdateUserId} where exception_id = #{exceptionId}
+  </update>
+  <!-- 根据订单号删除 -->
+  <update id="deleteByWaybillId" parameterType="waybillException" >
+    update waybill_exception set is_delete=true,last_update_time=now(),last_update_user_id=#{lastUpdateUserId} where waybill_id = #{waybillId}
+  </update>
+  <!-- 修改 -->
+  <update id="update" parameterType="waybillException" >
+    <![CDATA[UPDATE waybill_exception ]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE exception_id = #{exceptionId}]]>
+  </update>
+  <select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="waybillException">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </select>
+  <select id="get" parameterType="java.lang.Integer" resultType="waybillException">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where exception_id=#{exceptionId}]]>
+  </select>
+  <select id="loadAll" resultType="waybillException">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="waybillException" resultType="waybillException">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="selectEntryListCount" parameterType="waybillException" resultType="int">
+    <![CDATA[SELECT COUNT(id) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <!-- 获取运单异常总数 -->
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="java.lang.Integer">
+    select count(1)
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <!-- 分页获取运单异常信息 -->
+  <select id="searchDetails" parameterType="com.giants.common.tools.PageCondition"
+   resultType="com.juma.tgm.waybill.domain.WaybillExceptionBo">
+    select
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="searchorderByAndLimitSql"/> 
+  </select>
+</mapper>

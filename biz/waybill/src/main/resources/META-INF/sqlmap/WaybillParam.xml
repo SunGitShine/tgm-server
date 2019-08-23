@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillParamDao">
+    <sql id="Base_Column_List">
+    param_id as paramId,
+    waybill_id as waybillId,
+    task_id as taskId,
+    driver_handling_cost as driverHandlingCost,
+    laborer_handling_cost as laborerHandlingCost,
+    laborer_name as laborerName,
+    distribution_point_no as distributionPointNo,
+    valuation_const as valuationConst,
+    valuation_const_json as valuationConstJson,
+    project_freight_rule_json as projectFreightRuleJson,
+    required_min_temperature as requiredMinTemperature,
+    required_max_temperature as requiredMaxTemperature,
+    history_min_temperature as historyMinTemperature,
+    history_max_temperature as historyMaxTemperature,
+    remark as remark,
+    sop_id as sopId,
+    check_out_freight as checkOutFreight,
+    receivable_account as receivableAccount,
+    receivable_time as receivableTime,
+    receivable_remark as receivableRemark,
+    upload_delivery_point_supplement_time as uploadDeliveryPointSupplementTime,
+    update_delivery_point_supplement_time as updateDeliveryPointSupplementTime,
+    create_time as createTime,
+    create_user_id as createUserId,
+    driver_read as driverRead,
+    driver_read_time as driverReadTime,
+    is_check_goods as isCheckGoods,
+    last_estimate_freight AS lastEstimateFreight,
+    erp_result AS erpResult,
+    agency_take_freight AS agencyTakeFreight,
+    agency_take_freight_status AS agencyTakeFreightStatus,
+    transform_bill_vendor_fee_rate AS transformBillVendorFeeRate,
+    transform_bill_link_id AS transformBillLinkId
+
+  </sql>
+    <sql id="Search_Query_Sql">
+        <where>
+            <if test="paramId != null">and param_id = #{paramId}</if>
+            <if test="waybillId != null">and waybill_id = #{waybillId}</if>
+            <if test="transformBillLinkId != null">and transform_bill_link_id = #{transformBillLinkId}</if>
+        </where>
+    </sql>
+    <!-- 根据ID获取 -->
+    <select id="get" resultType="WaybillParam" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from waybill_param
+        where param_id = #{paramId}
+    </select>
+    <!-- 添加 -->
+    <insert id="insert" parameterType="WaybillParam" useGeneratedKeys="true" keyProperty="paramId">
+    insert into waybill_param (waybill_id,task_id,sop_id,valuation_const_json,project_freight_rule_json,required_min_temperature,required_max_temperature,history_min_temperature,history_max_temperature, driver_handling_cost, laborer_handling_cost, laborer_name, distribution_point_no, remark,check_out_freight ,receivable_account ,receivable_time ,receivable_remark, upload_delivery_point_supplement_time, update_delivery_point_supplement_time, create_time, create_user_id,driver_read,last_estimate_freight,erp_result, agency_take_freight,is_check_goods,transform_bill_vendor_fee_rate,transform_bill_link_id)
+    values (#{waybillId},#{taskId},#{sopId},#{valuationConstJson},#{projectFreightRuleJson},#{requiredMinTemperature},#{requiredMaxTemperature},#{historyMinTemperature},#{historyMaxTemperature}, #{driverHandlingCost}, #{laborerHandlingCost}, #{laborerName}, #{distributionPointNo}, #{remark}, #{checkOutFreight}, #{receivableAccount}, #{receivableTime}, #{receivableRemark},#{uploadDeliveryPointSupplementTime}, #{updateDeliveryPointSupplementTime}, now(), #{createUserId},#{driverRead},#{lastEstimateFreight},#{erpResult}, #{agencyTakeFreight}, #{isCheckGoods}, #{transformBillVendorFeeRate}, #{transformBillLinkId})
+  </insert>
+    <!-- 修改 -->
+
+    <update id="update" parameterType="WaybillParam">
+        <![CDATA[ update waybill_param ]]>
+        <set>
+            <if test="waybillId != null"><![CDATA[ waybill_id = #{waybillId}, ]]></if>
+            <if test="taskId != null"><![CDATA[ task_id = #{taskId}, ]]></if>
+            <if test="driverHandlingCost != null"><![CDATA[ driver_handling_cost = #{driverHandlingCost}, ]]></if>
+            <if test="laborerHandlingCost != null"><![CDATA[ laborer_handling_cost = #{laborerHandlingCost}, ]]></if>
+            <if test="driverRead != null"><![CDATA[ driver_read = #{driverRead}, ]]></if>
+            <if test="driverReadTime!= null"><![CDATA[ driver_read_time = #{driverReadTime}, ]]></if>
+            <if test="isCheckGoods!= null"><![CDATA[ is_check_goods = #{isCheckGoods}, ]]></if>
+            <if test="lastEstimateFreight != null"><![CDATA[ last_estimate_freight = #{lastEstimateFreight}, ]]></if>
+            <if test="laborerName != null"><![CDATA[ laborer_name = #{laborerName}, ]]></if>
+            <if test="distributionPointNo != null"><![CDATA[ distribution_point_no = #{distributionPointNo}, ]]></if>
+            <if test="valuationConstJson != null"><![CDATA[ valuation_const_json = #{valuationConstJson}, ]]></if>
+            <if test="projectFreightRuleJson != null">
+                <![CDATA[ project_freight_rule_json = #{projectFreightRuleJson}, ]]></if>
+
+            <if test="requiredMinTemperature != null">
+                <![CDATA[ required_min_temperature = #{requiredMinTemperature}, ]]></if>
+            <if test="requiredMaxTemperature != null">
+                <![CDATA[ required_max_temperature = #{requiredMaxTemperature}, ]]></if>
+            <if test="historyMinTemperature != null">
+                <![CDATA[ history_min_temperature = #{historyMinTemperature}, ]]></if>
+            <if test="historyMaxTemperature != null">
+                <![CDATA[ history_max_temperature = #{historyMaxTemperature}, ]]></if>
+
+            <if test="checkOutFreight != null"><![CDATA[ check_out_freight = #{checkOutFreight}, ]]></if>
+            <if test="receivableAccount != null"><![CDATA[ receivable_account = #{receivableAccount}, ]]></if>
+            <if test="receivableTime != null"><![CDATA[ receivable_time = #{receivableTime}, ]]></if>
+            <if test="receivableRemark != null"><![CDATA[ receivable_remark = #{receivableRemark}, ]]></if>
+            <if test="uploadDeliveryPointSupplementTime != null">
+                <![CDATA[ upload_delivery_point_supplement_time = #{uploadDeliveryPointSupplementTime}, ]]></if>
+            <if test="updateDeliveryPointSupplementTime != null">
+                <![CDATA[ update_delivery_point_supplement_time = #{updateDeliveryPointSupplementTime}, ]]></if>
+            <if test="erpResult != null"><![CDATA[ erp_result = #{erpResult}, ]]></if>
+            <if test="agencyTakeFreight != null"><![CDATA[ agency_take_freight = #{agencyTakeFreight}, ]]></if>
+            <if test="agencyTakeFreightStatus != null">
+                <![CDATA[ agency_take_freight_status = #{agencyTakeFreightStatus}, ]]></if>
+            <if test="remark != null"><![CDATA[ remark = #{remark}, ]]></if>
+            <![CDATA[ last_update_time = now(), ]]>
+            <if test="lastUpdateUserId != null"><![CDATA[ last_update_user_id = #{lastUpdateUserId}, ]]></if>
+            <if test="transformBillVendorFeeRate != null"><![CDATA[ transform_bill_vendor_fee_rate = #{transformBillVendorFeeRate}, ]]></if>
+            <if test="transformBillLinkId != null"><![CDATA[ transform_bill_link_id = #{transformBillLinkId}, ]]></if>
+        </set>
+        <![CDATA[ where param_id = #{paramId} ]]>
+    </update>
+
+    <update id="batchUpdateErpResult">
+        <foreach collection="list" item="item" index="index" separator=";">
+            <![CDATA[ UPDATE waybill_param set erp_result = #{item.erpResult} WHERE waybill_id = #{item.waybillId} ]]>
+        </foreach>
+    </update>
+    
+    <select id="findByExample" resultType="WaybillParam" parameterType="WaybillParam">
+        select
+        <include refid="Base_Column_List"/>
+        from waybill_param
+        <include refid="Search_Query_Sql"/>
+    </select>
+
+    <!-- 根据运单ID获取费用 -->
+    <select id="findByWaybillId" resultType="WaybillParam" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from waybill_param
+        where waybill_id = #{waybillId}
+    </select>
+    <!-- 根据运单ID集合获取费用 -->
+    <select id="findCountCost" resultType="WaybillParam" parameterType="java.util.List">
+        select
+        SUM(driver_handling_cost) as driverHandlingCost,
+        SUM(laborer_handling_cost) as laborerHandlingCost
+        from waybill_param
+        <where>
+            and waybill_id in
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+
+    <!-- 项目运单 -->
+    <select id="findProjectWaybill" resultType="WaybillParam">
+        select
+        <include refid="Base_Column_List"/>
+        from waybill_param
+        WHERE `project_freight_rule_json` IS NOT NULL
+    </select>
+</mapper>

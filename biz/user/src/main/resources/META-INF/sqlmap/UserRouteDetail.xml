@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.user.dao.UserRouteDetailDao">
+  <sql id="QUERY_COLUMN_LIST">
+    route_detail_id AS routeDetailId, 
+    route_master_id AS routeMasterId, 
+    receive_address_name AS receiveAddressName, 
+    receive_address AS receiveAddress, 
+    receive_address_contact_name AS receiveAddressContactName, 
+    receive_address_contact_phone AS receiveAddressContactPhone, 
+    location AS location, 
+    city AS city,
+    region AS region,
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM user_route_detail]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="routeDetailId != null"><![CDATA[AND route_detail_id = #{routeDetailId}]]></if>
+      <if test="routeMasterId != null"><![CDATA[AND route_master_id = #{routeMasterId}]]></if>
+      <if test="receiveAddressName != null and receiveAddressName != ''"><![CDATA[AND receive_address_name = #{receiveAddressName}]]></if>
+      <if test="receiveAddress != null and receiveAddress != ''"><![CDATA[AND receive_address = #{receiveAddress}]]></if>
+      <if test="receiveAddressContactName != null and receiveAddressContactName != ''"><![CDATA[AND receive_address_contact_name = #{receiveAddressContactName}]]></if>
+      <if test="receiveAddressContactPhone != null and receiveAddressContactPhone != ''"><![CDATA[AND receive_address_contact_phone = #{receiveAddressContactPhone}]]></if>
+      <if test="location != null and location != ''"><![CDATA[AND location = #{location}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.routeDetailId != null"><![CDATA[AND route_detail_id = #{filters.routeDetailId}]]></if>
+      <if test="filters.routeMasterId != null"><![CDATA[AND route_master_id = #{filters.routeMasterId}]]></if>
+      <if test="filters.receiveAddressName != null and receiveAddressName != ''"><![CDATA[AND receive_address_name = #{filters.receiveAddressName}]]></if>
+      <if test="filters.receiveAddress != null and receiveAddress != ''"><![CDATA[AND receive_address = #{filters.receiveAddress}]]></if>
+      <if test="filters.receiveAddressContactName != null and receiveAddressContactName != ''"><![CDATA[AND receive_address_contact_name = #{filters.receiveAddressContactName}]]></if>
+      <if test="filters.receiveAddressContactPhone != null and receiveAddressContactPhone != ''"><![CDATA[AND receive_address_contact_phone = #{filters.receiveAddressContactPhone}]]></if>
+      <if test="filters.location != null and location != ''"><![CDATA[AND location = #{filters.location}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="routeMasterId != null"><![CDATA[route_master_id = #{routeMasterId},]]></if>
+      <if test="receiveAddressName != null and receiveAddressName != ''"><![CDATA[receive_address_name = #{receiveAddressName},]]></if>
+      <if test="receiveAddress != null and receiveAddress != ''"><![CDATA[receive_address = #{receiveAddress},]]></if>
+      <if test="receiveAddressContactName != null and receiveAddressContactName != ''"><![CDATA[receive_address_contact_name = #{receiveAddressContactName},]]></if>
+      <if test="receiveAddressContactPhone != null and receiveAddressContactPhone != ''"><![CDATA[receive_address_contact_phone = #{receiveAddressContactPhone},]]></if>
+      <if test="location != null and location != ''"><![CDATA[location = #{location},]]></if>
+      <if test="city != null and city != ''"><![CDATA[city = #{city},]]></if>
+      <if test="region != null and region != ''"><![CDATA[region = #{region},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="userRouteDetail" useGeneratedKeys = "true" keyProperty ="routeDetailId">
+    <![CDATA[
+      insert into user_route_detail
+		(route_master_id, receive_address_name, receive_address, receive_address_contact_name, receive_address_contact_phone, location,city,region, create_time, create_user_id, last_update_time, last_update_user_id)
+	values
+		(#{routeMasterId}, #{receiveAddressName}, #{receiveAddress}, #{receiveAddressContactName}, #{receiveAddressContactPhone}, #{location}, #{city}, #{region}, now(),#{createUserId}, #{lastUpdateTime}, #{lastUpdateUserId})
+
+	]]>
+  </insert>
+  <update id="delete" parameterType="userRouteDetail" >
+  <![CDATA[DELETE FROM user_route_detail ]]>
+  <![CDATA[WHERE route_detail_id = #{routeDetailId}]]>
+  </update>
+  <update id="update" parameterType="userRouteDetail" >
+    <![CDATA[UPDATE user_route_detail]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE route_detail_id = #{routeDetailId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="userRouteDetail">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE route_detail_id = #{routeDetailId}]]>
+  </select>
+  <select id="loadAll" resultType="userRouteDetail">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="userRouteDetail" resultType="userRouteDetail">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="userRouteDetail">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+
+  <delete id="deleteByMasterId">
+    DELETE
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE route_master_id = #{masterId}]]>
+  </delete>
+</mapper>

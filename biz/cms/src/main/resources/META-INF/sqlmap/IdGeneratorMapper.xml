@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.id.dao.IdGeneratorMapper">
+	<select id="genId" resultType="int" parameterType="java.lang.String">
+	    <![CDATA[ SELECT  auto_increment ]]>
+	    <![CDATA[ FROM information_schema.TABLES]]>
+	    <![CDATA[ WHERE TABLE_SCHEMA = 'tgm' and table_name = '${value}']]>
+	</select>
+	
+	 <update id="excuteSQL" parameterType="java.lang.String">  
+	    ${value}
+	  </update>
+</mapper>

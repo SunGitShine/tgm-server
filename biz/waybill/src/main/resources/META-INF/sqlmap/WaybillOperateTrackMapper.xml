@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillOperateTrackMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.waybill.domain.WaybillOperateTrack">
+    <id column="track_id" jdbcType="INTEGER" property="trackId" />
+    <result column="waybill_id" jdbcType="INTEGER" property="waybillId" />
+    <result column="operate_type" jdbcType="INTEGER" property="operateType" />
+    <result column="operate_application" jdbcType="INTEGER" property="operateApplication" />
+    <result column="operate_address" jdbcType="VARCHAR" property="operateAddress" />
+    <result column="operate_address_coordinates" jdbcType="VARCHAR" property="operateAddressCoordinates" />
+    <result column="actual_address" jdbcType="VARCHAR" property="actualAddress" />
+    <result column="actual_address_coordinates" jdbcType="VARCHAR" property="actualAddressCoordinates" />
+    <result column="distance" jdbcType="INTEGER" property="distance" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="data_source" jdbcType="INTEGER" property="dataSource" />
+    <result column="device_no" jdbcType="VARCHAR" property="deviceNo" />
+    <result column="device_type" jdbcType="INTEGER" property="deviceType" />
+    <result column="fence_device_no" jdbcType="VARCHAR" property="fenceDeviceNo" />
+    <result column="fence_device_Type" jdbcType="INTEGER" property="fenceDeviceType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="declare_time" jdbcType="TIMESTAMP" property="declareTime" />
+    <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
+    <result column="driver_id" jdbcType="INTEGER" property="driverId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    track_id, waybill_id, operate_type, operate_application, operate_address, operate_address_coordinates, 
+    actual_address, actual_address_coordinates, distance, create_time, create_user_id, 
+    data_source, device_no, device_type, fence_device_no, fence_device_Type, remark, 
+    declare_time, plate_number, driver_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.waybill.domain.WaybillOperateTrackExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from waybill_operate_track
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from waybill_operate_track
+    where track_id = #{trackId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from waybill_operate_track
+    where track_id = #{trackId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.waybill.domain.WaybillOperateTrackExample">
+    delete from waybill_operate_track
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="track_id" keyProperty="trackId" parameterType="com.juma.tgm.waybill.domain.WaybillOperateTrack" useGeneratedKeys="true">
+    insert into waybill_operate_track (waybill_id, operate_type, operate_application, 
+      operate_address, operate_address_coordinates, 
+      actual_address, actual_address_coordinates, 
+      distance, create_time, create_user_id, 
+      data_source, device_no, device_type, 
+      fence_device_no, fence_device_Type, remark, 
+      declare_time, plate_number, driver_id
+      )
+    values (#{waybillId,jdbcType=INTEGER}, #{operateType,jdbcType=INTEGER}, #{operateApplication,jdbcType=INTEGER}, 
+      #{operateAddress,jdbcType=VARCHAR}, #{operateAddressCoordinates,jdbcType=VARCHAR}, 
+      #{actualAddress,jdbcType=VARCHAR}, #{actualAddressCoordinates,jdbcType=VARCHAR}, 
+      #{distance,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{dataSource,jdbcType=INTEGER}, #{deviceNo,jdbcType=VARCHAR}, #{deviceType,jdbcType=INTEGER}, 
+      #{fenceDeviceNo,jdbcType=VARCHAR}, #{fenceDeviceType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{declareTime,jdbcType=TIMESTAMP}, #{plateNumber,jdbcType=VARCHAR}, #{driverId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="track_id" keyProperty="trackId" parameterType="com.juma.tgm.waybill.domain.WaybillOperateTrack" useGeneratedKeys="true">
+    insert into waybill_operate_track
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="waybillId != null">
+        waybill_id,
+      </if>
+      <if test="operateType != null">
+        operate_type,
+      </if>
+      <if test="operateApplication != null">
+        operate_application,
+      </if>
+      <if test="operateAddress != null">
+        operate_address,
+      </if>
+      <if test="operateAddressCoordinates != null">
+        operate_address_coordinates,
+      </if>
+      <if test="actualAddress != null">
+        actual_address,
+      </if>
+      <if test="actualAddressCoordinates != null">
+        actual_address_coordinates,
+      </if>
+      <if test="distance != null">
+        distance,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="dataSource != null">
+        data_source,
+      </if>
+      <if test="deviceNo != null">
+        device_no,
+      </if>
+      <if test="deviceType != null">
+        device_type,
+      </if>
+      <if test="fenceDeviceNo != null">
+        fence_device_no,
+      </if>
+      <if test="fenceDeviceType != null">
+        fence_device_Type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="declareTime != null">
+        declare_time,
+      </if>
+      <if test="plateNumber != null">
+        plate_number,
+      </if>
+      <if test="driverId != null">
+        driver_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="waybillId != null">
+        #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="operateType != null">
+        #{operateType,jdbcType=INTEGER},
+      </if>
+      <if test="operateApplication != null">
+        #{operateApplication,jdbcType=INTEGER},
+      </if>
+      <if test="operateAddress != null">
+        #{operateAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="operateAddressCoordinates != null">
+        #{operateAddressCoordinates,jdbcType=VARCHAR},
+      </if>
+      <if test="actualAddress != null">
+        #{actualAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actualAddressCoordinates != null">
+        #{actualAddressCoordinates,jdbcType=VARCHAR},
+      </if>
+      <if test="distance != null">
+        #{distance,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        #{dataSource,jdbcType=INTEGER},
+      </if>
+      <if test="deviceNo != null">
+        #{deviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="fenceDeviceNo != null">
+        #{fenceDeviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fenceDeviceType != null">
+        #{fenceDeviceType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="declareTime != null">
+        #{declareTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="plateNumber != null">
+        #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="driverId != null">
+        #{driverId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.waybill.domain.WaybillOperateTrackExample" resultType="java.lang.Long">
+    select count(*) from waybill_operate_track
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update waybill_operate_track
+    <set>
+      <if test="record.trackId != null">
+        track_id = #{record.trackId,jdbcType=INTEGER},
+      </if>
+      <if test="record.waybillId != null">
+        waybill_id = #{record.waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="record.operateType != null">
+        operate_type = #{record.operateType,jdbcType=INTEGER},
+      </if>
+      <if test="record.operateApplication != null">
+        operate_application = #{record.operateApplication,jdbcType=INTEGER},
+      </if>
+      <if test="record.operateAddress != null">
+        operate_address = #{record.operateAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateAddressCoordinates != null">
+        operate_address_coordinates = #{record.operateAddressCoordinates,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualAddress != null">
+        actual_address = #{record.actualAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualAddressCoordinates != null">
+        actual_address_coordinates = #{record.actualAddressCoordinates,jdbcType=VARCHAR},
+      </if>
+      <if test="record.distance != null">
+        distance = #{record.distance,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dataSource != null">
+        data_source = #{record.dataSource,jdbcType=INTEGER},
+      </if>
+      <if test="record.deviceNo != null">
+        device_no = #{record.deviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceType != null">
+        device_type = #{record.deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="record.fenceDeviceNo != null">
+        fence_device_no = #{record.fenceDeviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fenceDeviceType != null">
+        fence_device_Type = #{record.fenceDeviceType,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.declareTime != null">
+        declare_time = #{record.declareTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.plateNumber != null">
+        plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.driverId != null">
+        driver_id = #{record.driverId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update waybill_operate_track
+    set track_id = #{record.trackId,jdbcType=INTEGER},
+      waybill_id = #{record.waybillId,jdbcType=INTEGER},
+      operate_type = #{record.operateType,jdbcType=INTEGER},
+      operate_application = #{record.operateApplication,jdbcType=INTEGER},
+      operate_address = #{record.operateAddress,jdbcType=VARCHAR},
+      operate_address_coordinates = #{record.operateAddressCoordinates,jdbcType=VARCHAR},
+      actual_address = #{record.actualAddress,jdbcType=VARCHAR},
+      actual_address_coordinates = #{record.actualAddressCoordinates,jdbcType=VARCHAR},
+      distance = #{record.distance,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      data_source = #{record.dataSource,jdbcType=INTEGER},
+      device_no = #{record.deviceNo,jdbcType=VARCHAR},
+      device_type = #{record.deviceType,jdbcType=INTEGER},
+      fence_device_no = #{record.fenceDeviceNo,jdbcType=VARCHAR},
+      fence_device_Type = #{record.fenceDeviceType,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      declare_time = #{record.declareTime,jdbcType=TIMESTAMP},
+      plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      driver_id = #{record.driverId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.waybill.domain.WaybillOperateTrack">
+    update waybill_operate_track
+    <set>
+      <if test="waybillId != null">
+        waybill_id = #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="operateType != null">
+        operate_type = #{operateType,jdbcType=INTEGER},
+      </if>
+      <if test="operateApplication != null">
+        operate_application = #{operateApplication,jdbcType=INTEGER},
+      </if>
+      <if test="operateAddress != null">
+        operate_address = #{operateAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="operateAddressCoordinates != null">
+        operate_address_coordinates = #{operateAddressCoordinates,jdbcType=VARCHAR},
+      </if>
+      <if test="actualAddress != null">
+        actual_address = #{actualAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actualAddressCoordinates != null">
+        actual_address_coordinates = #{actualAddressCoordinates,jdbcType=VARCHAR},
+      </if>
+      <if test="distance != null">
+        distance = #{distance,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dataSource != null">
+        data_source = #{dataSource,jdbcType=INTEGER},
+      </if>
+      <if test="deviceNo != null">
+        device_no = #{deviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        device_type = #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="fenceDeviceNo != null">
+        fence_device_no = #{fenceDeviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fenceDeviceType != null">
+        fence_device_Type = #{fenceDeviceType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="declareTime != null">
+        declare_time = #{declareTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="plateNumber != null">
+        plate_number = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="driverId != null">
+        driver_id = #{driverId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where track_id = #{trackId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.waybill.domain.WaybillOperateTrack">
+    update waybill_operate_track
+    set waybill_id = #{waybillId,jdbcType=INTEGER},
+      operate_type = #{operateType,jdbcType=INTEGER},
+      operate_application = #{operateApplication,jdbcType=INTEGER},
+      operate_address = #{operateAddress,jdbcType=VARCHAR},
+      operate_address_coordinates = #{operateAddressCoordinates,jdbcType=VARCHAR},
+      actual_address = #{actualAddress,jdbcType=VARCHAR},
+      actual_address_coordinates = #{actualAddressCoordinates,jdbcType=VARCHAR},
+      distance = #{distance,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      data_source = #{dataSource,jdbcType=INTEGER},
+      device_no = #{deviceNo,jdbcType=VARCHAR},
+      device_type = #{deviceType,jdbcType=INTEGER},
+      fence_device_no = #{fenceDeviceNo,jdbcType=VARCHAR},
+      fence_device_Type = #{fenceDeviceType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      declare_time = #{declareTime,jdbcType=TIMESTAMP},
+      plate_number = #{plateNumber,jdbcType=VARCHAR},
+      driver_id = #{driverId,jdbcType=INTEGER}
+    where track_id = #{trackId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="trackId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into waybill_operate_track
+    (waybill_id,operate_type,operate_application,operate_address,operate_address_coordinates,actual_address,actual_address_coordinates,distance,create_time,create_user_id,data_source,device_no,device_type,fence_device_no,fence_device_Type,remark,declare_time,plate_number,driver_id) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.waybillId},#{item.operateType},#{item.operateApplication},#{item.operateAddress},#{item.operateAddressCoordinates},#{item.actualAddress},#{item.actualAddressCoordinates},#{item.distance},#{item.createTime},#{item.createUserId},#{item.dataSource},#{item.deviceNo},#{item.deviceType},#{item.fenceDeviceNo},#{item.fenceDeviceType},#{item.remark},#{item.declareTime},#{item.plateNumber},#{item.driverId})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update waybill_operate_track
+      <set>
+        track_id = #{item.trackId},
+        waybill_id = #{item.waybillId},
+        operate_type = #{item.operateType},
+        operate_application = #{item.operateApplication},
+        operate_address = #{item.operateAddress},
+        operate_address_coordinates = #{item.operateAddressCoordinates},
+        actual_address = #{item.actualAddress},
+        actual_address_coordinates = #{item.actualAddressCoordinates},
+        distance = #{item.distance},
+        create_time = #{item.createTime},
+        create_user_id = #{item.createUserId},
+        data_source = #{item.dataSource},
+        device_no = #{item.deviceNo},
+        device_type = #{item.deviceType},
+        fence_device_no = #{item.fenceDeviceNo},
+        fence_device_Type = #{item.fenceDeviceType},
+        remark = #{item.remark},
+        declare_time = #{item.declareTime},
+        plate_number = #{item.plateNumber},
+        driver_id = #{item.driverId},
+      </set>
+      where track_id = #{item.trackId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update waybill_operate_track
+      <set>
+        <if test="item.waybillId != null">
+          waybill_id = #{item.waybillId,jdbcType=INTEGER},
+        </if>
+        <if test="item.operateType != null">
+          operate_type = #{item.operateType,jdbcType=INTEGER},
+        </if>
+        <if test="item.operateApplication != null">
+          operate_application = #{item.operateApplication,jdbcType=INTEGER},
+        </if>
+        <if test="item.operateAddress != null">
+          operate_address = #{item.operateAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="item.operateAddressCoordinates != null">
+          operate_address_coordinates = #{item.operateAddressCoordinates,jdbcType=VARCHAR},
+        </if>
+        <if test="item.actualAddress != null">
+          actual_address = #{item.actualAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="item.actualAddressCoordinates != null">
+          actual_address_coordinates = #{item.actualAddressCoordinates,jdbcType=VARCHAR},
+        </if>
+        <if test="item.distance != null">
+          distance = #{item.distance,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.dataSource != null">
+          data_source = #{item.dataSource,jdbcType=INTEGER},
+        </if>
+        <if test="item.deviceNo != null">
+          device_no = #{item.deviceNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.deviceType != null">
+          device_type = #{item.deviceType,jdbcType=INTEGER},
+        </if>
+        <if test="item.fenceDeviceNo != null">
+          fence_device_no = #{item.fenceDeviceNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.fenceDeviceType != null">
+          fence_device_Type = #{item.fenceDeviceType,jdbcType=INTEGER},
+        </if>
+        <if test="item.remark != null">
+          remark = #{item.remark,jdbcType=VARCHAR},
+        </if>
+        <if test="item.declareTime != null">
+          declare_time = #{item.declareTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.plateNumber != null">
+          plate_number = #{item.plateNumber,jdbcType=VARCHAR},
+        </if>
+        <if test="item.driverId != null">
+          driver_id = #{item.driverId,jdbcType=INTEGER},
+        </if>
+      </set>
+      where track_id = #{item.trackId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

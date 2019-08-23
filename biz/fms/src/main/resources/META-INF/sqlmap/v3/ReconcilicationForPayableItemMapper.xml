@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.fms.dao.v3.ReconcilicationForPayableItemMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableItem" >
+    <id column="reconcilication_item_id" property="reconcilicationItemId" jdbcType="INTEGER" />
+    <result column="reconcilication_id" property="reconcilicationId" jdbcType="INTEGER" />
+    <result column="settle_type" property="settleType" jdbcType="INTEGER" />
+    <result column="settle_account_id" property="settleAccountId" jdbcType="INTEGER" />
+    <result column="settle_account_name" property="settleAccountName" jdbcType="VARCHAR" />
+    <result column="waybill_id" property="waybillId" jdbcType="INTEGER" />
+    <result column="waybill_no" property="waybillNo" jdbcType="VARCHAR" />
+    <result column="plate_number" property="plateNumber" jdbcType="VARCHAR" />
+    <result column="vehicle_frame_no" property="vehicleFrameNo" jdbcType="VARCHAR" />
+    <result column="settle_freight" property="settleFreight" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="rebate_fee" property="rebateFee" jdbcType="DECIMAL" />
+    <result column="driver_transport_fee" property="driverTransportFee" jdbcType="DECIMAL" />
+    <result column="temporary_transport_fee" property="temporaryTransportFee" jdbcType="DECIMAL" />
+    <result column="settle_status" property="settleStatus" jdbcType="INTEGER" />
+    <result column="receivable_with_tax" property="receivableWithTax" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    reconcilication_item_id, reconcilication_id, settle_type, settle_account_id, settle_account_name,
+    waybill_id, waybill_no, plate_number, vehicle_frame_no, settle_freight, tax_rate,
+    rebate_fee, driver_transport_fee, temporary_transport_fee, settle_status,receivable_with_tax
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableItemExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from reconcilication_for_payable_item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null" >
+      <if test="startOffSet>=0" >
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableItemExample" >
+    delete from reconcilication_for_payable_item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableItem" >
+    <selectKey resultType="java.lang.Integer" keyProperty="reconcilicationItemId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into reconcilication_for_payable_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reconcilicationId != null" >
+        reconcilication_id,
+      </if>
+      <if test="settleType != null" >
+        settle_type,
+      </if>
+      <if test="settleAccountId != null" >
+        settle_account_id,
+      </if>
+      <if test="settleAccountName != null" >
+        settle_account_name,
+      </if>
+      <if test="waybillId != null" >
+        waybill_id,
+      </if>
+      <if test="waybillNo != null" >
+        waybill_no,
+      </if>
+      <if test="plateNumber != null" >
+        plate_number,
+      </if>
+      <if test="vehicleFrameNo != null" >
+        vehicle_frame_no,
+      </if>
+      <if test="settleFreight != null" >
+        settle_freight,
+      </if>
+      <if test="taxRate != null" >
+        tax_rate,
+      </if>
+      <if test="rebateFee != null" >
+        rebate_fee,
+      </if>
+      <if test="driverTransportFee != null" >
+        driver_transport_fee,
+      </if>
+      <if test="temporaryTransportFee != null" >
+        temporary_transport_fee,
+      </if>
+      <if test="settleStatus != null" >
+        settle_status,
+      </if>
+      <if test="receivableWithTax != null" >
+        receivable_with_tax,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reconcilicationId != null" >
+        #{reconcilicationId,jdbcType=INTEGER},
+      </if>
+      <if test="settleType != null" >
+        #{settleType,jdbcType=INTEGER},
+      </if>
+      <if test="settleAccountId != null" >
+        #{settleAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="settleAccountName != null" >
+        #{settleAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillId != null" >
+        #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillNo != null" >
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNumber != null" >
+        #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleFrameNo != null" >
+        #{vehicleFrameNo,jdbcType=VARCHAR},
+      </if>
+      <if test="settleFreight != null" >
+        #{settleFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateFee != null" >
+        #{rebateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="driverTransportFee != null" >
+        #{driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="temporaryTransportFee != null" >
+        #{temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="settleStatus != null" >
+        #{settleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="receivableWithTax != null" >
+        #{receivableWithTax,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableItemExample" resultType="java.lang.Integer" >
+    select count(*) from reconcilication_for_payable_item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update reconcilication_for_payable_item
+    <set >
+      <if test="record.reconcilicationItemId != null" >
+        reconcilication_item_id = #{record.reconcilicationItemId,jdbcType=INTEGER},
+      </if>
+      <if test="record.reconcilicationId != null" >
+        reconcilication_id = #{record.reconcilicationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.settleType != null" >
+        settle_type = #{record.settleType,jdbcType=INTEGER},
+      </if>
+      <if test="record.settleAccountId != null" >
+        settle_account_id = #{record.settleAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="record.settleAccountName != null" >
+        settle_account_name = #{record.settleAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.waybillId != null" >
+        waybill_id = #{record.waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="record.waybillNo != null" >
+        waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.plateNumber != null" >
+        plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vehicleFrameNo != null" >
+        vehicle_frame_no = #{record.vehicleFrameNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.settleFreight != null" >
+        settle_freight = #{record.settleFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.taxRate != null" >
+        tax_rate = #{record.taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rebateFee != null" >
+        rebate_fee = #{record.rebateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.driverTransportFee != null" >
+        driver_transport_fee = #{record.driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.temporaryTransportFee != null" >
+        temporary_transport_fee = #{record.temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.settleStatus != null" >
+        settle_status = #{record.settleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.receivableWithTax != null" >
+        receivable_with_tax = #{record.receivableWithTax,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update reconcilication_for_payable_item
+    set reconcilication_item_id = #{record.reconcilicationItemId,jdbcType=INTEGER},
+    reconcilication_id = #{record.reconcilicationId,jdbcType=INTEGER},
+    settle_type = #{record.settleType,jdbcType=INTEGER},
+    settle_account_id = #{record.settleAccountId,jdbcType=INTEGER},
+    settle_account_name = #{record.settleAccountName,jdbcType=VARCHAR},
+    waybill_id = #{record.waybillId,jdbcType=INTEGER},
+    waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+    plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+    vehicle_frame_no = #{record.vehicleFrameNo,jdbcType=VARCHAR},
+    settle_freight = #{record.settleFreight,jdbcType=DECIMAL},
+    tax_rate = #{record.taxRate,jdbcType=DECIMAL},
+    rebate_fee = #{record.rebateFee,jdbcType=DECIMAL},
+    driver_transport_fee = #{record.driverTransportFee,jdbcType=DECIMAL},
+    temporary_transport_fee = #{record.temporaryTransportFee,jdbcType=DECIMAL},
+    settle_status = #{record.settleStatus,jdbcType=INTEGER}
+    receivable_with_tax = #{record.receivableWithTax,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableItem" >
+    update reconcilication_for_payable_item
+    <set >
+      <if test="reconcilicationId != null" >
+        reconcilication_id = #{reconcilicationId,jdbcType=INTEGER},
+      </if>
+      <if test="settleType != null" >
+        settle_type = #{settleType,jdbcType=INTEGER},
+      </if>
+      <if test="settleAccountId != null" >
+        settle_account_id = #{settleAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="settleAccountName != null" >
+        settle_account_name = #{settleAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillId != null" >
+        waybill_id = #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillNo != null" >
+        waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNumber != null" >
+        plate_number = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleFrameNo != null" >
+        vehicle_frame_no = #{vehicleFrameNo,jdbcType=VARCHAR},
+      </if>
+      <if test="settleFreight != null" >
+        settle_freight = #{settleFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        tax_rate = #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateFee != null" >
+        rebate_fee = #{rebateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="driverTransportFee != null" >
+        driver_transport_fee = #{driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="temporaryTransportFee != null" >
+        temporary_transport_fee = #{temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="settleStatus != null" >
+        settle_status = #{settleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="receivableWithTax != null" >
+        receivable_with_tax = #{receivableWithTax,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where reconcilication_item_id = #{reconcilicationItemId,jdbcType=INTEGER}
+  </update>
+</mapper>

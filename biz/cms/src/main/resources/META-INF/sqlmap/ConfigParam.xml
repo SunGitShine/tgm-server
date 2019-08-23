@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.configure.dao.ConfigParamDao" >
+  <sql id="Base_Column_List" >
+    param_id as paramId,
+    param_key as paramKey,
+    param_name as paramName,
+    param_described as paramDescribed,
+    region_code as regionCode,
+    tenant_id as tenantId,
+    tenant_code as tenantCode,
+    is_delete as isDelete,
+    create_user_id as createUserId,
+    create_time as createTime
+  </sql>
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="paramId != null"><![CDATA[param_id = #{paramId}]]></if>
+      <if test="tenantId != null"><![CDATA[tenant_id = #{tenantId}]]></if>
+      <if test="tenantCode != null"><![CDATA[tenant_code = #{tenantCode}]]></if>
+      <if test="paramKey != null"><![CDATA[AND param_key = #{paramKey}]]></if>
+      <if test="paramName != null"><![CDATA[AND param_name like concat(#{paramName}, '%')]]></if>
+    </where>
+  </sql>
+
+  <sql id="UPDATE_SET_SQL">
+    <set>
+      <if test="paramKey != null"><![CDATA[ param_key = #{paramKey},]]></if>
+      <if test="paramName != null"><![CDATA[ param_name = #{paramName},]]></if>
+      <if test="paramDescribed != null"><![CDATA[ param_described = #{paramDescribed},]]></if>
+      <if test="regionCode != null"><![CDATA[ region_code = #{regionCode},]]></if>
+      <if test="tenantId != null"><![CDATA[ tenant_id = #{tenantId},]]></if>
+      <if test="tenantCode != null"><![CDATA[ tenant_code = #{tenantCode},]]></if>
+      last_update_time = now(),
+      <if test="lastUpdateUserId != null"><![CDATA[ last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+  <sql id="SearchWhereSql">
+    <where>
+      <if test="filters != null">
+        <if test="filters.tenantId != null"><![CDATA[ and tenant_id = #{filters.tenantId}]]></if>
+        <if test="filters.tenantCode != null"><![CDATA[ and tenant_code = #{filters.tenantCode}]]></if>
+        <if test="filters.paramId != null"><![CDATA[ and param_id = #{filters.paramId}]]></if>
+        <if test="filters.paramKey != null"><![CDATA[ and param_key = #{filters.paramKey}]]></if>
+        <if test="filters.paramName != null"><![CDATA[ and param_name like concat(#{filters.paramName}, '%')]]></if>
+      </if>
+    </where>
+  </sql>
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by create_time asc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+  <!-- 根据ID获取 -->
+  <select id="get" resultType="configParam" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from config_param
+    where param_id = #{paramId}
+  </select>
+  <!-- 删除 -->
+  <delete id="delete" parameterType="configParam" >
+    delete from config_param where param_id = #{paramId}
+  </delete>
+  <!-- 添加 -->
+  <insert id="insert" parameterType="configParam" useGeneratedKeys="true" keyProperty="paramId">
+    insert into config_param (param_key, param_name, param_described, region_code, tenant_id, tenant_code, is_delete, create_time, create_user_id)
+    values (#{paramKey}, #{paramName}, #{paramDescribed}, #{regionCode}, #{tenantId}, #{tenantCode}, 0, now(), #{createUserId})
+  </insert>
+  <!-- 修改 -->
+  <update id="update" parameterType="configParam" >
+    update config_param
+    <include refid="UPDATE_SET_SQL"></include>
+    where param_id = #{paramId}
+  </update>
+  <!-- 获取参数配置列表 -->
+  <select id="loadAll" resultType="configParam">
+    select 
+    <include refid="Base_Column_List" />
+    from config_param
+    where is_delete = false
+    order by param_id asc
+  </select>
+  <!-- 分页获取数据 -->
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="configParam">
+    select
+    <include refid="Base_Column_List"></include>
+    from config_param
+    <include refid="SearchWhereSql"></include>
+  </select>
+  <!-- 获取总数 -->
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.giants.common.tools.PageCondition">
+    select count(1) from config_param
+    <include refid="SearchWhereSql" />
+  </select>
+  <!-- 根据条件查询对象 -->
+  <select id="findByExample" parameterType="configParam" resultType="configParam">
+    <![CDATA[SELECT]]>
+    <include refid="Base_Column_List"/>
+    from config_param
+    <include refid="QUERY_WHERE_CLAUSE"/>
+  </select>
+</mapper>

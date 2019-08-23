@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.xlsx.dao.XlsxTemplateDao">
+  <sql id="QUERY_COLUMN_LIST">
+    template_id AS templateId, 
+    name AS name, 
+    start_data_index AS startDataIndex,
+    create_user_id AS createUserId, 
+    create_time AS createTime, 
+    last_update_user_id AS lastUpdateUserId, 
+    last_update_time AS lastUpdateTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM xlsx_template]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="templateId != null"><![CDATA[AND template_id = #{templateId}]]></if>
+      <if test="name != null and name != ''"><![CDATA[AND name = #{name}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[AND last_update_time = #{lastUpdateTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.templateId != null"><![CDATA[AND template_id = #{filters.templateId}]]></if>
+      <if test="filters.name != null and name != ''"><![CDATA[AND name = #{filters.name}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="name != null and name != ''"><![CDATA[name = #{name},]]></if>
+      <if test="startDataIndex != null and startDataIndex != ''"><![CDATA[start_data_index = #{startDataIndex},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[last_update_time = #{lastUpdateTime},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="xlsxTemplate" useGeneratedKeys = "true" keyProperty ="templateId">
+    <![CDATA[
+      insert into xlsx_template
+		(name,start_data_index, create_user_id, create_time, last_update_user_id, last_update_time)
+	values
+		(#{name},#{startDataIndex}, #{createUserId}, now(),#{lastUpdateUserId}, #{lastUpdateTime})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="xlsxTemplate" >
+    <![CDATA[UPDATE xlsx_template]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE template_id = #{templateId}]]>
+  </update>
+  
+  <delete id="delete" parameterType="xlsxTemplate" >
+    <![CDATA[delete from xlsx_template where template_id = #{templateId}]]>
+  </delete>
+  
+  <select id="get" parameterType="int" resultType="xlsxTemplate">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE template_id = #{templateId}]]>
+  </select>
+  <select id="loadAll" resultType="xlsxTemplate">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="xlsxTemplate" resultType="xlsxTemplate">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchDetails" parameterType="com.giants.common.tools.PageCondition" resultType="xlsxTemplate">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

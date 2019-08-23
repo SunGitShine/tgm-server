@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.DeliveryPointSupplementDao">
+
+<select id="findByWayBill" resultType="deliveryPointSupplement" parameterType="int">
+  SELECT
+   <include refid="QUERY_COLUMN_LIST"/>
+   FROM delivery_point_supplement
+    WHERE
+    waybill_id = #{value}
+    AND is_delete=0
+    ORDER BY delivery_point_supplement_id DESC
+</select>
+
+</mapper>

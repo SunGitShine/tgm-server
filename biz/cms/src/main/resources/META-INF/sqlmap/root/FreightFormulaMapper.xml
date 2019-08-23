@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.configure.dao.FreightFormulaMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.configure.domain.FreightFormula">
+    <id column="freight_formula_id" jdbcType="INTEGER" property="freightFormulaId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="freight_way" jdbcType="INTEGER" property="freightWay" />
+    <result column="formula" jdbcType="VARCHAR" property="formula" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    freight_formula_id, tenant_id, tenant_code, freight_way, formula, create_user_id, 
+    create_time, last_update_time, last_update_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.configure.domain.FreightFormulaExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from freight_formula
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null">
+      <if test="startOffSet>=0">
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from freight_formula
+    where freight_formula_id = #{freightFormulaId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from freight_formula
+    where freight_formula_id = #{freightFormulaId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.configure.domain.FreightFormulaExample">
+    delete from freight_formula
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.juma.tgm.configure.domain.FreightFormula">
+    insert into freight_formula (freight_formula_id, tenant_id, tenant_code, 
+      freight_way, formula, create_user_id, 
+      create_time, last_update_time, last_update_user_id
+      )
+    values (#{freightFormulaId,jdbcType=INTEGER}, #{tenantId,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, 
+      #{freightWay,jdbcType=INTEGER}, #{formula,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.juma.tgm.configure.domain.FreightFormula">
+    insert into freight_formula
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="freightFormulaId != null">
+        freight_formula_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="freightWay != null">
+        freight_way,
+      </if>
+      <if test="formula != null">
+        formula,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="freightFormulaId != null">
+        #{freightFormulaId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="freightWay != null">
+        #{freightWay,jdbcType=INTEGER},
+      </if>
+      <if test="formula != null">
+        #{formula,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.configure.domain.FreightFormulaExample" resultType="java.lang.Long">
+    select count(*) from freight_formula
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update freight_formula
+    <set>
+      <if test="record.freightFormulaId != null">
+        freight_formula_id = #{record.freightFormulaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.freightWay != null">
+        freight_way = #{record.freightWay,jdbcType=INTEGER},
+      </if>
+      <if test="record.formula != null">
+        formula = #{record.formula,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update freight_formula
+    set freight_formula_id = #{record.freightFormulaId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      freight_way = #{record.freightWay,jdbcType=INTEGER},
+      formula = #{record.formula,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.configure.domain.FreightFormula">
+    update freight_formula
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="freightWay != null">
+        freight_way = #{freightWay,jdbcType=INTEGER},
+      </if>
+      <if test="formula != null">
+        formula = #{formula,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where freight_formula_id = #{freightFormulaId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.configure.domain.FreightFormula">
+    update freight_formula
+    set tenant_id = #{tenantId,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      freight_way = #{freightWay,jdbcType=INTEGER},
+      formula = #{formula,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER}
+    where freight_formula_id = #{freightFormulaId,jdbcType=INTEGER}
+  </update>
+</mapper>

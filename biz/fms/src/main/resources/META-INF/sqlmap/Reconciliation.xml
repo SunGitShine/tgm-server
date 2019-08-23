@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.fms.dao.ReconciliationDao">
+	<sql id="QUERY_COLUMN_LIST">
+		reconciliation_id AS reconciliationId,
+		reconciliation_no AS reconciliationNo,
+		reconciliation_status AS reconciliationStatus,
+		process_instance_id AS processInstanceId,
+		submit_time AS submitTime,
+		submitter AS submitter,
+		total_freight AS totalFreight,
+		create_user_id AS createUserId,
+		create_time AS createTime,
+		tenant_id as tenantId,
+		tenant_code as tenantCode
+	</sql>
+
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM reconciliation]]></sql>
+
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+			<if test="reconciliationId != null"><![CDATA[AND reconciliation_id = #{reconciliationId}]]></if>
+			<if test="reconciliationNo != null"><![CDATA[AND reconciliation_no = #{reconciliationNo}]]></if>
+			<if test="tenantId != null"><![CDATA[AND tenant_id = #{tenantId}]]></if>
+			<if test="tenantCode != null"><![CDATA[AND tenant_code = #{tenantCode}]]></if>
+			<if test="reconciliationStatus != null"><![CDATA[AND reconciliation_status = #{reconciliationStatus}]]></if>
+			<if test="processInstanceId != null"><![CDATA[AND process_instance_id = #{processInstanceId}]]></if>
+			<if test="submitTime != null"><![CDATA[AND submit_time = #{submitTime}]]></if>
+			<if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+			<if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+		</where>
+	</sql>
+
+	<sql id="SEARCH_WHERE_CLAUSE">
+		<where>
+			<if test="filters.reconciliationId != null"><![CDATA[AND reconciliation_id = #{filters.reconciliationId}]]></if>
+			<if test="filters.reconciliationNo != null"><![CDATA[AND reconciliation_no = #{filters.reconciliationNo}]]></if>
+			<if test="filters.tenantId != null"><![CDATA[AND tenant_id = #{filters.tenantId}]]></if>
+			<if test="filters.tenantCode != null"><![CDATA[AND tenant_code = #{filters.tenantCode}]]></if>
+			<if test="filters.reconciliationStatus != null"><![CDATA[AND reconciliation_status = #{filters.reconciliationStatus}]]></if>
+			<if test="filters.processInstanceId != null"><![CDATA[AND process_instance_id = #{filters.processInstanceId}]]></if>
+			<if test="filters.submitTime != null"><![CDATA[AND submit_time = #{filters.submitTime}]]></if>
+			<if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+			<if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+		</where>
+	</sql>
+
+	<sql id="SEARCH_ORDERBY_LIMIT">
+		<choose>
+			<when test="orderBy == null">
+				order by create_time desc
+			</when>
+			<otherwise>
+				order by ${orderBy} ${orderSort}
+			</otherwise>
+		</choose>
+		limit #{startOffSet}, #{endOffSet}
+	</sql>
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="reconciliationStatus != null"><![CDATA[reconciliation_status = #{reconciliationStatus},]]></if>
+			<if test="processInstanceId != null"><![CDATA[process_instance_id = #{processInstanceId},]]></if>
+			<if test="submitter"><![CDATA[submitter = #{submitter},]]></if>
+			<if test="totalFreight"><![CDATA[total_freight = #{totalFreight},]]></if>
+			<if test="submitTime != null"><![CDATA[submit_time = #{submitTime},]]></if>
+		</set>
+	</sql>
+	<insert id="insert" parameterType="reconciliation"
+		useGeneratedKeys="true" keyProperty="reconciliationId">
+    <![CDATA[
+      insert into reconciliation
+		(reconciliation_no, reconciliation_status, submitter, total_freight,process_instance_id,submit_time, create_user_id, create_time, tenant_id, tenant_code)
+	values
+		(#{reconciliationNo}, #{reconciliationStatus}, #{submitter}, #{totalFreight},#{processInstanceId},#{submitTime}, #{createUserId}, #{createTime}, #{tenantId}, #{tenantCode})
+
+	]]>
+	</insert>
+	<delete id="delete" parameterType="reconciliation">
+		<![CDATA[DELETE FROM reconciliation ]]>
+    	<![CDATA[WHERE reconciliation_id = #{reconciliationId}]]>
+	</delete>
+	<update id="update" parameterType="reconciliation">
+    	<![CDATA[UPDATE reconciliation]]>
+		<include refid="UPDATE_COLUMN_SET" />
+		<where>
+			<if test="reconciliationIds != null and reconciliationIds.size >0">
+				AND reconciliation_id in
+				<foreach collection="reconciliationIds" item="item"
+					open="(" separator="," close=")">
+                <![CDATA[#{item}]]>
+				</foreach>
+			</if>
+			<if test="reconciliationId != null"> AND reconciliation_id = #{reconciliationId} </if>
+		</where>
+	</update>
+	<select id="getNextSequence" resultType="int" parameterType="java.lang.String">
+    <![CDATA[ SELECT  Auto_increment ]]>
+    <![CDATA[ FROM information_schema.TABLES]]>
+    <![CDATA[ WHERE TABLE_SCHEMA = '${value}' and table_name = 'reconciliation']]>
+	</select>
+	<select id="get" parameterType="int" resultType="reconciliation">
+    <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+    <![CDATA[WHERE reconciliation_id = #{reconciliationId}]]>
+	</select>
+	<select id="loadAll" resultType="reconciliation">
+    <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+	</select>
+	<select id="findByExample" parameterType="reconciliation"
+		resultType="reconciliation">
+    <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="QUERY_WHERE_CLAUSE" />
+	</select>
+
+	<select id="searchCount" parameterType="com.giants.common.tools.PageCondition"
+		resultType="int">
+    <![CDATA[SELECT count(*) FROM (SELECT a.reconciliation_id From reconciliation a LEFT JOIN reconciliation_item b  on a.reconciliation_id = b.reconciliation_id ]]>
+		<where>
+			<if test="filters.reconciliationNo != null">
+                    <![CDATA[AND reconciliation_no like CONCAT(#{filters.reconciliationNo}, '%')]]>
+			</if>
+			<if test="filters.customerName != null">
+                    <![CDATA[AND customer_name like CONCAT(#{filters.customerName}, '%')]]>
+			</if>
+			<if test="filters.projectName != null">
+                    <![CDATA[AND project_name like CONCAT(#{filters.projectName}, '%')]]>
+			</if>
+			<if test="filters.reconciliationStatus != null">
+                    <![CDATA[AND reconciliation_status = #{filters.reconciliationStatus}]]>
+			</if>
+			<if test="filters.startTime != null">
+					<![CDATA[AND submit_time >= #{filters.startTime}]]>
+			</if>
+			<if test="filters.endTime != null">
+                    <![CDATA[AND submit_time <= #{filters.endTime}]]>
+			</if>
+		</where>
+		<![CDATA[
+			GROUP BY a.reconciliation_id) A
+		]]>
+	</select>
+
+	<select id="searchMaster" parameterType="com.giants.common.tools.PageCondition"
+		resultType="com.juma.tgm.fms.domain.bo.ReconciliationMaster">
+    <![CDATA[
+   		SELECT T.* FROM (
+			SELECT a.reconciliation_id reconciliationId,reconciliation_no reconciliationNo,reconciliation_status reconciliationStatus,process_instance_id processInstanceId,
+				customer_id customerId,
+			   customer_name customerName,project_id projectId,project_name projectName,submit_time submitTime,area_code areaCode,
+			 	total_freight totalFee,SUM(estimate_freight) estimateFreight,SUM(after_tax_freight) afterTaxFreight,SUM(rebate_fee) rebateFee,
+	 			SUM(driver_handling_fee) driverHandlingFee,SUM(laborer_handling_fee) laborerHandlingFee,
+	 			SUM(show4_driver_freight) show4DriverFreight 
+	 		FROM reconciliation a LEFT JOIN reconciliation_item b  on a.reconciliation_id = b.reconciliation_id 
+ 	]]>
+		<where>
+		    <if test="filters.reconciliationId != null">
+					<![CDATA[AND a.reconciliation_id >= #{filters.reconciliationId}]]>
+			</if>
+			<if test="filters.reconciliationNo != null">
+                    <![CDATA[AND reconciliation_no like CONCAT(#{filters.reconciliationNo}, '%')]]>
+			</if>
+			<if test="filters.customerName != null">
+                    <![CDATA[AND customer_name like CONCAT(#{filters.customerName}, '%')]]>
+			</if>
+			<if test="filters.projectName != null">
+                    <![CDATA[AND project_name like CONCAT(#{filters.projectName}, '%')]]>
+			</if>
+			<if test="filters.startTime != null">
+					<![CDATA[AND submit_time >= #{filters.startTime}]]>
+			</if>
+			<if test="filters.endTime != null">
+                    <![CDATA[AND submit_time <= #{filters.endTime}]]>
+			</if>
+		    <if test="filters.tenantId != null">
+					<![CDATA[AND a.tenant_id = #{filters.tenantId}]]>
+			</if>
+			<if test="filters.reconciliationStatus != null">
+                    <![CDATA[AND reconciliation_status = #{filters.reconciliationStatus}]]>
+			</if>
+			
+		</where>
+		<![CDATA[
+			GROUP BY a.reconciliation_id 
+			Limit #{startOffSet}, #{endOffSet}
+			) T ORDER BY T.reconciliationId desc
+		]]>
+	</select>
+
+
+	<select id="findItemsById" parameterType="com.giants.common.tools.PageCondition"
+		resultType="com.juma.tgm.fms.domain.bo.ReconciliationMaster">
+    <![CDATA[
+        SELECT reconciliation_item_id reconciliationItemId, a.reconciliation_id reconciliationId,reconciliation_no reconciliationNo,reconciliation_status reconciliationStatus,
+        	waybill_id waybillId,waybill_no waybillNo,customer_id customerId,
+		    customer_name customerName,project_id projectId,project_name projectName,submit_time submitTime,
+		 	estimate_freight estimateFreight,after_tax_freight afterTaxFreight,rebate_fee rebateFee,tax_rate_value taxRateValue,
+ 			driver_handling_fee driverHandlingFee,laborer_handling_fee laborerHandlingFee,area_code areaCode,
+ 			show4_driver_freight show4DriverFreight,update_freight_remark updateFreightRemark, plate_number plateNumber, a.create_time createTime 
+ 		FROM reconciliation a LEFT JOIN reconciliation_item b  on a.reconciliation_id = b.reconciliation_id 
+ 	]]>
+		<where>
+			<![CDATA[AND a.reconciliation_id = #{filters.reconciliationId}]]>
+			<if test="filters.waybillNo != null and filters.waybillNo !=''">
+                    <![CDATA[AND waybill_no like CONCAT(#{filters.waybillNo}, '%')]]>
+			</if>
+			<if test="filters.tenantId != null">
+					<![CDATA[AND a.tenant_id = #{filters.tenantId}]]>
+			</if>
+			<if test="filters.startTime != null and filters.startTime !=''">
+					<![CDATA[AND submit_time >= #{filters.startTime}]]>
+			</if>
+			<if test="filters.endTime != null and filters.endTime !=''">
+                    <![CDATA[AND submit_time <= #{filters.endTime}]]>
+			</if>
+		</where>
+		<if test="filters.useLimit != null and filters.useLimit"><![CDATA[ limit #{startOffSet}, #{endOffSet} ]]></if>
+	</select>
+	
+	<select id="countItemsPageById" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+		<![CDATA[
+        SELECT count(1)
+ 		FROM reconciliation a LEFT JOIN reconciliation_item b  on a.reconciliation_id = b.reconciliation_id 
+ 	]]>
+		<where>
+			<![CDATA[AND a.reconciliation_id = #{filters.reconciliationId}]]>
+			<if test="filters.waybillNo != null and filters.waybillNo !=''">
+                    <![CDATA[AND waybill_no like CONCAT(#{filters.waybillNo}, '%')]]>
+			</if>
+			<if test="filters.tenantId != null">
+					<![CDATA[AND a.tenant_id = #{filters.tenantId}]]>
+			</if>
+			<if test="filters.startTime != null and filters.startTime !=''">
+					<![CDATA[AND submit_time >= #{filters.startTime}]]>
+			</if>
+			<if test="filters.endTime != null and filters.endTime !=''">
+                    <![CDATA[AND submit_time <= #{filters.endTime}]]>
+			</if>
+		</where>
+	</select>
+</mapper>

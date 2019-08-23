@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.customerManager.dao.TaskWaybillTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.customerManager.domain.TaskWaybillTemplate" >
+    <id column="task_waybill_template_id" property="taskWaybillTemplateId" jdbcType="INTEGER" />
+    <result column="customer_manager_id" property="customerManagerId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="truck_customer_id" property="truckCustomerId" jdbcType="INTEGER" />
+    <result column="business_branch" property="businessBranch" jdbcType="TINYINT" />
+    <result column="required_min_temperature" property="requiredMinTemperature" jdbcType="REAL" />
+    <result column="required_max_temperature" property="requiredMaxTemperature" jdbcType="REAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="estimate_freight" property="estimateFreight" jdbcType="DECIMAL" />
+    <result column="show4_driver_freight" property="show4DriverFreight" jdbcType="DECIMAL" />
+    <result column="delivery_time_point" property="deliveryTimePoint" jdbcType="VARCHAR" />
+    <result column="finish_time_point" property="finishTimePoint" jdbcType="INTEGER" />
+    <result column="receipt_type" property="receiptType" jdbcType="TINYINT" />
+    <result column="require_json" property="requireJson" jdbcType="VARCHAR" />
+    <result column="vehicle_count" property="vehicleCount" jdbcType="INTEGER" />
+    <result column="need_delivery_point_note" property="needDeliveryPointNote" jdbcType="TINYINT" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="receive_way" property="receiveWay" jdbcType="TINYINT" />
+    <result column="only_load_cargo" property="onlyLoadCargo" jdbcType="TINYINT" />
+    <result column="agency_take_freight" property="agencyTakeFreight" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_user_id" property="lastUpdateUserId" jdbcType="INTEGER" />
+    <result column="valuation_way" property="valuationWay" jdbcType="TINYINT" />
+    <result column="project_freight_rule_json" property="projectFreightRuleJson" jdbcType="VARCHAR" />
+    <result column="road_map_id" property="roadMapId" jdbcType="INTEGER" />
+    <result column="department_code" property="departmentCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    task_waybill_template_id, customer_manager_id, customer_id, truck_customer_id, business_branch, 
+    required_min_temperature, required_max_temperature, remark, estimate_freight, show4_driver_freight, 
+    delivery_time_point, finish_time_point, receipt_type, require_json, vehicle_count, 
+    need_delivery_point_note, project_id, receive_way, only_load_cargo, agency_take_freight, 
+    create_time, create_user_id, last_update_time, last_update_user_id, valuation_way, 
+    project_freight_rule_json, road_map_id,department_code
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.juma.tgm.customerManager.domain.TaskWaybillTemplateExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from task_waybill_template
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null" >
+      <if test="startOffSet>=0" >
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.customerManager.domain.TaskWaybillTemplateExample" >
+    delete from task_waybill_template
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.juma.tgm.customerManager.domain.TaskWaybillTemplate" >
+    <selectKey resultType="java.lang.Integer" keyProperty="taskWaybillTemplateId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into task_waybill_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerManagerId != null" >
+        customer_manager_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="truckCustomerId != null" >
+        truck_customer_id,
+      </if>
+      <if test="businessBranch != null" >
+        business_branch,
+      </if>
+      <if test="requiredMinTemperature != null" >
+        required_min_temperature,
+      </if>
+      <if test="requiredMaxTemperature != null" >
+        required_max_temperature,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="estimateFreight != null" >
+        estimate_freight,
+      </if>
+      <if test="show4DriverFreight != null" >
+        show4_driver_freight,
+      </if>
+      <if test="deliveryTimePoint != null" >
+        delivery_time_point,
+      </if>
+      <if test="finishTimePoint != null" >
+        finish_time_point,
+      </if>
+      <if test="receiptType != null" >
+        receipt_type,
+      </if>
+      <if test="requireJson != null" >
+        require_json,
+      </if>
+      <if test="vehicleCount != null" >
+        vehicle_count,
+      </if>
+      <if test="needDeliveryPointNote != null" >
+        need_delivery_point_note,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="receiveWay != null" >
+        receive_way,
+      </if>
+      <if test="onlyLoadCargo != null" >
+        only_load_cargo,
+      </if>
+      <if test="agencyTakeFreight != null" >
+        agency_take_freight,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null" >
+        last_update_user_id,
+      </if>
+      <if test="valuationWay != null" >
+        valuation_way,
+      </if>
+      <if test="projectFreightRuleJson != null" >
+        project_freight_rule_json,
+      </if>
+      <if test="roadMapId != null" >
+        road_map_id,
+      </if>
+      <if test="departmentCode != null" >
+        department_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerManagerId != null" >
+        #{customerManagerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="truckCustomerId != null" >
+        #{truckCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="businessBranch != null" >
+        #{businessBranch,jdbcType=TINYINT},
+      </if>
+      <if test="requiredMinTemperature != null" >
+        #{requiredMinTemperature,jdbcType=REAL},
+      </if>
+      <if test="requiredMaxTemperature != null" >
+        #{requiredMaxTemperature,jdbcType=REAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="estimateFreight != null" >
+        #{estimateFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="show4DriverFreight != null" >
+        #{show4DriverFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryTimePoint != null" >
+        #{deliveryTimePoint,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTimePoint != null" >
+        #{finishTimePoint,jdbcType=INTEGER},
+      </if>
+      <if test="receiptType != null" >
+        #{receiptType,jdbcType=TINYINT},
+      </if>
+      <if test="requireJson != null" >
+        #{requireJson,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleCount != null" >
+        #{vehicleCount,jdbcType=INTEGER},
+      </if>
+      <if test="needDeliveryPointNote != null" >
+        #{needDeliveryPointNote,jdbcType=TINYINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="receiveWay != null" >
+        #{receiveWay,jdbcType=TINYINT},
+      </if>
+      <if test="onlyLoadCargo != null" >
+        #{onlyLoadCargo,jdbcType=TINYINT},
+      </if>
+      <if test="agencyTakeFreight != null" >
+        #{agencyTakeFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null" >
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="valuationWay != null" >
+        #{valuationWay,jdbcType=TINYINT},
+      </if>
+      <if test="projectFreightRuleJson != null" >
+        #{projectFreightRuleJson,jdbcType=VARCHAR},
+      </if>
+      <if test="roadMapId != null" >
+        #{roadMapId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentCode != null" >
+        #{departmentCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.customerManager.domain.TaskWaybillTemplateExample" resultType="java.lang.Integer" >
+    select count(*) from task_waybill_template
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update task_waybill_template
+    <set >
+      <if test="record.taskWaybillTemplateId != null" >
+        task_waybill_template_id = #{record.taskWaybillTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerManagerId != null" >
+        customer_manager_id = #{record.customerManagerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.truckCustomerId != null" >
+        truck_customer_id = #{record.truckCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.businessBranch != null" >
+        business_branch = #{record.businessBranch,jdbcType=TINYINT},
+      </if>
+      <if test="record.requiredMinTemperature != null" >
+        required_min_temperature = #{record.requiredMinTemperature,jdbcType=REAL},
+      </if>
+      <if test="record.requiredMaxTemperature != null" >
+        required_max_temperature = #{record.requiredMaxTemperature,jdbcType=REAL},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.estimateFreight != null" >
+        estimate_freight = #{record.estimateFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.show4DriverFreight != null" >
+        show4_driver_freight = #{record.show4DriverFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deliveryTimePoint != null" >
+        delivery_time_point = #{record.deliveryTimePoint,jdbcType=VARCHAR},
+      </if>
+      <if test="record.finishTimePoint != null" >
+        finish_time_point = #{record.finishTimePoint,jdbcType=INTEGER},
+      </if>
+      <if test="record.receiptType != null" >
+        receipt_type = #{record.receiptType,jdbcType=TINYINT},
+      </if>
+      <if test="record.requireJson != null" >
+        require_json = #{record.requireJson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vehicleCount != null" >
+        vehicle_count = #{record.vehicleCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.needDeliveryPointNote != null" >
+        need_delivery_point_note = #{record.needDeliveryPointNote,jdbcType=TINYINT},
+      </if>
+      <if test="record.projectId != null" >
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.receiveWay != null" >
+        receive_way = #{record.receiveWay,jdbcType=TINYINT},
+      </if>
+      <if test="record.onlyLoadCargo != null" >
+        only_load_cargo = #{record.onlyLoadCargo,jdbcType=TINYINT},
+      </if>
+      <if test="record.agencyTakeFreight != null" >
+        agency_take_freight = #{record.agencyTakeFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null" >
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null" >
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.valuationWay != null" >
+        valuation_way = #{record.valuationWay,jdbcType=TINYINT},
+      </if>
+      <if test="record.projectFreightRuleJson != null" >
+        project_freight_rule_json = #{record.projectFreightRuleJson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roadMapId != null" >
+        road_map_id = #{record.roadMapId,jdbcType=INTEGER},
+      </if>
+      <if test="record.departmentCode != null" >
+        road_map_id = #{record.departmentCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update task_waybill_template
+    set task_waybill_template_id = #{record.taskWaybillTemplateId,jdbcType=INTEGER},
+      customer_manager_id = #{record.customerManagerId,jdbcType=INTEGER},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      truck_customer_id = #{record.truckCustomerId,jdbcType=INTEGER},
+      business_branch = #{record.businessBranch,jdbcType=TINYINT},
+      required_min_temperature = #{record.requiredMinTemperature,jdbcType=REAL},
+      required_max_temperature = #{record.requiredMaxTemperature,jdbcType=REAL},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      estimate_freight = #{record.estimateFreight,jdbcType=DECIMAL},
+      show4_driver_freight = #{record.show4DriverFreight,jdbcType=DECIMAL},
+      delivery_time_point = #{record.deliveryTimePoint,jdbcType=VARCHAR},
+      finish_time_point = #{record.finishTimePoint,jdbcType=INTEGER},
+      receipt_type = #{record.receiptType,jdbcType=TINYINT},
+      require_json = #{record.requireJson,jdbcType=VARCHAR},
+      vehicle_count = #{record.vehicleCount,jdbcType=INTEGER},
+      need_delivery_point_note = #{record.needDeliveryPointNote,jdbcType=TINYINT},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      receive_way = #{record.receiveWay,jdbcType=TINYINT},
+      only_load_cargo = #{record.onlyLoadCargo,jdbcType=TINYINT},
+      agency_take_freight = #{record.agencyTakeFreight,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      valuation_way = #{record.valuationWay,jdbcType=TINYINT},
+      project_freight_rule_json = #{record.projectFreightRuleJson,jdbcType=VARCHAR},
+      road_map_id = #{record.roadMapId,jdbcType=INTEGER},
+      department_code = #{record.departmentCode,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.customerManager.domain.TaskWaybillTemplate" >
+    update task_waybill_template
+    <set >
+      <if test="customerManagerId != null" >
+        customer_manager_id = #{customerManagerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="truckCustomerId != null" >
+        truck_customer_id = #{truckCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="businessBranch != null" >
+        business_branch = #{businessBranch,jdbcType=TINYINT},
+      </if>
+      <if test="requiredMinTemperature != null" >
+        required_min_temperature = #{requiredMinTemperature,jdbcType=REAL},
+      </if>
+      <if test="requiredMaxTemperature != null" >
+        required_max_temperature = #{requiredMaxTemperature,jdbcType=REAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="estimateFreight != null" >
+        estimate_freight = #{estimateFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="show4DriverFreight != null" >
+        show4_driver_freight = #{show4DriverFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryTimePoint != null" >
+        delivery_time_point = #{deliveryTimePoint,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTimePoint != null" >
+        finish_time_point = #{finishTimePoint,jdbcType=INTEGER},
+      </if>
+      <if test="receiptType != null" >
+        receipt_type = #{receiptType,jdbcType=TINYINT},
+      </if>
+      <if test="requireJson != null" >
+        require_json = #{requireJson,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleCount != null" >
+        vehicle_count = #{vehicleCount,jdbcType=INTEGER},
+      </if>
+      <if test="needDeliveryPointNote != null" >
+        need_delivery_point_note = #{needDeliveryPointNote,jdbcType=TINYINT},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="receiveWay != null" >
+        receive_way = #{receiveWay,jdbcType=TINYINT},
+      </if>
+      <if test="onlyLoadCargo != null" >
+        only_load_cargo = #{onlyLoadCargo,jdbcType=TINYINT},
+      </if>
+      <if test="agencyTakeFreight != null" >
+        agency_take_freight = #{agencyTakeFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null" >
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="valuationWay != null" >
+        valuation_way = #{valuationWay,jdbcType=TINYINT},
+      </if>
+      <if test="projectFreightRuleJson != null" >
+        project_freight_rule_json = #{projectFreightRuleJson,jdbcType=VARCHAR},
+      </if>
+      <if test="roadMapId != null" >
+        road_map_id = #{roadMapId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentCode != null" >
+        department_code = #{departmentCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where task_waybill_template_id = #{taskWaybillTemplateId,jdbcType=INTEGER}
+  </update>
+</mapper>

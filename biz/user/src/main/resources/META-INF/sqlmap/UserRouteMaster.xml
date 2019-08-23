@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.user.dao.UserRouteMasterDao">
+    <sql id="QUERY_COLUMN_LIST">
+    route_master_id AS routeMasterId, 
+    user_id AS userId, 
+    delivery_address_name AS deliveryAddressName, 
+    delivery_address AS deliveryAddress, 
+    delivery_address_contact_name AS deliveryAddressContactName, 
+    delivery_address_contact_phone AS deliveryAddressContactPhone, 
+    location AS location, 
+    city AS city,
+    region AS region,
+    md5_digest AS md5Digest,
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId,
+    business_branch AS businessBranch
+
+  </sql>
+
+    <sql id="QUERY_FROM_TABLE"><![CDATA[
+        FROM user_route_master
+        ]]></sql>
+
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="routeMasterId != null"><![CDATA[AND route_master_id = #{routeMasterId}]]></if>
+            <if test="userId != null"><![CDATA[AND user_id = #{userId}]]></if>
+            <if test="deliveryAddressName != null and deliveryAddressName != ''">
+                <![CDATA[AND delivery_address_name = #{deliveryAddressName}]]></if>
+            <if test="deliveryAddress != null and deliveryAddress != ''">
+                <![CDATA[AND delivery_address = #{deliveryAddress}]]></if>
+            <if test="deliveryAddressContactName != null and deliveryAddressContactName != ''">
+                <![CDATA[AND delivery_address_contact_name = #{deliveryAddressContactName}]]></if>
+            <if test="deliveryAddressContactPhone != null and deliveryAddressContactPhone != ''">
+                <![CDATA[AND delivery_address_contact_phone = #{deliveryAddressContactPhone}]]></if>
+            <if test="location != null and location != ''"><![CDATA[AND location = #{location}]]></if>
+            <if test="md5Digest != null and md5Digest != ''"><![CDATA[AND md5_digest = #{md5Digest}]]></if>
+            <if test="businessBranch != null"><![CDATA[AND business_branch = #{businessBranch}]]></if>
+        </where>
+    </sql>
+
+    <sql id="SEARCH_WHERE_CLAUSE">
+        <where>
+            <if test="filters.routeMasterId != null"><![CDATA[AND route_master_id = #{filters.routeMasterId}]]></if>
+            <if test="filters.userId != null"><![CDATA[AND user_id = #{filters.userId}]]></if>
+            <if test="filters.deliveryAddressName != null and deliveryAddressName != ''">
+                <![CDATA[AND delivery_address_name = #{filters.deliveryAddressName}]]></if>
+            <if test="filters.deliveryAddress != null and deliveryAddress != ''">
+                <![CDATA[AND delivery_address = #{filters.deliveryAddress}]]></if>
+            <if test="filters.deliveryAddressContactName != null and deliveryAddressContactName != ''">
+                <![CDATA[AND delivery_address_contact_name = #{filters.deliveryAddressContactName}]]></if>
+            <if test="filters.deliveryAddressContactPhone != null and deliveryAddressContactPhone != ''">
+                <![CDATA[AND delivery_address_contact_phone = #{filters.deliveryAddressContactPhone}]]></if>
+            <if test="filters.location != null and location != ''"><![CDATA[AND location = #{filters.location}]]></if>
+            <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+            <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+            <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+            <if test="filters.lastUpdateUserId != null">
+                <![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+            <if test="filters.businessBranch != null"><![CDATA[AND business_branch = #{filters.businessBranch}]]></if>
+        </where>
+    </sql>
+
+    <sql id="SEARCH_ORDERBY_LIMIT">
+        <choose>
+            <when test="orderBy == null">
+                order by create_time desc
+            </when>
+            <otherwise>
+                order by ${orderBy} ${orderSort}
+            </otherwise>
+        </choose>
+        limit #{startOffSet}, #{endOffSet}
+    </sql>
+    <sql id="UPDATE_COLUMN_SET">
+        <set>
+            <if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
+            <if test="deliveryAddressName != null and deliveryAddressName != ''">
+                <![CDATA[delivery_address_name = #{deliveryAddressName},]]></if>
+            <if test="deliveryAddress != null and deliveryAddress != ''">
+                <![CDATA[delivery_address = #{deliveryAddress},]]></if>
+            <if test="deliveryAddressContactName != null and deliveryAddressContactName != ''">
+                <![CDATA[delivery_address_contact_name = #{deliveryAddressContactName},]]></if>
+            <if test="deliveryAddressContactPhone != null and deliveryAddressContactPhone != ''">
+                <![CDATA[delivery_address_contact_phone = #{deliveryAddressContactPhone},]]></if>
+            <if test="location != null and location != ''"><![CDATA[location = #{location},]]></if>
+            <if test="city != null and city != ''"><![CDATA[city = #{city},]]></if>
+            <if test="region != null and region != ''"><![CDATA[region = #{region},]]></if>
+            <if test="md5Digest != null and md5Digest != ''"><![CDATA[md5_digest = #{md5Digest},]]></if>
+            <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+            <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+            <![CDATA[last_update_time = now(),]]>
+            <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+            <if test="businessBranch != null"><![CDATA[business_branch = #{businessBranch}]]></if>
+        </set>
+    </sql>
+    <insert id="insert" parameterType="userRouteMaster" useGeneratedKeys="true" keyProperty="routeMasterId">
+    <![CDATA[
+
+      insert into user_route_master
+		(user_id, delivery_address_name, delivery_address, delivery_address_contact_name, delivery_address_contact_phone, location, city,region,md5_digest,create_time, create_user_id, last_update_time, last_update_user_id, business_branch)
+	values
+		(#{userId}, #{deliveryAddressName}, #{deliveryAddress}, #{deliveryAddressContactName}, #{deliveryAddressContactPhone}, #{location}, #{city}, #{region},#{md5Digest},now(),#{createUserId}, #{lastUpdateTime}, #{lastUpdateUserId}, #{businessBranch})
+
+
+        ]]>
+  </insert>
+
+    <update id="delete" parameterType="userRouteMaster">
+  <![CDATA[
+        DELETE FROM user_route_master ]]>
+  <![CDATA[WHERE route_master_id = #{routeMasterId}
+        ]]>
+  </update>
+    <update id="update" parameterType="userRouteMaster">
+        <![CDATA[UPDATE user_route_master]]>
+        <include refid="UPDATE_COLUMN_SET"/>
+        <![CDATA[WHERE route_master_id = #{routeMasterId}]]>
+    </update>
+    <select id="get" parameterType="int" resultType="userRouteMaster">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[WHERE route_master_id = #{routeMasterId}]]>
+    </select>
+    <select id="loadAll" resultType="userRouteMaster">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+    </select>
+    <select id="findByExample" parameterType="userRouteMaster" resultType="userRouteMaster">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <![CDATA[order by route_master_id DESC  ]]>
+    </select>
+    <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+        <![CDATA[SELECT COUNT(1)]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="SEARCH_WHERE_CLAUSE"/>
+    </select>
+    <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="userRouteMaster">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="SEARCH_WHERE_CLAUSE"/>
+        <include refid="SEARCH_ORDERBY_LIMIT"/>
+    </select>
+</mapper>

@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.TaskScheduledMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskScheduled">
+    <id column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="task_no" jdbcType="VARCHAR" property="taskNo" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="road_map_id" jdbcType="INTEGER" property="roadMapId" />
+    <result column="road_map_price_rule_id" jdbcType="INTEGER" property="roadMapPriceRuleId" />
+    <result column="vendor_id" jdbcType="INTEGER" property="vendorId" />
+    <result column="truck_id" jdbcType="INTEGER" property="truckId" />
+    <result column="driver_id" jdbcType="INTEGER" property="driverId" />
+    <result column="depot_id" jdbcType="INTEGER" property="depotId" />
+    <result column="is_fixed_delivery" jdbcType="TINYINT" property="isFixedDelivery" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="end_date" jdbcType="DATE" property="endDate" />
+    <result column="task_status" jdbcType="INTEGER" property="taskStatus" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    task_id, task_no, tenant_id, area_code, region_code, project_id, customer_id, road_map_id, 
+    road_map_price_rule_id, vendor_id, truck_id, driver_id, depot_id, is_fixed_delivery, 
+    start_date, end_date, task_status, is_delete, create_user_id, create_time, last_update_user_id, 
+    last_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.task.domain.TaskScheduledExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from task_scheduled
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from task_scheduled
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from task_scheduled
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.task.domain.TaskScheduledExample">
+    delete from task_scheduled
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="task_id" keyProperty="taskId" parameterType="com.juma.tgm.task.domain.TaskScheduled" useGeneratedKeys="true">
+    insert into task_scheduled (task_no, tenant_id, area_code, 
+      region_code, project_id, customer_id, 
+      road_map_id, road_map_price_rule_id, vendor_id, 
+      truck_id, driver_id, depot_id, 
+      is_fixed_delivery, start_date, end_date, 
+      task_status, is_delete, create_user_id, 
+      create_time, last_update_user_id, last_update_time
+      )
+    values (#{taskNo,jdbcType=VARCHAR}, #{tenantId,jdbcType=INTEGER}, #{areaCode,jdbcType=VARCHAR}, 
+      #{regionCode,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, 
+      #{roadMapId,jdbcType=INTEGER}, #{roadMapPriceRuleId,jdbcType=INTEGER}, #{vendorId,jdbcType=INTEGER}, 
+      #{truckId,jdbcType=INTEGER}, #{driverId,jdbcType=INTEGER}, #{depotId,jdbcType=INTEGER}, 
+      #{isFixedDelivery,jdbcType=TINYINT}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{taskStatus,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="task_id" keyProperty="taskId" parameterType="com.juma.tgm.task.domain.TaskScheduled" useGeneratedKeys="true">
+    insert into task_scheduled
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskNo != null">
+        task_no,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="regionCode != null">
+        region_code,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="roadMapId != null">
+        road_map_id,
+      </if>
+      <if test="roadMapPriceRuleId != null">
+        road_map_price_rule_id,
+      </if>
+      <if test="vendorId != null">
+        vendor_id,
+      </if>
+      <if test="truckId != null">
+        truck_id,
+      </if>
+      <if test="driverId != null">
+        driver_id,
+      </if>
+      <if test="depotId != null">
+        depot_id,
+      </if>
+      <if test="isFixedDelivery != null">
+        is_fixed_delivery,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="taskStatus != null">
+        task_status,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskNo != null">
+        #{taskNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="roadMapId != null">
+        #{roadMapId,jdbcType=INTEGER},
+      </if>
+      <if test="roadMapPriceRuleId != null">
+        #{roadMapPriceRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="truckId != null">
+        #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null">
+        #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="depotId != null">
+        #{depotId,jdbcType=INTEGER},
+      </if>
+      <if test="isFixedDelivery != null">
+        #{isFixedDelivery,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="taskStatus != null">
+        #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.task.domain.TaskScheduledExample" resultType="java.lang.Long">
+    select count(*) from task_scheduled
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.task.domain.TaskScheduled">
+    update task_scheduled
+    <set>
+      <if test="taskNo != null">
+        task_no = #{taskNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        region_code = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="roadMapId != null">
+        road_map_id = #{roadMapId,jdbcType=INTEGER},
+      </if>
+      <if test="roadMapPriceRuleId != null">
+        road_map_price_rule_id = #{roadMapPriceRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null">
+        vendor_id = #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="truckId != null">
+        truck_id = #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null">
+        driver_id = #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="depotId != null">
+        depot_id = #{depotId,jdbcType=INTEGER},
+      </if>
+      <if test="isFixedDelivery != null">
+        is_fixed_delivery = #{isFixedDelivery,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="taskStatus != null">
+        task_status = #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.task.domain.TaskScheduled">
+    update task_scheduled
+    set task_no = #{taskNo,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=INTEGER},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      region_code = #{regionCode,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      road_map_id = #{roadMapId,jdbcType=INTEGER},
+      road_map_price_rule_id = #{roadMapPriceRuleId,jdbcType=INTEGER},
+      vendor_id = #{vendorId,jdbcType=INTEGER},
+      truck_id = #{truckId,jdbcType=INTEGER},
+      driver_id = #{driverId,jdbcType=INTEGER},
+      depot_id = #{depotId,jdbcType=INTEGER},
+      is_fixed_delivery = #{isFixedDelivery,jdbcType=TINYINT},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      task_status = #{taskStatus,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="taskId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into task_scheduled
+    (task_no,tenant_id,area_code,region_code,project_id,customer_id,road_map_id,road_map_price_rule_id,vendor_id,truck_id,driver_id,depot_id,is_fixed_delivery,start_date,end_date,task_status,is_delete,create_user_id,create_time,last_update_user_id,last_update_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.taskNo},#{item.tenantId},#{item.areaCode},#{item.regionCode},#{item.projectId},#{item.customerId},#{item.roadMapId},#{item.roadMapPriceRuleId},#{item.vendorId},#{item.truckId},#{item.driverId},#{item.depotId},#{item.isFixedDelivery},#{item.startDate},#{item.endDate},#{item.taskStatus},#{item.isDelete},#{item.createUserId},#{item.createTime},#{item.lastUpdateUserId},#{item.lastUpdateTime})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_scheduled
+      <set>
+        task_id = #{item.taskId},
+        task_no = #{item.taskNo},
+        tenant_id = #{item.tenantId},
+        area_code = #{item.areaCode},
+        region_code = #{item.regionCode},
+        project_id = #{item.projectId},
+        customer_id = #{item.customerId},
+        road_map_id = #{item.roadMapId},
+        road_map_price_rule_id = #{item.roadMapPriceRuleId},
+        vendor_id = #{item.vendorId},
+        truck_id = #{item.truckId},
+        driver_id = #{item.driverId},
+        depot_id = #{item.depotId},
+        is_fixed_delivery = #{item.isFixedDelivery},
+        start_date = #{item.startDate},
+        end_date = #{item.endDate},
+        task_status = #{item.taskStatus},
+        is_delete = #{item.isDelete},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+        last_update_time = #{item.lastUpdateTime},
+      </set>
+      where task_id = #{item.taskId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_scheduled
+      <set>
+        <if test="item.taskNo != null">
+          task_no = #{item.taskNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.areaCode != null">
+          area_code = #{item.areaCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.regionCode != null">
+          region_code = #{item.regionCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.projectId != null">
+          project_id = #{item.projectId,jdbcType=INTEGER},
+        </if>
+        <if test="item.customerId != null">
+          customer_id = #{item.customerId,jdbcType=INTEGER},
+        </if>
+        <if test="item.roadMapId != null">
+          road_map_id = #{item.roadMapId,jdbcType=INTEGER},
+        </if>
+        <if test="item.roadMapPriceRuleId != null">
+          road_map_price_rule_id = #{item.roadMapPriceRuleId,jdbcType=INTEGER},
+        </if>
+        <if test="item.vendorId != null">
+          vendor_id = #{item.vendorId,jdbcType=INTEGER},
+        </if>
+        <if test="item.truckId != null">
+          truck_id = #{item.truckId,jdbcType=INTEGER},
+        </if>
+        <if test="item.driverId != null">
+          driver_id = #{item.driverId,jdbcType=INTEGER},
+        </if>
+        <if test="item.depotId != null">
+          depot_id = #{item.depotId,jdbcType=INTEGER},
+        </if>
+        <if test="item.isFixedDelivery != null">
+          is_fixed_delivery = #{item.isFixedDelivery,jdbcType=TINYINT},
+        </if>
+        <if test="item.startDate != null">
+          start_date = #{item.startDate,jdbcType=DATE},
+        </if>
+        <if test="item.endDate != null">
+          end_date = #{item.endDate,jdbcType=DATE},
+        </if>
+        <if test="item.taskStatus != null">
+          task_status = #{item.taskStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.isDelete != null">
+          is_delete = #{item.isDelete,jdbcType=TINYINT},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where task_id = #{item.taskId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.fms.dao.v3.ext.AdjustForItemExtMapper">
+    <sql id="QUERY_COLUMN_LIST">
+        SUM(afi.adjust_for_freight + afi.adjust_for_carry + afi.adjust_for_workload + afi.adjust_for_upstairs + afi.adjust_for_fine + afi.adjust_for_cargo_loss) AS adjustFreight,
+        SUM(ABS(afi.adjust_for_freight) + ABS(afi.adjust_for_carry) + ABS(afi.adjust_for_workload) + ABS(afi.adjust_for_upstairs) + ABS(afi.adjust_for_fine) + ABS(afi.adjust_for_cargo_loss)) AS adjustAbsFreight
+    </sql>
+
+    <sql id="QUERY_FROM_TABLE"><![CDATA[ FROM adjust_for_master afm left join adjust_for_item afi on afm
+    .adjust_id = afi.adjust_id]]></sql>
+
+    <sql id="QUERY_WHERE">
+        <where>
+            <if test="vendorId != null"><![CDATA[ and afi.vendor_id = #{vendorId} ]]></if>
+            <if test="waybillId != null"><![CDATA[ and afi.waybill_id = #{waybillId} ]]></if>
+            <if test="reconcilicationNo != null"><![CDATA[ and afm.reconcilication_no = #{reconcilicationNo} ]]></if>
+            <if test="approvalStatus != null"><![CDATA[ and afm.approval_status = #{approvalStatus} ]]></if>
+            <if test="adjustType != null"><![CDATA[ and afm.adjust_type = #{adjustType} ]]></if>
+            <if test="adjustForWho != null"><![CDATA[ and afm.adjust_for_who = #{adjustForWho} ]]></if>
+        </where>
+    </sql>
+
+    <!-- 调整金额 -->
+    <select id="selectAdjustFreightByExample" parameterType="com.juma.tgm.fms.domain.v3.vo.AdjustForItemExtFilter" resultType="com.juma.tgm.fms.domain.v3.vo.AdjustFreightVo">
+        <![CDATA[ select ]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE"/>
+    </select>
+
+</mapper>

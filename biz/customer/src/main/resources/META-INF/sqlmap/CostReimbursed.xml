@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.costReimbursed.dao.CostReimbursedDao">
+  <sql id="QUERY_COLUMN_LIST">
+    cost_reimbursed_id AS costReimbursedId, 
+    cost_reimbursed_key AS costReimbursedKey, 
+    cost_reimbursed_type AS costReimbursedType, 
+    cost_reimbursed_no AS costReimbursedNo, 
+    cost_produce_time AS costProduceTime, 
+    declare_time AS declareTime, 
+    reimbursed_amount AS reimbursedAmount, 
+    audit_result AS auditResult, 
+    truck_id AS truckId, 
+    driver_id AS driverId, 
+    waybill_id AS waybillId, 
+    waybill_no AS waybillNo, 
+    remark AS remark, 
+    tenant_id AS tenantId, 
+    tenant_code AS tenantCode, 
+    area_code AS areaCode, 
+    region_code AS regionCode, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    is_delete AS isDelete, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM cost_reimbursed]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <![CDATA[AND tenant_id = #{tenantId}]]>
+      <if test="costReimbursedId != null"><![CDATA[AND cost_reimbursed_id = #{costReimbursedId}]]></if>
+      <if test="costReimbursedKey != null"><![CDATA[AND cost_reimbursed_key = #{costReimbursedKey}]]></if>
+      <if test="costReimbursedType != null"><![CDATA[AND cost_reimbursed_type = #{costReimbursedType}]]></if>
+      <if test="costReimbursedNo != null"><![CDATA[AND cost_reimbursed_no = #{costReimbursedNo}]]></if>
+      <if test="costProduceTime != null"><![CDATA[AND cost_produce_time = #{costProduceTime}]]></if>
+      <if test="declareTime != null"><![CDATA[AND declare_time = #{declareTime}]]></if>
+      <if test="reimbursedAmount != null"><![CDATA[AND reimbursed_amount = #{reimbursedAmount}]]></if>
+      <if test="auditResult != null"><![CDATA[AND audit_result = #{auditResult}]]></if>
+      <if test="truckId != null"><![CDATA[AND truck_id = #{truckId}]]></if>
+      <if test="driverId != null"><![CDATA[AND driver_id = #{driverId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="waybillNo != null"><![CDATA[AND waybill_no = #{waybillNo}]]></if>
+      <if test="remark != null"><![CDATA[AND remark = #{remark}]]></if>
+      <if test="tenantCode != null"><![CDATA[AND tenant_code = #{tenantCode}]]></if>
+      <if test="areaCode != null"><![CDATA[AND area_code = #{areaCode}]]></if>
+      <if test="regionCode != null"><![CDATA[AND region_code = #{regionCode}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[AND last_update_time = #{lastUpdateTime}]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <![CDATA[AND tenant_id = #{filters.tenantId}]]>
+      <if test="filters.costReimbursedId != null"><![CDATA[AND cost_reimbursed_id = #{filters.costReimbursedId}]]></if>
+      <if test="filters.costReimbursedKey != null"><![CDATA[AND cost_reimbursed_key = #{filters.costReimbursedKey}]]></if>
+      <if test="filters.costReimbursedType != null"><![CDATA[AND cost_reimbursed_type = #{filters.costReimbursedType}]]></if>
+      <if test="filters.costReimbursedNo != null"><![CDATA[AND cost_reimbursed_no like concat('%' ,#{filters.costReimbursedNo}, '%')]]></if>
+      <if test="filters.costProduceTime != null"><![CDATA[AND cost_produce_time = #{filters.costProduceTime}]]></if>
+      <if test="filters.areaCodeList != null">
+      AND
+      <foreach collection="filters.areaCodeList" item="code" open="("
+               close=")" separator=" or">
+        area_code like concat(#{code},'%')
+      </foreach>
+    </if>
+      <if test="filters.driverIdList != null">
+        <![CDATA[AND driver_id in]]>
+        <foreach item="item" index="index" collection="filters.driverIdList"
+                 open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="filters.declareTime != null"><![CDATA[AND declare_time = #{filters.declareTime}]]></if>
+      <if test="filters.startTime != null"><![CDATA[AND declare_time >= #{filters.startTime}]]></if>
+      <if test="filters.endTime != null"><![CDATA[AND declare_time <= #{filters.endTime}]]></if>
+      <if test="filters.reimbursedAmount != null"><![CDATA[AND reimbursed_amount = #{filters.reimbursedAmount}]]></if>
+      <if test="filters.auditResult != null"><![CDATA[AND audit_result = #{filters.auditResult}]]></if>
+      <if test="filters.truckId != null"><![CDATA[AND truck_id = #{filters.truckId}]]></if>
+      <if test="filters.driverId != null"><![CDATA[AND driver_id = #{filters.driverId}]]></if>
+      <if test="filters.waybillId != null"><![CDATA[AND waybill_id = #{filters.waybillId}]]></if>
+      <if test="filters.waybillNo != null"><![CDATA[AND waybill_no like concat('%' ,#{filters.waybillNo}, '%')]]></if>
+      <if test="filters.remark != null"><![CDATA[AND remark = #{filters.remark}]]></if>
+      <if test="filters.tenantCode != null"><![CDATA[AND tenant_code = #{filters.tenantCode}]]></if>
+      <if test="filters.areaCode != null"><![CDATA[AND area_code = #{filters.areaCode}]]></if>
+      <if test="filters.regionCode != null"><![CDATA[AND region_code = #{filters.regionCode}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.isDelete != null"><![CDATA[AND is_delete = #{filters.isDelete}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="costReimbursedKey != null"><![CDATA[cost_reimbursed_key = #{costReimbursedKey},]]></if>
+      <if test="costReimbursedType != null"><![CDATA[cost_reimbursed_type = #{costReimbursedType},]]></if>
+      <if test="costReimbursedNo != null"><![CDATA[cost_reimbursed_no = #{costReimbursedNo},]]></if>
+      <if test="costProduceTime != null"><![CDATA[cost_produce_time = #{costProduceTime},]]></if>
+      <if test="declareTime != null"><![CDATA[declare_time = #{declareTime},]]></if>
+      <if test="reimbursedAmount != null"><![CDATA[reimbursed_amount = #{reimbursedAmount},]]></if>
+      <if test="auditResult != null"><![CDATA[audit_result = #{auditResult},]]></if>
+      <if test="truckId != null"><![CDATA[truck_id = #{truckId},]]></if>
+      <if test="driverId != null"><![CDATA[driver_id = #{driverId},]]></if>
+      <if test="waybillId != null"><![CDATA[waybill_id = #{waybillId},]]></if>
+      <if test="waybillNo != null"><![CDATA[waybill_no = #{waybillNo},]]></if>
+      <if test="remark != null"><![CDATA[remark = #{remark},]]></if>
+      <if test="tenantId != null"><![CDATA[ tenant_id = #{tenantId},]]></if>
+      <if test="tenantCode != null"><![CDATA[ tenant_code = #{tenantCode},]]></if>
+      <if test="areaCode != null"><![CDATA[ area_code = #{areaCode},]]></if>
+      <if test="regionCode != null"><![CDATA[ region_code = #{regionCode},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+
+  <insert id="insert" parameterType="costReimbursed" useGeneratedKeys = "true" keyProperty ="costReimbursedId">
+    <![CDATA[
+      insert into cost_reimbursed
+		(cost_reimbursed_key, cost_reimbursed_type, cost_reimbursed_no, cost_produce_time, declare_time, reimbursed_amount, audit_result, truck_id, driver_id, waybill_id, waybill_no, remark, tenant_id,tenant_code,area_code,region_code, create_time, create_user_id, is_delete)
+	values
+		(#{costReimbursedKey}, #{costReimbursedType}, #{costReimbursedNo}, #{costProduceTime}, #{declareTime}, #{reimbursedAmount}, #{auditResult}, #{truckId}, #{driverId}, #{waybillId}, #{waybillNo}, #{remark}, #{tenantId}, #{tenantCode}, #{areaCode}, #{regionCode}, now(),#{createUserId}, false)
+	]]>
+  </insert>
+
+  <update id="update" parameterType="costReimbursed" >
+    <![CDATA[UPDATE cost_reimbursed]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE cost_reimbursed_id = #{costReimbursedId}]]>
+  </update>
+
+  <select id="get" parameterType="int" resultType="costReimbursed">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE cost_reimbursed_id = #{costReimbursedId}]]>
+  </select>
+
+  <select id="loadAll" resultType="costReimbursed">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+
+  <select id="findByExample" parameterType="costReimbursed" resultType="costReimbursed">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="costReimbursed">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+  
+  <select id="getNextSequence" resultType="int" parameterType="java.lang.String">
+    <![CDATA[SELECT  Auto_increment FROM information_schema.TABLES
+             WHERE TABLE_SCHEMA = #{dataBaseName} and table_name = 'cost_reimbursed']]>
+  </select>
+
+  <select id="getByCostReimbursedNo" resultType="costReimbursed" parameterType="java.lang.String">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE cost_reimbursed_no = #{costReimbursedNo}]]>
+  </select>
+</mapper>

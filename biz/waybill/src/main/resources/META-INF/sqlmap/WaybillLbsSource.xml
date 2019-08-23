@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.waybillLbsSource.dao.WaybillLbsSourceDao" >
+  <sql id="Base_Column_List" >
+    waybill_lbs_source_id as waybillLbsSourceId,
+    waybill_id as waybillId,
+    sign as sign,
+    time_consuming as timeConsuming,
+    coordinate as coordinate,
+    device_no as deviceNo,
+    address as address,
+    device_type as deviceType,
+    create_time as createTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[ FROM waybill_lbs_source ]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="waybillLbsSourceId != null"><![CDATA[waybill_lbs_source_id = #{waybillLbsSourceId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="sign != null"><![CDATA[AND sign = #{sign}]]></if>
+      <if test="deviceNo != null"><![CDATA[AND device_no = #{deviceNo}]]></if>
+      <if test="deviceType != null"><![CDATA[AND device_type = #{deviceType}]]></if>
+      <if test="address != null"><![CDATA[AND address = #{address}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters != null">
+        <if test="filters.waybillId != null"><![CDATA[and waybill_id = #{filters.waybillId}]]></if>
+        <if test="filters.sign != null"><![CDATA[AND sign = #{filters.sign}]]></if>
+        <if test="filters.deviceNo != null"><![CDATA[AND device_no = #{filters.deviceNo}]]></if>
+        <if test="filters.deviceType != null"><![CDATA[AND device_type = #{filters.deviceType}]]></if>
+      </if>
+    </where>
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="waybillId != null"><![CDATA[ waybill_id = #{waybillId},]]></if>
+      <if test="sign != null"><![CDATA[ sign = #{sign},]]></if>
+      <if test="timeConsuming != null"><![CDATA[ time_consuming = #{timeConsuming},]]></if>
+      <if test="deviceNo != null"><![CDATA[ device_no = #{deviceNo},]]></if>
+      <if test="deviceType != null"><![CDATA[ device_type = #{deviceType},]]></if>
+      <if test="address != null"><![CDATA[ address = #{address},]]></if>
+    </set>
+  </sql>
+
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by create_time asc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <select id="get" resultType="waybillLbsSource" parameterType="java.lang.Integer" >
+    <![CDATA[select ]]>
+    <include refid="Base_Column_List" />
+    <include refid="QUERY_FROM_TABLE" />
+    <![CDATA[where waybill_lbs_source_id = #{waybillLbsSourceId}]]>
+  </select>
+
+  <select id="delete" parameterType="waybillLbsSource" >
+    <![CDATA[delete from waybill_lbs_source where waybill_id = #{waybillId} and sign = #{sign}]]>
+  </select>
+
+  <select id="update" parameterType="waybillLbsSource" >
+    <![CDATA[update waybill_lbs_source ]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[ where waybill_lbs_source_id = #{waybillLbsSourceId}]]>
+  </select>
+
+  <insert id="insert" parameterType="waybillLbsSource" useGeneratedKeys="true" keyProperty="trackId">
+    insert into waybill_lbs_source (waybill_id, sign, time_consuming, coordinate, device_no, device_type, address, create_time)
+    values (#{waybillId}, #{sign}, #{timeConsuming}, #{coordinate}, #{deviceNo}, #{deviceType}, #{address}, now())
+  </insert>
+
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="waybillLbsSource">
+    <![CDATA[select ]]>
+    <include refid="Base_Column_List"></include>
+    <include refid="QUERY_FROM_TABLE" />
+    <include refid="SEARCH_WHERE_CLAUSE"></include>
+    <include refid="searchorderByAndLimitSql"></include>
+  </select>
+
+  <select id="searchDetail" parameterType="com.giants.common.tools.PageCondition" resultType="com.juma.tgm.waybillLbsSource.domain.WaybillLbsSourceQuery">
+    <![CDATA[
+      select 
+      w.waybill_id as waybillId,
+      w.waybill_no as waybillNo,
+      w.driver_id as driverId,
+      w.truck_id as truckId,
+      w.customer_id as customerId,
+      w.customer_manager_id as customerManagerId,
+      w.plan_delivery_time as planDeliveryTime,
+      w.create_time as createTime,
+      wls.time_consuming as timeConsuming,
+      wls.waybill_lbs_source_id as waybillLbsSourceId
+      from waybill_lbs_source wls INNER JOIN waybill w
+      on wls.waybill_id = w.waybill_id
+    ]]>
+    <include refid="SEARCH_WHERE_CLAUSE_INNER_TABLE"></include>
+    <include refid="searchorderByAndLimitSqlTable"></include>
+  </select>
+
+  <sql id="SEARCH_WHERE_CLAUSE_INNER_TABLE">
+    <where>
+      <![CDATA[ AND wls.sign = #{filters.sign} and tenant_id = #{filters.tenantId} ]]>
+      <if test="filters.driverId != null"><![CDATA[ AND w.driver_id=#{filters.driverId}]]></if>
+      <if test="filters.driverId != null"><![CDATA[ AND w.driver_id=#{filters.driverId}]]></if>
+      <if test="filters.waybillNo != null"><![CDATA[ AND w.waybill_no like concat('%',#{filters.waybillNo},'%')]]></if>
+      <if test="filters.customerId != null"><![CDATA[ AND w.customer_id = #{filters.customerId}]]></if>
+      <if test="filters.isTest != null"><![CDATA[ AND w.is_test = #{filters.isTest}]]></if>
+      <if test="filters.tenantCode != null"><![CDATA[ AND w.tenant_code = #{filters.tenantCode}]]></if>
+
+      <if test="filters.isBespeakWaybill != null">
+        <choose>
+            <when test="filters.isBespeakWaybill == 1">
+                <![CDATA[ AND DATE_FORMAT(w.plan_delivery_time, '%Y-%m-%d') != DATE_FORMAT(w.create_time, '%Y-%m-%d')]]>
+            </when>
+            <otherwise>
+                <![CDATA[ AND DATE_FORMAT(w.plan_delivery_time, '%Y-%m-%d') = DATE_FORMAT(w.create_time, '%Y-%m-%d')]]>
+            </otherwise>
+        </choose>
+       </if>
+
+      <if test="filters.areaCodeList != null">
+          <![CDATA[ AND ( ]]>
+            <foreach collection="filters.areaCodeList" item="code" separator=" or">
+              w.area_code like concat(#{code},'%')
+            </foreach>
+          <![CDATA[ ) ]]>
+      </if>
+
+      <if test="filters.driverIdList != null">
+          <![CDATA[ AND w.driver_id in]]>
+          <foreach item="item" index="index" collection="filters.driverIdList"
+                   open="(" separator="," close=")">
+              #{item}
+          </foreach>
+      </if>
+      
+      <!-- 企业客户 -->
+      <if test="filters.customerInfoIdList != null">
+          and w.customer_id IN
+          <foreach collection="filters.customerInfoIdList" item="item" open="(" separator="," close=")">
+              #{item}
+          </foreach>
+      </if>
+      <if test="filters.startTime != null"><![CDATA[AND w.plan_delivery_time >= #{filters.startTime}]]></if>
+      <if test="filters.endTime != null"><![CDATA[AND w.plan_delivery_time <= #{filters.endTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="searchorderByAndLimitSqlTable">
+    <choose>
+        <when test="orderBy == null">
+            order by w.plan_delivery_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.giants.common.tools.PageCondition">
+    <![CDATA[select count(1)
+      from waybill_lbs_source wls INNER JOIN waybill w
+      on wls.waybill_id = w.waybill_id ]]>
+    <include refid="SEARCH_WHERE_CLAUSE_INNER_TABLE" />
+  </select>
+  <select id="findByExample" parameterType="waybillLbsSource" resultType="waybillLbsSource">
+    <![CDATA[SELECT]]>
+    <include refid="Base_Column_List"/>
+    <include refid="QUERY_FROM_TABLE" />
+    <include refid="QUERY_WHERE_CLAUSE"/>
+    <![CDATA[ order by create_time asc ]]>
+  </select>
+</mapper>

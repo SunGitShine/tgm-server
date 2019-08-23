@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.truck.dao.AdditionalFunctionFreightDao">
+  <sql id="QUERY_COLUMN_LIST">
+    additional_function_freight_id AS additionalFunctionFreightId, 
+    additional_function_id AS additionalFunctionId, 
+    freight_per_waybill AS freightPerWaybill, 
+    lowest_freight AS lowestFreight, 
+    lowest_mileage AS lowestMileage, 
+    beyond_unit_price AS beyondUnitPrice, 
+    highest_freight AS highestFreight, 
+    note AS note, 
+    freight_id AS freightId,
+    is_delete AS isDelete, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM additional_function_freight]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="additionalFunctionFreightId != null"><![CDATA[AND additional_function_freight_id = #{additionalFunctionFreightId}]]></if>
+      <if test="freightId != null"><![CDATA[AND freight_id = #{freightId}]]></if>
+      <if test="additionalFunctionId != null"><![CDATA[AND additional_function_id = #{additionalFunctionId}]]></if>
+      <if test="freightPerWaybill != null"><![CDATA[AND freight_per_waybill = #{freightPerWaybill}]]></if>
+      <if test="lowestFreight != null"><![CDATA[AND lowest_freight = #{lowestFreight}]]></if>
+      <if test="lowestMileage != null"><![CDATA[AND lowest_mileage = #{lowestMileage}]]></if>
+      <if test="beyondUnitPrice != null"><![CDATA[AND beyond_unit_price = #{beyondUnitPrice}]]></if>
+      <if test="highestFreight != null"><![CDATA[AND highest_freight = #{highestFreight}]]></if>
+      <if test="note != null and note != ''"><![CDATA[AND note = #{note}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+    </where>
+  </sql>
+
+  <sql id="QUERY_ORDER_LIMIT_CONDTION">
+    <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+    <if test="orderField == null and orderFieldType == null"><![CDATA[ORDER BY id DESC]]></if>
+    <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="freightId != null"><![CDATA[freight_id = #{freightId},]]></if>
+      <if test="additionalFunctionId != null"><![CDATA[additional_function_id = #{additionalFunctionId},]]></if>
+      <if test="freightPerWaybill != null"><![CDATA[freight_per_waybill = #{freightPerWaybill},]]></if>
+      <if test="lowestFreight != null"><![CDATA[lowest_freight = #{lowestFreight},]]></if>
+      <if test="lowestMileage != null"><![CDATA[lowest_mileage = #{lowestMileage},]]></if>
+      <if test="beyondUnitPrice != null"><![CDATA[beyond_unit_price = #{beyondUnitPrice},]]></if>
+      <if test="highestFreight != null"><![CDATA[highest_freight = #{highestFreight},]]></if>
+      <if test="note != null and note != ''"><![CDATA[note = #{note},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="additionalFunctionFreight" useGeneratedKeys = "true" keyProperty ="id">
+     insert into additional_function_freight
+    <trim prefix="(" suffixOverrides="," suffix=")">
+      <if test="freightId != null">
+        freight_id,
+      </if>
+      <if test="additionalFunctionId != null">
+        additional_function_id,
+      </if>
+      <if test="freightPerWaybill != null">
+        freight_per_waybill,
+      </if>
+      <if test="lowestFreight != null">
+        lowest_freight,
+      </if>
+      <if test="lowestMileage != null">
+        lowest_mileage,
+      </if>
+      <if test="beyondUnitPrice != null">
+        beyond_unit_price,
+      </if>
+      <if test="highestFreight != null">
+        highest_freight,
+      </if>
+      <if test="note != null and note != ''">
+        note,
+      </if>
+      is_delete,
+      create_time,
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffixOverrides="," suffix=")">
+      <if test="freightId != null">
+        #{freightId},
+      </if>
+      <if test="additionalFunctionId != null">
+        #{additionalFunctionId},
+      </if>
+      <if test="freightPerWaybill != null">
+        #{freightPerWaybill},
+      </if>
+      <if test="lowestFreight != null">
+        #{lowestFreight},
+      </if>
+      <if test="lowestMileage != null">
+        #{lowestMileage},
+      </if>
+      <if test="beyondUnitPrice != null">
+        #{beyondUnitPrice},
+      </if>
+      <if test="highestFreight != null">
+        #{highestFreight},
+      </if>
+      <if test="note != null and note != ''">
+        #{note},
+      </if>
+      false,
+      now(),
+      <if test="createUserId != null">
+        #{createUserId},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId},
+      </if>
+    </trim>
+  </insert>
+  <select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+  <delete id="delete" parameterType="additionalFunctionFreight" >
+    delete from additional_function_freight where freight_id=#{freightId}
+  </delete>
+  <update id="update" parameterType="additionalFunctionFreight" >
+    <![CDATA[UPDATE additional_function_freight ]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE freight_id = #{freightId}]]>
+  </update>
+
+  <select id="findByExample" parameterType="additionalFunctionFreight" resultType="additionalFunctionFreight">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+
+</mapper>

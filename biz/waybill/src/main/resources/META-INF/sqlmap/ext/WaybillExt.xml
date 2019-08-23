@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillDao">
+	<resultMap id="BaseResultMap" type="com.juma.tgm.waybill.domain.Waybill">
+		<id column="waybill_id" jdbcType="INTEGER" property="waybillId" />
+		<result column="truck_customer_id" jdbcType="INTEGER" property="truckCustomerId" />
+		<result column="truck_customer_name" jdbcType="VARCHAR"
+			property="truckCustomerName" />
+		<result column="driver_id" jdbcType="INTEGER" property="driverId" />
+		<result column="driver_name" jdbcType="VARCHAR" property="driverName" />
+		<result column="driver_type" jdbcType="TINYINT" property="driverType" />
+		<result column="truck_id" jdbcType="INTEGER" property="truckId" />
+		<result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
+		<result column="is_test" jdbcType="TINYINT" property="isTest" />
+		<result column="waybill_no" jdbcType="VARCHAR" property="waybillNo" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="status_view" jdbcType="INTEGER" property="statusView" />
+		<result column="receive_way" jdbcType="INTEGER" property="receiveWay" />
+		<result column="estimate_distance" jdbcType="INTEGER" property="estimateDistance" />
+		<result column="estimate_time_consumption" jdbcType="INTEGER"
+			property="estimateTimeConsumption" />
+		<result column="estimate_freight" jdbcType="DECIMAL" property="estimateFreight" />
+		<result column="plan_delivery_time" jdbcType="TIMESTAMP"
+			property="planDeliveryTime" />
+		<result column="arrive_depot_time" jdbcType="TIMESTAMP"
+			property="arriveDepotTime" />
+		<result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
+		<result column="waybill_remark" jdbcType="VARCHAR" property="waybillRemark" />
+		<result column="receipt_type" jdbcType="TINYINT" property="receiptType" />
+		<result column="receiving_time" jdbcType="TIMESTAMP" property="receivingTime" />
+		<result column="finish_time" jdbcType="TIMESTAMP" property="finishTime" />
+		<result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+		<result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+		<result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+		<result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+		<result column="last_update_time" jdbcType="TIMESTAMP"
+			property="lastUpdateTime" />
+		<result column="last_update_user_id" jdbcType="INTEGER"
+			property="lastUpdateUserId" />
+		<result column="flight_usage_id" jdbcType="INTEGER" property="flightUsageId" />
+		<result column="calculated_freight" jdbcType="DECIMAL"
+			property="calculatedFreight" />
+		<result column="after_tax_freight" jdbcType="DECIMAL" property="afterTaxFreight" />
+		<result column="show4_driver_freight" jdbcType="DECIMAL"
+			property="show4DriverFreight" />
+		<result column="order_no" jdbcType="INTEGER" property="orderNo" />
+		<result column="is_late" jdbcType="BIT" property="isLate" />
+		<result column="update_freight_remark" jdbcType="VARCHAR"
+			property="updateFreightRemark" />
+		<result column="update_freight_audit_status" jdbcType="TINYINT"
+			property="updateFreightAuditStatus" />
+		<result column="freight_to_be_audited" jdbcType="DECIMAL"
+			property="freightToBeAudited" />
+		<result column="update_freight_audit_remark" jdbcType="VARCHAR"
+			property="updateFreightAuditRemark" />
+		<result column="assign_waybill_remark" jdbcType="VARCHAR"
+			property="assignWaybillRemark" />
+		<result column="payment_route" jdbcType="TINYINT" property="paymentRoute" />
+		<result column="compare_result" jdbcType="DECIMAL" property="compareResult" />
+		<result column="waybill_source" jdbcType="TINYINT" property="waybillSource" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+		<result column="customer_manager_id" jdbcType="INTEGER"
+			property="customerManagerId" />
+		<result column="customer_manager_name" jdbcType="VARCHAR"
+			property="customerManagerName" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="project_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="business_branch" jdbcType="TINYINT" property="businessBranch" />
+		<result column="rebate_rate" jdbcType="DECIMAL" property="rebateRate" />
+		<result column="reconciliation_status" jdbcType="TINYINT"
+			property="reconciliationStatus" />
+		<result column="actual_mileage" jdbcType="INTEGER" property="actualMileage" />
+		<result column="tolls" jdbcType="DECIMAL" property="tolls" />
+		<result column="need_receipt" jdbcType="TINYINT" property="needReceipt" />
+		<result column="waybill_cancel_remark" jdbcType="VARCHAR"
+			property="waybillCancelRemark" />
+		<result column="is_submit_match" jdbcType="BIT" property="isSubmitMatch" />
+		<result column="waybill_unbundling_reason" jdbcType="VARCHAR"
+			property="waybillUnbundlingReason" />
+		<result column="assign_car_feedback" jdbcType="VARCHAR"
+			property="assignCarFeedback" />
+		<result column="cancel_channel" jdbcType="TINYINT" property="cancelChannel" />
+		<result column="entry_license" jdbcType="TINYINT" property="entryLicense" />
+		<result column="goods_weight" jdbcType="INTEGER" property="goodsWeight" />
+		<result column="goods_volume" jdbcType="DECIMAL" property="goodsVolume" />
+		<result column="is_change_delivery_point" jdbcType="TINYINT"
+			property="isChangeDeliveryPoint" />
+		<result column="vehicle_box_type" jdbcType="TINYINT" property="vehicleBoxType" />
+		<result column="cm_estimate_finish_time" jdbcType="TIMESTAMP"
+			property="cmEstimateFinishTime" />
+		<result column="only_load_cargo" jdbcType="TINYINT" property="onlyLoadCargo" />
+		<result column="need_delivery_point_note" jdbcType="TINYINT"
+			property="needDeliveryPointNote" />
+		<result column="reconciliation_no" jdbcType="VARCHAR" property="reconciliationNo" />
+		<result column="vehicle_to_vendor" jdbcType="INTEGER" property="vehicleToVendor" />
+		<result column="vendor_id" jdbcType="INTEGER" property="vendorId" />
+		<result column="receivable_reconcilication_no" jdbcType="VARCHAR" property="receivableReconcilicationNo" />
+		<result column="receivable_reconcilication_status" jdbcType="INTEGER" property="receivableReconcilicationStatus" />
+		<result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="pay_to_company" jdbcType="INTEGER" property="payToCompany" />
+		<result column="pay_to_company_credit_code" jdbcType="VARCHAR" property="payToCompanyCreditCode" />
+		<result column="contract_to_company_credit_code" jdbcType="VARCHAR" property="contractToCompanyCreditCode" />
+	</resultMap>
+
+	<resultMap id="billStatsMap" type="com.juma.tgm.waybill.domain.Waybill">
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="status_view" jdbcType="INTEGER" property="statusView" />
+		<result column="waybill_source" jdbcType="TINYINT" property="waybillSource" />
+		<result column="finish_time" jdbcType="TIMESTAMP" property="finishTime" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		waybill_id, truck_customer_id, truck_customer_name,
+		driver_id,
+		driver_name, driver_type, truck_id, plate_number, is_test, waybill_no, status,
+		status_view,
+		receive_way, estimate_distance, estimate_time_consumption, estimate_freight,
+		plan_delivery_time,
+		arrive_depot_time, delivery_time, waybill_remark, receipt_type, receiving_time,
+		finish_time, tenant_code, tenant_id, region_code, area_code,
+		create_time, create_user_id,
+		last_update_time, last_update_user_id,
+		flight_usage_id, calculated_freight, after_tax_freight, show4_driver_freight,
+		order_no,
+		is_late, update_freight_remark, update_freight_audit_status,
+		freight_to_be_audited,
+		update_freight_audit_remark, assign_waybill_remark, payment_route, compare_result,
+		waybill_source, customer_id, customer_name, customer_manager_id,
+		customer_manager_name,
+		project_id, project_name, business_branch, rebate_rate,
+		reconciliation_status, actual_mileage, tolls, need_receipt, waybill_cancel_remark,
+		is_submit_match, waybill_unbundling_reason, assign_car_feedback,
+		cancel_channel,
+		entry_license, goods_weight, goods_volume, is_change_delivery_point,
+		vehicle_box_type, cm_estimate_finish_time, only_load_cargo, need_delivery_point_note,
+		reconciliation_no, vehicle_to_vendor, vendor_id,
+		receivable_reconcilication_no,receivable_reconcilication_status,department_id,pay_to_company,
+		pay_to_company_credit_code,contract_to_company_credit_code
+	</sql>
+	<select id="selectByExample" parameterType="com.juma.tgm.waybill.domain.example.WaybillExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from waybill
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="startOffSet!=null">
+			<if test="startOffSet>=0">
+				limit ${startOffSet} , ${size}
+			</if>
+		</if>
+	</select>
+
+
+	<select id="countWaybillStatus" resultType="int">
+		SELECT
+		project_id
+		FROM
+		waybill b
+		LEFT JOIN waybill_amount a ON a.waybill_id = b.waybill_id
+		WHERE
+		b.project_id IS NOT NULL
+		AND a.amount_status !=1
+		AND b.project_id in
+		<foreach collection="projectIds" index="index" item="item"
+				 open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND b.status_view in (2,3,5)
+		AND b.is_delete = 0
+		AND b.plan_delivery_time between #{dailyDate} and  #{endTime}
+	</select>
+
+
+	<select id="checkWayBillStatsByDate" resultMap="billStatsMap">
+		SELECT
+		project_id,
+		status_view,
+		waybill_source,
+		MAX(finish_time) as finish_time
+		FROM
+		tgm.waybill
+		WHERE
+		plan_delivery_time <![CDATA[>= ]]> #{startDate}
+		AND plan_delivery_time <![CDATA[<= ]]> #{endTime}
+		AND project_id IS NOT NULL
+		AND status_view IN (2, 3, 5)
+		AND is_delete = 0
+		GROUP BY
+		project_id,
+		status_view,
+		waybill_source
+		ORDER BY
+		project_id DESC;
+	</select>
+
+
+</mapper>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.vendor.dao.VendorProjectMappingMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.vendor.domain.VendorProjectMapping" >
+    <id column="vendor_project_mapping_id" property="vendorProjectMappingId" jdbcType="INTEGER" />
+    <result column="vendor_mapping_id" property="vendorMappingId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="vendor_project_id" property="vendorProjectId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    vendor_project_mapping_id, vendor_mapping_id, customer_id, project_id, vendor_project_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.juma.tgm.vendor.domain.VendorProjectMappingExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from vendor_project_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null" >
+      <if test="startOffSet>=0" >
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.vendor.domain.VendorProjectMappingExample" >
+    delete from vendor_project_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.juma.tgm.vendor.domain.VendorProjectMapping" >
+    <selectKey resultType="java.lang.Integer" keyProperty="vendorProjectMappingId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vendor_project_mapping
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vendorMappingId != null" >
+        vendor_mapping_id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="vendorProjectId != null" >
+        vendor_project_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vendorMappingId != null" >
+        #{vendorMappingId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorProjectId != null" >
+        #{vendorProjectId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.vendor.domain.VendorProjectMappingExample" resultType="java.lang.Integer" >
+    select count(*) from vendor_project_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update vendor_project_mapping
+    <set >
+      <if test="record.vendorProjectMappingId != null" >
+        vendor_project_mapping_id = #{record.vendorProjectMappingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorMappingId != null" >
+        vendor_mapping_id = #{record.vendorMappingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectId != null" >
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorProjectId != null" >
+        vendor_project_id = #{record.vendorProjectId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update vendor_project_mapping
+    set vendor_project_mapping_id = #{record.vendorProjectMappingId,jdbcType=INTEGER},
+      vendor_mapping_id = #{record.vendorMappingId,jdbcType=INTEGER},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      vendor_project_id = #{record.vendorProjectId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.vendor.domain.VendorProjectMapping" >
+    update vendor_project_mapping
+    <set >
+      <if test="vendorMappingId != null" >
+        vendor_mapping_id = #{vendorMappingId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorProjectId != null" >
+        vendor_project_id = #{vendorProjectId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where vendor_project_mapping_id = #{vendorProjectMappingId,jdbcType=INTEGER}
+  </update>
+</mapper>

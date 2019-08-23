@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.daily.dao.ProjectDailyMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.daily.domain.ProjectDaily">
+    <id column="project_daily_id" jdbcType="INTEGER" property="projectDailyId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="project_daily_no" jdbcType="VARCHAR" property="projectDailyNo" />
+    <result column="project_daily_date" jdbcType="DATE" property="projectDailyDate" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="daily_status" jdbcType="INTEGER" property="dailyStatus" />
+    <result column="standing_book_status" jdbcType="INTEGER" property="standingBookStatus" />
+    <result column="freight_status" jdbcType="INTEGER" property="freightStatus" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    project_daily_id, tenant_id, area_code, project_daily_no, project_daily_date, project_id, 
+    customer_id, daily_status, standing_book_status, freight_status, is_delete, create_user_id, 
+    create_time, last_update_user_id, last_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.daily.domain.ProjectDailyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from project_daily
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_daily
+    where project_daily_id = #{projectDailyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from project_daily
+    where project_daily_id = #{projectDailyId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.daily.domain.ProjectDailyExample">
+    delete from project_daily
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="project_daily_id" keyProperty="projectDailyId" parameterType="com.juma.tgm.daily.domain.ProjectDaily" useGeneratedKeys="true">
+    insert into project_daily (tenant_id, area_code, project_daily_no, 
+      project_daily_date, project_id, customer_id, 
+      daily_status, standing_book_status, freight_status, 
+      is_delete, create_user_id, create_time, 
+      last_update_user_id, last_update_time)
+    values (#{tenantId,jdbcType=INTEGER}, #{areaCode,jdbcType=VARCHAR}, #{projectDailyNo,jdbcType=VARCHAR}, 
+      #{projectDailyDate,jdbcType=DATE}, #{projectId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, 
+      #{dailyStatus,jdbcType=INTEGER}, #{standingBookStatus,jdbcType=INTEGER}, #{freightStatus,jdbcType=INTEGER}, 
+      #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastUpdateUserId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="project_daily_id" keyProperty="projectDailyId" parameterType="com.juma.tgm.daily.domain.ProjectDaily" useGeneratedKeys="true">
+    insert into project_daily
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="projectDailyNo != null">
+        project_daily_no,
+      </if>
+      <if test="projectDailyDate != null">
+        project_daily_date,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="dailyStatus != null">
+        daily_status,
+      </if>
+      <if test="standingBookStatus != null">
+        standing_book_status,
+      </if>
+      <if test="freightStatus != null">
+        freight_status,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDailyNo != null">
+        #{projectDailyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDailyDate != null">
+        #{projectDailyDate,jdbcType=DATE},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="dailyStatus != null">
+        #{dailyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="standingBookStatus != null">
+        #{standingBookStatus,jdbcType=INTEGER},
+      </if>
+      <if test="freightStatus != null">
+        #{freightStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.daily.domain.ProjectDailyExample" resultType="java.lang.Long">
+    select count(*) from project_daily
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update project_daily
+    <set>
+      <if test="record.projectDailyId != null">
+        project_daily_id = #{record.projectDailyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaCode != null">
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectDailyNo != null">
+        project_daily_no = #{record.projectDailyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectDailyDate != null">
+        project_daily_date = #{record.projectDailyDate,jdbcType=DATE},
+      </if>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerId != null">
+        customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dailyStatus != null">
+        daily_status = #{record.dailyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.standingBookStatus != null">
+        standing_book_status = #{record.standingBookStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.freightStatus != null">
+        freight_status = #{record.freightStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update project_daily
+    set project_daily_id = #{record.projectDailyId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      project_daily_no = #{record.projectDailyNo,jdbcType=VARCHAR},
+      project_daily_date = #{record.projectDailyDate,jdbcType=DATE},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      daily_status = #{record.dailyStatus,jdbcType=INTEGER},
+      standing_book_status = #{record.standingBookStatus,jdbcType=INTEGER},
+      freight_status = #{record.freightStatus,jdbcType=INTEGER},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.daily.domain.ProjectDaily">
+    update project_daily
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDailyNo != null">
+        project_daily_no = #{projectDailyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDailyDate != null">
+        project_daily_date = #{projectDailyDate,jdbcType=DATE},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="dailyStatus != null">
+        daily_status = #{dailyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="standingBookStatus != null">
+        standing_book_status = #{standingBookStatus,jdbcType=INTEGER},
+      </if>
+      <if test="freightStatus != null">
+        freight_status = #{freightStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where project_daily_id = #{projectDailyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.daily.domain.ProjectDaily">
+    update project_daily
+    set tenant_id = #{tenantId,jdbcType=INTEGER},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      project_daily_no = #{projectDailyNo,jdbcType=VARCHAR},
+      project_daily_date = #{projectDailyDate,jdbcType=DATE},
+      project_id = #{projectId,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      daily_status = #{dailyStatus,jdbcType=INTEGER},
+      standing_book_status = #{standingBookStatus,jdbcType=INTEGER},
+      freight_status = #{freightStatus,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where project_daily_id = #{projectDailyId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="projectDailyId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into project_daily
+    (tenant_id,area_code,project_daily_no,project_daily_date,project_id,customer_id,daily_status,standing_book_status,freight_status,is_delete,create_user_id,create_time,last_update_user_id,last_update_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.tenantId},#{item.areaCode},#{item.projectDailyNo},#{item.projectDailyDate},#{item.projectId},#{item.customerId},#{item.dailyStatus},#{item.standingBookStatus},#{item.freightStatus},#{item.isDelete},#{item.createUserId},#{item.createTime},#{item.lastUpdateUserId},#{item.lastUpdateTime})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update project_daily
+      <set>
+        project_daily_id = #{item.projectDailyId},
+        tenant_id = #{item.tenantId},
+        area_code = #{item.areaCode},
+        project_daily_no = #{item.projectDailyNo},
+        project_daily_date = #{item.projectDailyDate},
+        project_id = #{item.projectId},
+        customer_id = #{item.customerId},
+        daily_status = #{item.dailyStatus},
+        standing_book_status = #{item.standingBookStatus},
+        freight_status = #{item.freightStatus},
+        is_delete = #{item.isDelete},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+        last_update_time = #{item.lastUpdateTime},
+      </set>
+      where project_daily_id = #{item.projectDailyId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update project_daily
+      <set>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.areaCode != null">
+          area_code = #{item.areaCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.projectDailyNo != null">
+          project_daily_no = #{item.projectDailyNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.projectDailyDate != null">
+          project_daily_date = #{item.projectDailyDate,jdbcType=DATE},
+        </if>
+        <if test="item.projectId != null">
+          project_id = #{item.projectId,jdbcType=INTEGER},
+        </if>
+        <if test="item.customerId != null">
+          customer_id = #{item.customerId,jdbcType=INTEGER},
+        </if>
+        <if test="item.dailyStatus != null">
+          daily_status = #{item.dailyStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.standingBookStatus != null">
+          standing_book_status = #{item.standingBookStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.freightStatus != null">
+          freight_status = #{item.freightStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.isDelete != null">
+          is_delete = #{item.isDelete,jdbcType=TINYINT},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where project_daily_id = #{item.projectDailyId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

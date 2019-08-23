@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE configuration PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<!-- 全局映射器启用缓存 -->
+		<setting name="cacheEnabled" value="false" />
+		<!-- 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果 -->
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<!--开启驼峰命名转换-->
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<!-- 允许使用列标签代替列名 -->
+		<setting name="useColumnLabel" value="true" />
+		<!-- 数据库超过25000秒仍未响应则超时 -->
+		<setting name="defaultStatementTimeout" value="25000" />
+		<setting name="lazyLoadingEnabled" value="false" />
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.juma.tgm.crm.domain.CustomerInfo" alias="customerInfo" />
+		<typeAlias type="com.juma.tgm.crm.domain.PrivateCustomer" alias="privateCustomer" />
+		<typeAlias type="com.juma.tgm.crm.domain.PrivateCustomerContacts" alias="privateCustomerContacts" />
+		
+		<typeAlias type="com.juma.tgm.waybill.domain.AddressHistory" alias="addressHistory" />
+		<typeAlias type="com.juma.tgm.waybill.domain.ContactHistory" alias="contactHistory" />
+		
+		<typeAlias type="com.juma.tgm.gaode.domain.DriverLocation" alias="driverLocation" />
+		
+		<typeAlias type="com.juma.tgm.waybill.domain.Waybill" alias="waybill" />
+		<typeAlias type="com.juma.tgm.waybill.domain.WaybillDeliveryAddress" alias="waybillDeliveryAddress" />
+		<typeAlias type="com.juma.tgm.waybill.domain.WaybillException" alias="waybillException" />
+		<typeAlias type="com.juma.tgm.waybill.domain.WaybillReceiveAddress" alias="waybillReceiveAddress" />
+		<typeAlias type="com.juma.tgm.waybill.domain.TaxRate" alias="taxRate" />
+		<typeAlias type="com.juma.tgm.waybill.domain.TruckRequire" alias="truckRequire" />
+		<typeAlias type="com.juma.tgm.waybill.domain.WaybillNotice" alias="waybillNotice" />
+		<typeAlias type="com.juma.tgm.waybill.domain.WaybillViewHistory" alias="waybillViewHistory" />
+		<typeAlias type="com.juma.tgm.waybill.domain.WaybillBindFence" alias="waybillBindFence" />
+		<typeAlias type="com.juma.tgm.waybillLbsSource.domain.WaybillLbsSource" alias="waybillLbsSource" />
+		
+		<typeAlias type="com.juma.tgm.truck.domain.TruckFleet" alias="truckFleet" />
+		<typeAlias type="com.juma.tgm.truck.domain.TruckFleetTruck" alias="truckFleetTruck" />
+		
+		<typeAlias type="com.juma.tgm.truck.domain.AdditionalFunction" alias="additionalFunction" />
+		<typeAlias type="com.juma.tgm.truck.domain.AdditionalFunctionFreight" alias="additionalFunctionFreight" />
+		<typeAlias type="com.juma.tgm.truck.domain.TruckAdditionalFunction" alias="truckAdditionalFunction" />
+		<typeAlias type="com.juma.tgm.truck.domain.TruckType" alias="truckType" />
+		<typeAlias type="com.juma.tgm.configure.domain.TruckTypeCity" alias="truckTypeCity" />
+		<typeAlias type="com.juma.tgm.truck.domain.TruckTypeFreight" alias="truckTypeFreight" />
+	
+		<typeAlias type="com.juma.tgm.version.domain.Version" alias="version" />
+		
+		<typeAlias type="com.juma.tgm.cityManage.domain.CityManage" alias="cityManage" />
+		<typeAlias type="com.juma.tgm.importantNotice.domain.ImportantNotice" alias="importantNotice" />
+		
+		<typeAlias type="com.juma.tgm.cms.domain.ExportTask" alias="exportTask" />
+
+		<typeAlias type="com.juma.tgm.waybill.domain.WaybillOperateTrack" alias="waybillOperateTrack" />
+		<typeAlias type="com.juma.tgm.waybill.domain.FreightCompareRate" alias="freightCompareRate" />
+		<typeAlias type="com.juma.tgm.waybill.domain.WaybillParam" alias="waybillParam" />
+		<typeAlias type="com.juma.tgm.crm.domain.IncomeStatistics" alias="incomeStatistics" />
+		<typeAlias type="com.juma.tgm.configure.domain.ConfigParam" alias="configParam" />
+		<typeAlias type="com.juma.tgm.configure.domain.ConfigParamOption" alias="configParamOption" />
+		<typeAlias type="com.juma.tgm.waybillReport.domain.OfflineWaybill" alias="offlineWaybill" />
+		<typeAlias type="com.juma.tgm.user.domain.DepartmentAC" alias="departmentAC" />
+		<typeAlias type="com.juma.tgm.waybill.domain.DeliveryPointSupplement" alias="deliveryPointSupplement" />
+		<typeAlias type="com.juma.tgm.driver.domain.ReportInfo" alias="reportInfo" />
+		<typeAlias type="com.juma.tgm.driver.domain.ReportInfoDetails" alias="reportInfoDetails" />
+		
+		<typeAlias type="com.juma.tgm.user.domain.UserRouteMaster" alias="userRouteMaster" />
+		<typeAlias type="com.juma.tgm.user.domain.UserRouteDetail" alias="userRouteDetail" />
+
+		<typeAlias type="com.juma.tgm.receiptManage.domain.ReceiptManage" alias="receiptManage" />
+		<typeAlias type="com.juma.tgm.imageUploadManage.domain.ImageUploadManage" alias="imageUploadManage"/>
+
+		<typeAlias type="com.juma.tgm.customerManager.domain.ManagerSchedule" alias="managerSchedule" />
+		<typeAlias type="com.juma.tgm.costReimbursed.domain.CostReimbursed" alias="costReimbursed" />
+		<typeAlias type="com.juma.tgm.customerManager.domain.FixedDemand" alias="fixedDemand" />
+		<typeAlias type="com.juma.tgm.customerManager.domain.FixedDemandDeliveryPoint" alias="fixedDemandDeliveryPoint" />
+		
+		<typeAlias type="com.juma.tgm.xlsx.domain.XlsxTitleFieldMapping" alias="xlsxTitleFieldMapping" />
+		<typeAlias type="com.juma.tgm.xlsx.domain.XlsxTemplate" alias="xlsxTemplate" />
+
+		<typeAlias type="com.juma.tgm.project.domain.Project" alias="project" />
+		<typeAlias type="com.juma.tgm.project.domain.ValuationWay" alias="valuationWay" />
+		
+		<typeAlias type="com.juma.tgm.fms.domain.Reconciliation" alias="reconciliation" />
+		<typeAlias type="com.juma.tgm.fms.domain.ReconciliationItem" alias="reconciliationItem" />
+		<typeAlias type="com.juma.tgm.project.domain.ProjectFreightRule" alias="projectFreightRule" />
+	</typeAliases>
+</configuration>

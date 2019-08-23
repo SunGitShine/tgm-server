@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.customerManager.dao.Task4WaybillMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.customerManager.domain.Task4Waybill" >
+    <id column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="task_waybill_template_id" property="taskWaybillTemplateId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="employee_id" property="employeeId" jdbcType="INTEGER" />
+    <result column="task_start_date" property="taskStartDate" jdbcType="DATE" />
+    <result column="task_end_date" property="taskEndDate" jdbcType="DATE" />
+    <result column="task_week_days" property="taskWeekDays" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="is_close" property="isClose" jdbcType="TINYINT" />
+    <result column="last_update_user_id" property="lastUpdateUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    task_id, task_waybill_template_id, user_id, employee_id, task_start_date, task_end_date, 
+    task_week_days, create_user_id, create_time, last_update_time, is_close, last_update_user_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.juma.tgm.customerManager.domain.Task4WaybillExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from task_4_waybill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null" >
+      <if test="startOffSet>=0" >
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.customerManager.domain.Task4WaybillExample" >
+    delete from task_4_waybill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.juma.tgm.customerManager.domain.Task4Waybill" >
+    <selectKey resultType="java.lang.Integer" keyProperty="taskId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into task_4_waybill
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="taskWaybillTemplateId != null" >
+        task_waybill_template_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="employeeId != null" >
+        employee_id,
+      </if>
+      <if test="taskStartDate != null" >
+        task_start_date,
+      </if>
+      <if test="taskEndDate != null" >
+        task_end_date,
+      </if>
+      <if test="taskWeekDays != null" >
+        task_week_days,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time,
+      </if>
+      <if test="isClose != null" >
+        is_close,
+      </if>
+      <if test="lastUpdateUserId != null" >
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="taskWaybillTemplateId != null" >
+        #{taskWaybillTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="employeeId != null" >
+        #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="taskStartDate != null" >
+        #{taskStartDate,jdbcType=DATE},
+      </if>
+      <if test="taskEndDate != null" >
+        #{taskEndDate,jdbcType=DATE},
+      </if>
+      <if test="taskWeekDays != null" >
+        #{taskWeekDays,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isClose != null" >
+        #{isClose,jdbcType=TINYINT},
+      </if>
+      <if test="lastUpdateUserId != null" >
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.customerManager.domain.Task4WaybillExample" resultType="java.lang.Integer" >
+    select count(*) from task_4_waybill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update task_4_waybill
+    <set >
+      <if test="record.taskId != null" >
+        task_id = #{record.taskId,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskWaybillTemplateId != null" >
+        task_waybill_template_id = #{record.taskWaybillTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.employeeId != null" >
+        employee_id = #{record.employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskStartDate != null" >
+        task_start_date = #{record.taskStartDate,jdbcType=DATE},
+      </if>
+      <if test="record.taskEndDate != null" >
+        task_end_date = #{record.taskEndDate,jdbcType=DATE},
+      </if>
+      <if test="record.taskWeekDays != null" >
+        task_week_days = #{record.taskWeekDays,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateTime != null" >
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isClose != null" >
+        is_close = #{record.isClose,jdbcType=TINYINT},
+      </if>
+      <if test="record.lastUpdateUserId != null" >
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update task_4_waybill
+    set task_id = #{record.taskId,jdbcType=INTEGER},
+      task_waybill_template_id = #{record.taskWaybillTemplateId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      employee_id = #{record.employeeId,jdbcType=INTEGER},
+      task_start_date = #{record.taskStartDate,jdbcType=DATE},
+      task_end_date = #{record.taskEndDate,jdbcType=DATE},
+      task_week_days = #{record.taskWeekDays,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      is_close = #{record.isClose,jdbcType=TINYINT},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.customerManager.domain.Task4Waybill" >
+    update task_4_waybill
+    <set >
+      <if test="taskWaybillTemplateId != null" >
+        task_waybill_template_id = #{taskWaybillTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="employeeId != null" >
+        employee_id = #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="taskStartDate != null" >
+        task_start_date = #{taskStartDate,jdbcType=DATE},
+      </if>
+      <if test="taskEndDate != null" >
+        task_end_date = #{taskEndDate,jdbcType=DATE},
+      </if>
+      <if test="taskWeekDays != null" >
+        task_week_days = #{taskWeekDays,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isClose != null" >
+        is_close = #{isClose,jdbcType=TINYINT},
+      </if>
+      <if test="lastUpdateUserId != null" >
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </update>
+</mapper>

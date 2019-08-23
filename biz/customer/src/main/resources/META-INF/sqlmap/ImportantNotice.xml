@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.importantNotice.dao.ImportantNoticeDao">
+  <sql id="QUERY_COLUMN_LIST">
+    notice_id AS noticeId, 
+    notice_application AS noticeApplication, 
+    notice_title AS noticeTitle, 
+    notice_content AS noticeContent, 
+    notice_personnel_type AS noticePersonnelType, 
+    notice_personnel_user_ids AS noticePersonnelUserIds, 
+    effective_time AS effectiveTime, 
+    expiry_time AS expiryTime, 
+    tenant_id AS tenantId, 
+    tenant_code AS tenantCode, 
+    area_code AS areaCode, 
+    region_code AS regionCode, 
+    notice_user_no AS noticeUserNo, 
+    is_must_read AS isMustRead, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    is_delete AS isDelete, 
+    change_sign AS changeSign
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[ FROM important_notice ]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <![CDATA[ and tenant_id = #{tenantId} ]]>
+      <if test="noticeId != null"><![CDATA[AND notice_id = #{noticeId}]]></if>
+      <if test="noticeApplication != null"><![CDATA[AND notice_application = #{noticeApplication}]]></if>
+      <if test="noticeTitle != null"><![CDATA[AND notice_title = #{noticeTitle}]]></if>
+      <if test="noticeContent != null"><![CDATA[AND notice_content = #{noticeContent}]]></if>
+      <if test="noticePersonnelType != null"><![CDATA[AND notice_personnel_type = #{noticePersonnelType}]]></if>
+      <if test="noticePersonnelUserIds != null"><![CDATA[AND notice_personnel_user_ids = #{noticePersonnelUserIds}]]></if>
+      <if test="effectiveTime != null"><![CDATA[AND effective_time = #{effectiveTime}]]></if>
+      <if test="expiryTime != null"><![CDATA[AND expiry_time = #{expiryTime}]]></if>
+      <if test="tenantCode != null"><![CDATA[AND tenant_code = #{tenantCode}]]></if>
+      <if test="areaCode != null"><![CDATA[AND area_code = #{areaCode}]]></if>
+      <if test="regionCode != null"><![CDATA[AND region_code = #{regionCode}]]></if>
+      <if test="isMustRead != null"><![CDATA[AND is_must_read = #{isMustRead}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+      <if test="changeSign != null"><![CDATA[AND change_sign = #{changeSign}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <![CDATA[ and tenant_id = #{filters.tenantId} ]]>
+      <if test="filters.noticeId != null"><![CDATA[AND notice_id = #{filters.noticeId}]]></if>
+      <if test="filters.noticeApplication != null"><![CDATA[AND notice_application = #{filters.noticeApplication}]]></if>
+      <if test="filters.noticeTitle != null"><![CDATA[AND notice_title = #{filters.noticeTitle}]]></if>
+      <if test="filters.noticeContent != null"><![CDATA[AND notice_content = #{filters.noticeContent}]]></if>
+      <if test="filters.noticePersonnelType != null"><![CDATA[AND notice_personnel_type = #{filters.noticePersonnelType}]]></if>
+      <if test="filters.noticePersonnelUserIds != null"><![CDATA[AND notice_personnel_user_ids = #{filters.noticePersonnelUserIds}]]></if>
+      <if test="filters.effectiveTime != null"><![CDATA[AND effective_time = #{filters.effectiveTime}]]></if>
+      <if test="filters.expiryTime != null"><![CDATA[AND expiry_time = #{filters.expiryTime}]]></if>
+      <if test="filters.tenantCode != null"><![CDATA[AND tenant_code = #{filters.tenantCode}]]></if>
+      <if test="filters.areaCode != null"><![CDATA[AND area_code = #{filters.areaCode}]]></if>
+      <if test="filters.regionCode != null"><![CDATA[AND region_code = #{filters.regionCode}]]></if>
+      <if test="filters.isMustRead != null"><![CDATA[AND is_must_read = #{filters.isMustRead}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.isDelete != null"><![CDATA[AND is_delete = #{filters.isDelete}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+      <if test="filters.changeSign != null"><![CDATA[AND change_sign = #{filters.changeSign}]]></if>
+      <if test="filters.areaCodeList != null">
+		AND
+		<foreach collection="filters.areaCodeList" item="code" open="("
+			close=")" separator=" or">
+			area_code like concat(#{code}, '%')
+		</foreach>
+	</if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="noticeApplication != null"><![CDATA[ notice_application = #{noticeApplication},]]></if>
+      <if test="noticeTitle != null"><![CDATA[ notice_title = #{noticeTitle},]]></if>
+      <if test="noticeContent != null"><![CDATA[ notice_content = #{noticeContent},]]></if>
+      <if test="noticePersonnelType != null"><![CDATA[ notice_personnel_type = #{noticePersonnelType},]]></if>
+      <if test="noticePersonnelUserIds != null"><![CDATA[ notice_personnel_user_ids = #{noticePersonnelUserIds},]]></if>
+      <if test="effectiveTime != null"><![CDATA[ effective_time = #{effectiveTime},]]></if>
+      <if test="expiryTime != null"><![CDATA[ expiry_time = #{expiryTime},]]></if>
+      <if test="tenantId != null"><![CDATA[ tenant_id = #{tenantId},]]></if>
+      <if test="tenantCode != null"><![CDATA[ tenant_code = #{tenantCode},]]></if>
+      <if test="areaCode != null"><![CDATA[ area_code = #{areaCode},]]></if>
+      <if test="regionCode != null"><![CDATA[ region_code = #{regionCode},]]></if>
+      <if test="noticeUserNo != null"><![CDATA[ notice_user_no = #{noticeUserNo},]]></if>
+      <if test="isMustRead != null"><![CDATA[ is_must_read = #{isMustRead},]]></if>
+      <if test="createTime != null"><![CDATA[ create_time = #{createTime},]]></if>
+      <if test="createUserId != null"><![CDATA[ create_user_id = #{createUserId},]]></if>
+      <if test="isDelete != null"><![CDATA[ is_delete = #{isDelete},]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[ last_update_user_id = #{lastUpdateUserId},]]></if>
+      <![CDATA[ last_update_time = now(),]]>
+      <if test="changeSign != null"><![CDATA[ change_sign = #{changeSign},]]></if>
+    </set>
+  </sql>
+
+  <insert id="insert" parameterType="importantNotice" useGeneratedKeys = "true" keyProperty ="noticeId">
+    <![CDATA[
+      insert into important_notice
+		(notice_application, notice_title, notice_content, notice_personnel_type, notice_personnel_user_ids, effective_time, expiry_time, tenant_id, tenant_code, area_code, region_code, notice_user_no, is_must_read, create_time, create_user_id, is_delete, last_update_user_id, last_update_time, change_sign)
+	values
+		(#{noticeApplication}, #{noticeTitle}, #{noticeContent}, #{noticePersonnelType}, #{noticePersonnelUserIds}, #{effectiveTime}, #{expiryTime}, #{tenantId}, #{tenantCode}, #{areaCode}, #{regionCode}, #{noticeUserNo}, #{isMustRead}, now(),#{createUserId}, false, #{lastUpdateUserId}, #{lastUpdateTime}, #{changeSign})
+	]]>
+  </insert>
+
+  <update id="update" parameterType="importantNotice" >
+    <![CDATA[UPDATE important_notice]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE notice_id = #{noticeId}]]>
+  </update>
+
+  <select id="get" parameterType="int" resultType="importantNotice">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE notice_id = #{noticeId}]]>
+  </select>
+
+  <select id="loadAll" resultType="importantNotice">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+
+  <select id="findByExample" parameterType="importantNotice" resultType="importantNotice">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="importantNotice">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

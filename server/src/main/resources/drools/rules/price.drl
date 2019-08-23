@@ -1,0 +1,141 @@
+package drools.rules;
+
+import com.juma.tgm.waybill.domain.drools.*;
+dialect "mvel"
+//运费规则
+rule "起步里程费"
+	lock-on-active
+	salience 20
+	when
+		$p : PriceProxy()
+	then
+		$p.finalPrice = $p.lowestFreight;
+end
+
+rule "超里程费"
+	lock-on-active
+	salience 19
+	when
+		$p : PriceProxy(superMileageInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+($p.totalMileage - $p.lowestMileage)*$p.superMileageInfo.price;
+end
+
+rule "时间成本"
+	lock-on-active
+	salience 18
+	when
+		$p : PriceProxy(true)
+	then
+		$p.finalPrice = $p.finalPrice+$p.timeCost;
+end
+
+rule "停车费"
+	lock-on-active
+	salience 17
+	when
+		$p : PriceProxy(true)
+	then
+		$p.finalPrice = $p.finalPrice+$p.parkingFee;
+end
+
+rule "过路费"
+	lock-on-active
+	salience 16
+	when
+		$p : PriceProxy(true)
+	then
+		$p.finalPrice = $p.finalPrice+$p.tolls;
+end
+
+rule "配送点费"
+	lock-on-active
+	salience 15
+	when
+		$p : PriceProxy(distributionPointInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+($p.totalSite - 1)*$p.distributionPointInfo.price;
+end
+
+rule "代收货款费"
+	lock-on-active
+	salience 14
+	when
+		$p : PriceProxy(collectionPaymentInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+$p.collectionPaymentInfo.price;
+end
+
+rule "冷链费"
+	lock-on-active
+	salience 13
+	when
+		$p : PriceProxy(coldChainInfo.flag)
+	then
+		$p.coldChainFrihgt = $p.finalPrice*$p.coldChainInfo.rate;
+end
+
+rule "冷链溢价"
+	lock-on-active
+	salience 12
+	when
+		$p : PriceProxy(coldChainInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+$p.coldChainFrihgt;
+end
+
+rule "返仓费"
+	lock-on-active
+	salience 11
+	when
+		$p : PriceProxy(backStorageInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+$p.totalMileage*$p.backStorageInfo.price;
+end
+
+rule "入城证费"
+	lock-on-active
+	salience 10
+	when
+		$p : PriceProxy(entryLicenseInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+$p.entryLicenseInfo.price;
+end
+
+rule "回单费"
+	lock-on-active
+	salience 9
+	when
+		$p : PriceProxy(receiptInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+$p.receiptInfo.price;
+end
+
+rule "司机搬运费"
+	lock-on-active
+	salience 8
+	when
+		$p : PriceProxy(driverCarryInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+$p.driverCarryInfo.price;
+end
+
+
+rule "小工搬运费"
+	lock-on-active
+	salience 7
+	when
+		$p : PriceProxy(laborerCarryInfo.flag)
+	then
+		$p.finalPrice = $p.finalPrice+$p.laborerCarryInfo.price;
+end
+
+rule "税费 成本价"
+	lock-on-active
+	salience 6
+	when
+		$p : PriceProxy(true)
+	then
+		$p.finalPrice = $p.finalPrice/0.9*(1+$p.taxRateInfo.rate+$p.rebateRateInfo.rate);
+		$p.rateFrihgt = $p.finalPrice/0.9*$p.taxRateInfo.rate;
+end

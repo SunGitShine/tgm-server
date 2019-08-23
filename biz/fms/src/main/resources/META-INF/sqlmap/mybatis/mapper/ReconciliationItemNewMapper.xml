@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.fms.dao.ReconciliationItemNewMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v2.ReconciliationItemNew" >
+    <id column="reconciliation_item_id" property="reconciliationItemId" jdbcType="INTEGER" />
+    <result column="reconciliation_id" property="reconciliationId" jdbcType="INTEGER" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="truck_id" property="truckId" jdbcType="INTEGER" />
+    <result column="plate_number" property="plateNumber" jdbcType="VARCHAR" />
+    <result column="tax_rate_value" property="taxRateValue" jdbcType="DECIMAL" />
+    <result column="rebate_fee" property="rebateFee" jdbcType="DECIMAL" />
+    <result column="driver_handling_fee" property="driverHandlingFee" jdbcType="DECIMAL" />
+    <result column="laborer_handling_fee" property="laborerHandlingFee" jdbcType="DECIMAL" />
+    <result column="has_pay_freight" property="hasPayFreight" jdbcType="DECIMAL" />
+    <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+    <result column="lessee_name" property="lesseeName" jdbcType="VARCHAR" />
+    <result column="lessee_id" property="lesseeId" jdbcType="INTEGER" />
+    <result column="driver_initial_before_tax" property="driverInitialBeforeTax" jdbcType="DECIMAL" />
+    <result column="driver_initial_after_tax" property="driverInitialAfterTax" jdbcType="DECIMAL" />
+    <result column="driver_final_before_tax" property="driverFinalBeforeTax" jdbcType="DECIMAL" />
+    <result column="driver_final_after_tax" property="driverFinalAfterTax" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_user_id" property="lastUpdateUserId" jdbcType="INTEGER" />
+    <result column="vendor_id" property="vendorId" jdbcType="INTEGER" />
+    <result column="vendor_name" property="vendorName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    reconciliation_item_id, reconciliation_id, area_code, customer_id, customer_name, 
+    project_id, project_name, truck_id, plate_number, tax_rate_value, rebate_fee, driver_handling_fee, 
+    laborer_handling_fee, has_pay_freight, pay_status, lessee_name, lessee_id, driver_initial_before_tax, 
+    driver_initial_after_tax, driver_final_before_tax, driver_final_after_tax, create_time, 
+    create_user_id, last_update_time, last_update_user_id, vendor_id, vendor_name
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.juma.tgm.fms.domain.v2.ReconciliationItemNewExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from reconciliation_item_new
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null" >
+      <if test="startOffSet>=0" >
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.fms.domain.v2.ReconciliationItemNewExample" >
+    delete from reconciliation_item_new
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.juma.tgm.fms.domain.v2.ReconciliationItemNew" >
+    <selectKey resultType="java.lang.Integer" keyProperty="reconciliationItemId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into reconciliation_item_new
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reconciliationId != null" >
+        reconciliation_id,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="truckId != null" >
+        truck_id,
+      </if>
+      <if test="plateNumber != null" >
+        plate_number,
+      </if>
+      <if test="taxRateValue != null" >
+        tax_rate_value,
+      </if>
+      <if test="rebateFee != null" >
+        rebate_fee,
+      </if>
+      <if test="driverHandlingFee != null" >
+        driver_handling_fee,
+      </if>
+      <if test="laborerHandlingFee != null" >
+        laborer_handling_fee,
+      </if>
+      <if test="hasPayFreight != null" >
+        has_pay_freight,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="lesseeName != null" >
+        lessee_name,
+      </if>
+      <if test="lesseeId != null" >
+        lessee_id,
+      </if>
+      <if test="driverInitialBeforeTax != null" >
+        driver_initial_before_tax,
+      </if>
+      <if test="driverInitialAfterTax != null" >
+        driver_initial_after_tax,
+      </if>
+      <if test="driverFinalBeforeTax != null" >
+        driver_final_before_tax,
+      </if>
+      <if test="driverFinalAfterTax != null" >
+        driver_final_after_tax,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null" >
+        last_update_user_id,
+      </if>
+      <if test="vendorId != null" >
+        vendor_id,
+      </if>
+      <if test="vendorName != null" >
+        vendor_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reconciliationId != null" >
+        #{reconciliationId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="truckId != null" >
+        #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="plateNumber != null" >
+        #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRateValue != null" >
+        #{taxRateValue,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateFee != null" >
+        #{rebateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="driverHandlingFee != null" >
+        #{driverHandlingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="laborerHandlingFee != null" >
+        #{laborerHandlingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="hasPayFreight != null" >
+        #{hasPayFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="lesseeName != null" >
+        #{lesseeName,jdbcType=VARCHAR},
+      </if>
+      <if test="lesseeId != null" >
+        #{lesseeId,jdbcType=INTEGER},
+      </if>
+      <if test="driverInitialBeforeTax != null" >
+        #{driverInitialBeforeTax,jdbcType=DECIMAL},
+      </if>
+      <if test="driverInitialAfterTax != null" >
+        #{driverInitialAfterTax,jdbcType=DECIMAL},
+      </if>
+      <if test="driverFinalBeforeTax != null" >
+        #{driverFinalBeforeTax,jdbcType=DECIMAL},
+      </if>
+      <if test="driverFinalAfterTax != null" >
+        #{driverFinalAfterTax,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null" >
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null" >
+        #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorName != null" >
+        #{vendorName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.fms.domain.v2.ReconciliationItemNewExample" resultType="java.lang.Integer" >
+    select count(*) from reconciliation_item_new
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update reconciliation_item_new
+    <set >
+      <if test="record.reconciliationItemId != null" >
+        reconciliation_item_id = #{record.reconciliationItemId,jdbcType=INTEGER},
+      </if>
+      <if test="record.reconciliationId != null" >
+        reconciliation_id = #{record.reconciliationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaCode != null" >
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerName != null" >
+        customer_name = #{record.customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectId != null" >
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectName != null" >
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.truckId != null" >
+        truck_id = #{record.truckId,jdbcType=INTEGER},
+      </if>
+      <if test="record.plateNumber != null" >
+        plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taxRateValue != null" >
+        tax_rate_value = #{record.taxRateValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rebateFee != null" >
+        rebate_fee = #{record.rebateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.driverHandlingFee != null" >
+        driver_handling_fee = #{record.driverHandlingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.laborerHandlingFee != null" >
+        laborer_handling_fee = #{record.laborerHandlingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.hasPayFreight != null" >
+        has_pay_freight = #{record.hasPayFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payStatus != null" >
+        pay_status = #{record.payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.lesseeName != null" >
+        lessee_name = #{record.lesseeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lesseeId != null" >
+        lessee_id = #{record.lesseeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.driverInitialBeforeTax != null" >
+        driver_initial_before_tax = #{record.driverInitialBeforeTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.driverInitialAfterTax != null" >
+        driver_initial_after_tax = #{record.driverInitialAfterTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.driverFinalBeforeTax != null" >
+        driver_final_before_tax = #{record.driverFinalBeforeTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.driverFinalAfterTax != null" >
+        driver_final_after_tax = #{record.driverFinalAfterTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null" >
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null" >
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorId != null" >
+        vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorName != null" >
+        vendor_name = #{record.vendorName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update reconciliation_item_new
+    set reconciliation_item_id = #{record.reconciliationItemId,jdbcType=INTEGER},
+      reconciliation_id = #{record.reconciliationId,jdbcType=INTEGER},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      customer_name = #{record.customerName,jdbcType=VARCHAR},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      truck_id = #{record.truckId,jdbcType=INTEGER},
+      plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      tax_rate_value = #{record.taxRateValue,jdbcType=DECIMAL},
+      rebate_fee = #{record.rebateFee,jdbcType=DECIMAL},
+      driver_handling_fee = #{record.driverHandlingFee,jdbcType=DECIMAL},
+      laborer_handling_fee = #{record.laborerHandlingFee,jdbcType=DECIMAL},
+      has_pay_freight = #{record.hasPayFreight,jdbcType=DECIMAL},
+      pay_status = #{record.payStatus,jdbcType=TINYINT},
+      lessee_name = #{record.lesseeName,jdbcType=VARCHAR},
+      lessee_id = #{record.lesseeId,jdbcType=INTEGER},
+      driver_initial_before_tax = #{record.driverInitialBeforeTax,jdbcType=DECIMAL},
+      driver_initial_after_tax = #{record.driverInitialAfterTax,jdbcType=DECIMAL},
+      driver_final_before_tax = #{record.driverFinalBeforeTax,jdbcType=DECIMAL},
+      driver_final_after_tax = #{record.driverFinalAfterTax,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      vendor_name = #{record.vendorName,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.fms.domain.v2.ReconciliationItemNew" >
+    update reconciliation_item_new
+    <set >
+      <if test="reconciliationId != null" >
+        reconciliation_id = #{reconciliationId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null" >
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="truckId != null" >
+        truck_id = #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="plateNumber != null" >
+        plate_number = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRateValue != null" >
+        tax_rate_value = #{taxRateValue,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateFee != null" >
+        rebate_fee = #{rebateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="driverHandlingFee != null" >
+        driver_handling_fee = #{driverHandlingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="laborerHandlingFee != null" >
+        laborer_handling_fee = #{laborerHandlingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="hasPayFreight != null" >
+        has_pay_freight = #{hasPayFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="lesseeName != null" >
+        lessee_name = #{lesseeName,jdbcType=VARCHAR},
+      </if>
+      <if test="lesseeId != null" >
+        lessee_id = #{lesseeId,jdbcType=INTEGER},
+      </if>
+      <if test="driverInitialBeforeTax != null" >
+        driver_initial_before_tax = #{driverInitialBeforeTax,jdbcType=DECIMAL},
+      </if>
+      <if test="driverInitialAfterTax != null" >
+        driver_initial_after_tax = #{driverInitialAfterTax,jdbcType=DECIMAL},
+      </if>
+      <if test="driverFinalBeforeTax != null" >
+        driver_final_before_tax = #{driverFinalBeforeTax,jdbcType=DECIMAL},
+      </if>
+      <if test="driverFinalAfterTax != null" >
+        driver_final_after_tax = #{driverFinalAfterTax,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null" >
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null" >
+        vendor_id = #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorName != null" >
+        vendor_name = #{vendorName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where reconciliation_item_id = #{reconciliationItemId,jdbcType=INTEGER}
+  </update>
+</mapper>

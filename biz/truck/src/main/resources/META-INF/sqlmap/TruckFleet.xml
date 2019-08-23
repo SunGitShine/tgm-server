@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.truck.dao.TruckFleetDao">
+  <sql id="QUERY_COLUMN_LIST">
+    truck_fleet_id AS truckFleetId, 
+    employee_id AS employeeId, 
+    user_id AS userId, 
+    truck_fleet_name AS truckFleetName, 
+    owner_company AS ownerCompany, 
+    region_code AS regionCode, 
+    area_code AS areaCode, 
+    tenant_id AS tenantId, 
+    tenant_code AS tenantCode, 
+    status AS status, 
+    is_delete AS isDelete, 
+    create_time AS createTime, 
+    create_user_id AS createUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM truck_fleet]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <![CDATA[AND tenant_id = #{tenantId}]]>
+      <if test="truckFleetId != null"><![CDATA[AND truck_fleet_id = #{truckFleetId}]]></if>
+      <if test="employeeId != null"><![CDATA[AND employee_id = #{employeeId}]]></if>
+      <if test="tenantCode != null"><![CDATA[AND tenant_code = #{tenantCode}]]></if>
+      <if test="userId != null"><![CDATA[AND user_id = #{userId}]]></if>
+      <if test="truckFleetName != null"><![CDATA[AND truck_fleet_name = #{truckFleetName}]]></if>
+      <if test="ownerCompany != null"><![CDATA[AND owner_company = #{ownerCompany}]]></if>
+      <if test="regionCode != null"><![CDATA[AND region_code = #{regionCode}]]></if>
+      <if test="areaCode != null"><![CDATA[AND area_code = #{areaCode}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <![CDATA[ AND tenant_id = #{filters.tenantId} ]]>
+      <if test="filters != null">
+        <if test="filters.truckFleetId != null">AND truck_fleet_id = #{filters.truckFleetId}</if>
+        <if test="filters.tenantCode != null">AND tenant_code = #{filters.tenantCode}</if>
+        <if test="filters.truckFleetName != null">AND truck_fleet_name like concat('%', #{filters.truckFleetName}, '%')</if>
+        <if test="filters.ownerCompany != null">AND owner_company like concat('%', #{filters.ownerCompany}, '%')</if>
+        <if test="filters.regionCode != null">AND region_code = #{filters.regionCode}</if>
+        <if test="filters.userId != null">AND user_id = #{filters.userId}</if>
+        <if test="filters.employeeId != null">AND employee_id = #{filters.employeeId}</if>
+        <if test="filters.isDelete != null"><![CDATA[AND is_delete = #{filters.isDelete}]]></if>
+        <if test="filters.truckFleetIdList != null">
+          and truck_fleet_id in
+          <foreach collection="filters.truckFleetIdList" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+        <if test="filters.employeeIdList != null">
+          and employee_id in
+          <foreach collection="filters.employeeIdList" item="item" open="(" separator="," close=")">
+            #{item} 
+          </foreach>
+        </if>
+        <if test="filters.areaCodeList != null">
+          and 
+          <foreach collection="filters.areaCodeList" item="item" open="(" separator="or" close=")">
+            area_code like concat(#{item}, '%') 
+          </foreach>
+        </if>
+      </if>
+    </where>
+  </sql>
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by create_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="employeeId != null"><![CDATA[employee_id = #{employeeId},]]></if>
+      <if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
+      <if test="truckFleetName != null"><![CDATA[truck_fleet_name = #{truckFleetName},]]></if>
+      <if test="ownerCompany != null"><![CDATA[owner_company = #{ownerCompany},]]></if>
+      <if test="regionCode != null"><![CDATA[region_code = #{regionCode},]]></if>
+      <if test="areaCode != null"><![CDATA[area_code = #{areaCode},]]></if>
+      <if test="tenantId != null"><![CDATA[tenant_id = #{tenantId},]]></if>
+      <if test="tenantCode != null"><![CDATA[tenant_code = #{tenantCode},]]></if>
+      <if test="status != null"><![CDATA[status = #{status},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+
+  <!-- 添加 -->
+  <insert id="insert" parameterType="truckFleet" useGeneratedKeys = "true" keyProperty ="truckFleetId">
+    <![CDATA[insert into truck_fleet(employee_id,user_id,truck_fleet_name,owner_company,region_code,area_code, tenant_id,tenant_code,status,is_delete,create_time,create_user_id)
+    values (#{employeeId},#{userId},#{truckFleetName},#{ownerCompany},#{regionCode},#{areaCode}, #{tenantId},#{tenantCode},#{status},false,now(),#{createUserId})]]>
+  </insert>
+
+  <!-- 删除车队 -->
+  <update id="delete" parameterType="truckFleet" >
+    update truck_fleet set is_delete=true,last_update_time=now(),last_update_user_id = #{lastUpdateUserId}
+    where truck_fleet_id = #{truckFleetId}
+  </update>
+
+  <!-- 解绑车队 -->
+  <update id="updateToUnbundlingFleetAndUser" parameterType="truckFleet" >
+    <![CDATA[update truck_fleet set truck_customer_id=null,last_update_time=now(),last_update_user_id = #{lastUpdateUserId}
+    where truck_customer_id = #{truckCustomerId}]]>
+  </update>
+
+  <!-- 修改 -->
+  <update id="update" parameterType="truckFleet">
+    <![CDATA[UPDATE truck_fleet]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE truck_fleet_id = #{truckFleetId}]]>
+  </update>
+
+  <select id="get" parameterType="java.lang.Integer" resultType="truckFleet">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where truck_fleet_id=#{truckFleetId}]]>
+  </select>
+
+  <select id="findByExample" parameterType="truckFleet" resultType="truckFleet">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+
+  <!-- 根据条件获取分页列表 -->
+  <select id="search" parameterType="com.giants.common.tools.PageQueryCondition" resultType="truckFleet">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="searchorderByAndLimitSql"/>
+  </select>
+  <!-- 根据条件获取总记录数 -->
+  <select id="searchCount" parameterType="com.giants.common.tools.PageQueryCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+  </select>
+  <!-- 批量获取 -->
+  <select id="listTruckFleetByListTruckFleetId" parameterType="java.util.List" resultType="truckFleet">
+    <![CDATA[SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <where>
+      and truck_fleet_id in
+      <foreach collection="list" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.configure.dao.FreightFactorMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.configure.domain.FreightFactor">
+    <id column="freight_factor_id" jdbcType="INTEGER" property="freightFactorId" />
+    <result column="label_name" jdbcType="VARCHAR" property="labelName" />
+    <result column="label_input_name" jdbcType="VARCHAR" property="labelInputName" />
+    <result column="label_input_type" jdbcType="INTEGER" property="labelInputType" />
+    <result column="label_value_type" jdbcType="VARCHAR" property="labelValueType" />
+    <result column="required" jdbcType="BIT" property="required" />
+    <result column="required_min_value" jdbcType="INTEGER" property="requiredMinValue" />
+    <result column="required_max_value" jdbcType="INTEGER" property="requiredMaxValue" />
+    <result column="show_order" jdbcType="INTEGER" property="showOrder" />
+    <result column="is_enable" jdbcType="TINYINT" property="isEnable" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    freight_factor_id, label_name, label_input_name, label_input_type, label_value_type, 
+    required, required_min_value, required_max_value, show_order, is_enable, create_time, 
+    create_user_id, last_update_user_id, last_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.configure.domain.FreightFactorExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from freight_factor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null">
+      <if test="startOffSet>=0">
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from freight_factor
+    where freight_factor_id = #{freightFactorId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from freight_factor
+    where freight_factor_id = #{freightFactorId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.configure.domain.FreightFactorExample">
+    delete from freight_factor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.juma.tgm.configure.domain.FreightFactor">
+    insert into freight_factor (freight_factor_id, label_name, label_input_name, 
+      label_input_type, label_value_type, required, 
+      required_min_value, required_max_value, show_order, 
+      is_enable, create_time, create_user_id, 
+      last_update_user_id, last_update_time)
+    values (#{freightFactorId,jdbcType=INTEGER}, #{labelName,jdbcType=VARCHAR}, #{labelInputName,jdbcType=VARCHAR}, 
+      #{labelInputType,jdbcType=INTEGER}, #{labelValueType,jdbcType=VARCHAR}, #{required,jdbcType=BIT}, 
+      #{requiredMinValue,jdbcType=INTEGER}, #{requiredMaxValue,jdbcType=INTEGER}, #{showOrder,jdbcType=INTEGER}, 
+      #{isEnable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{lastUpdateUserId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.juma.tgm.configure.domain.FreightFactor">
+    insert into freight_factor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="freightFactorId != null">
+        freight_factor_id,
+      </if>
+      <if test="labelName != null">
+        label_name,
+      </if>
+      <if test="labelInputName != null">
+        label_input_name,
+      </if>
+      <if test="labelInputType != null">
+        label_input_type,
+      </if>
+      <if test="labelValueType != null">
+        label_value_type,
+      </if>
+      <if test="required != null">
+        required,
+      </if>
+      <if test="requiredMinValue != null">
+        required_min_value,
+      </if>
+      <if test="requiredMaxValue != null">
+        required_max_value,
+      </if>
+      <if test="showOrder != null">
+        show_order,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="freightFactorId != null">
+        #{freightFactorId,jdbcType=INTEGER},
+      </if>
+      <if test="labelName != null">
+        #{labelName,jdbcType=VARCHAR},
+      </if>
+      <if test="labelInputName != null">
+        #{labelInputName,jdbcType=VARCHAR},
+      </if>
+      <if test="labelInputType != null">
+        #{labelInputType,jdbcType=INTEGER},
+      </if>
+      <if test="labelValueType != null">
+        #{labelValueType,jdbcType=VARCHAR},
+      </if>
+      <if test="required != null">
+        #{required,jdbcType=BIT},
+      </if>
+      <if test="requiredMinValue != null">
+        #{requiredMinValue,jdbcType=INTEGER},
+      </if>
+      <if test="requiredMaxValue != null">
+        #{requiredMaxValue,jdbcType=INTEGER},
+      </if>
+      <if test="showOrder != null">
+        #{showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.configure.domain.FreightFactorExample" resultType="java.lang.Long">
+    select count(*) from freight_factor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update freight_factor
+    <set>
+      <if test="record.freightFactorId != null">
+        freight_factor_id = #{record.freightFactorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.labelName != null">
+        label_name = #{record.labelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.labelInputName != null">
+        label_input_name = #{record.labelInputName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.labelInputType != null">
+        label_input_type = #{record.labelInputType,jdbcType=INTEGER},
+      </if>
+      <if test="record.labelValueType != null">
+        label_value_type = #{record.labelValueType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.required != null">
+        required = #{record.required,jdbcType=BIT},
+      </if>
+      <if test="record.requiredMinValue != null">
+        required_min_value = #{record.requiredMinValue,jdbcType=INTEGER},
+      </if>
+      <if test="record.requiredMaxValue != null">
+        required_max_value = #{record.requiredMaxValue,jdbcType=INTEGER},
+      </if>
+      <if test="record.showOrder != null">
+        show_order = #{record.showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.isEnable != null">
+        is_enable = #{record.isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update freight_factor
+    set freight_factor_id = #{record.freightFactorId,jdbcType=INTEGER},
+      label_name = #{record.labelName,jdbcType=VARCHAR},
+      label_input_name = #{record.labelInputName,jdbcType=VARCHAR},
+      label_input_type = #{record.labelInputType,jdbcType=INTEGER},
+      label_value_type = #{record.labelValueType,jdbcType=VARCHAR},
+      required = #{record.required,jdbcType=BIT},
+      required_min_value = #{record.requiredMinValue,jdbcType=INTEGER},
+      required_max_value = #{record.requiredMaxValue,jdbcType=INTEGER},
+      show_order = #{record.showOrder,jdbcType=INTEGER},
+      is_enable = #{record.isEnable,jdbcType=TINYINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.configure.domain.FreightFactor">
+    update freight_factor
+    <set>
+      <if test="labelName != null">
+        label_name = #{labelName,jdbcType=VARCHAR},
+      </if>
+      <if test="labelInputName != null">
+        label_input_name = #{labelInputName,jdbcType=VARCHAR},
+      </if>
+      <if test="labelInputType != null">
+        label_input_type = #{labelInputType,jdbcType=INTEGER},
+      </if>
+      <if test="labelValueType != null">
+        label_value_type = #{labelValueType,jdbcType=VARCHAR},
+      </if>
+      <if test="required != null">
+        required = #{required,jdbcType=BIT},
+      </if>
+      <if test="requiredMinValue != null">
+        required_min_value = #{requiredMinValue,jdbcType=INTEGER},
+      </if>
+      <if test="requiredMaxValue != null">
+        required_max_value = #{requiredMaxValue,jdbcType=INTEGER},
+      </if>
+      <if test="showOrder != null">
+        show_order = #{showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where freight_factor_id = #{freightFactorId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.configure.domain.FreightFactor">
+    update freight_factor
+    set label_name = #{labelName,jdbcType=VARCHAR},
+      label_input_name = #{labelInputName,jdbcType=VARCHAR},
+      label_input_type = #{labelInputType,jdbcType=INTEGER},
+      label_value_type = #{labelValueType,jdbcType=VARCHAR},
+      required = #{required,jdbcType=BIT},
+      required_min_value = #{requiredMinValue,jdbcType=INTEGER},
+      required_max_value = #{requiredMaxValue,jdbcType=INTEGER},
+      show_order = #{showOrder,jdbcType=INTEGER},
+      is_enable = #{isEnable,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where freight_factor_id = #{freightFactorId,jdbcType=INTEGER}
+  </update>
+</mapper>

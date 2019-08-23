@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.fms.dao.v3.ext.ReconcilicationForPayableItemExtraMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableItem" >
+    <id column="reconcilication_item_id" property="reconcilicationItemId" jdbcType="INTEGER" />
+    <result column="reconcilication_id" property="reconcilicationId" jdbcType="INTEGER" />
+    <result column="settle_type" property="settleType" jdbcType="INTEGER" />
+    <result column="settle_account_id" property="settleAccountId" jdbcType="INTEGER" />
+    <result column="waybill_id" property="waybillId" jdbcType="INTEGER" />
+    <result column="settle_account_name" property="settleAccountName" jdbcType="VARCHAR" />
+    <result column="waybill_no" property="waybillNo" jdbcType="VARCHAR" />
+    <result column="plate_number" property="plateNumber" jdbcType="VARCHAR" />
+    <result column="vehicle_frame_no" property="vehicleFrameNo" jdbcType="VARCHAR" />
+    <result column="settle_freight" property="settleFreight" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="rebate_fee" property="rebateFee" jdbcType="DECIMAL" />
+    <result column="driver_transport_fee" property="driverTransportFee" jdbcType="DECIMAL" />
+    <result column="temporary_transport_fee" property="temporaryTransportFee" jdbcType="DECIMAL" />
+    <result column="settle_status" property="settleStatus" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    reconcilication_item_id, reconcilication_id, settle_type, settle_account_id, waybill_id, settle_account_name,
+    waybill_no, group_concat(distinct plate_number SEPARATOR ' ') plate_number, vehicle_frame_no, SUM(settle_freight) settle_freight, tax_rate, rebate_fee,
+    SUM(driver_transport_fee) driver_transport_fee, SUM(temporary_transport_fee) temporary_transport_fee, settle_status
+  </sql>
+
+  <select id="itemCount" resultType="java.lang.Integer" parameterType="com.giants.common.tools.PageCondition">
+    select count(1) from
+    (select
+    <include refid="Base_Column_List" />
+    from reconcilication_for_payable_item
+    <include refid="SEARCH_WHERE_CLAUSE" />
+    GROUP BY `settle_type`, `settle_account_id`) a
+  </select>
+
+  <select id="itemSearch" resultType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableItem" parameterType="com.giants.common.tools.PageCondition">
+    select
+    <include refid="Base_Column_List" />
+    from reconcilication_for_payable_item
+    <include refid="SEARCH_WHERE_CLAUSE" />
+    GROUP BY `settle_type`, `settle_account_id`
+    <include refid="QUERY_ORDER_LIMIT_CONDTION" />
+  </select>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.reconcilicationId != null"><![CDATA[ AND reconcilication_id = #{filters.reconcilicationId} ]]></if>
+      <if test="filters.settleType != null"><![CDATA[ AND settle_type = #{filters.settleType} ]]></if>
+      <if test="filters.settleAccountName != null"><![CDATA[AND settle_account_name like CONCAT(#{filters.settleAccountName}, '%')]]></if>
+      <if test="filters.settleStatus != null"><![CDATA[ AND settle_status = #{filters.settleStatus} ]]></if>
+    </where>
+  </sql>
+
+  <sql id="QUERY_ORDER_LIMIT_CONDTION">
+    <choose>
+      <when test="orderBy == null">
+        order by reconcilication_item_id desc
+      </when>
+      <otherwise>
+        order by ${orderBy} ${orderSort}
+      </otherwise>
+    </choose>
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+</mapper>

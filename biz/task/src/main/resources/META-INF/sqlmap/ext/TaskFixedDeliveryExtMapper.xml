@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.ext.TaskFixedDeliveryExtMapper">
+
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskFixedDelivery">
+    <id column="fixed_id" jdbcType="INTEGER" property="fixedId" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="link_man" jdbcType="VARCHAR" property="linkMan" />
+    <result column="link_man_tel" jdbcType="VARCHAR" property="linkManTel" />
+    <result column="address_name" jdbcType="VARCHAR" property="addressName" />
+    <result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />
+    <result column="coordinates" jdbcType="VARCHAR" property="coordinates" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    fixed_id, task_id, link_man, link_man_tel, address_name, address_detail, coordinates
+  </sql>
+
+  <select id="groupTaskFixedDelivery" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from task_fixed_delivery
+    where task_id in
+      <foreach collection="taskIds" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    and link_man like concat(#{linkName},'%')
+    GROUP BY link_man_tel
+    limit 0, #{baskPageSize} ;
+  </select>
+
+</mapper>

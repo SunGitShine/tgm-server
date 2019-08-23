@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+	PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!--导入属性配置 -->
+	<properties resource="mybatis-generator.properties" />
+	<context id="test" targetRuntime="MyBatis3">
+		<plugin type="org.mybatis.generator.my.plugins.DynamicQueryExamplePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+		<plugin type="org.mybatis.generator.my.plugins.PaginationPlugin"></plugin>
+		<plugin type="org.mybatis.generator.my.plugins.ExampleEnhancedPlugin"></plugin>
+		<plugin type="org.mybatis.generator.my.plugins.ModelEnhancedPlugin"></plugin>
+		<!--<plugin type="org.mybatis.generator.my.plugins.ModelSwaggerPlugin"></plugin>-->
+		<plugin type="org.mybatis.generator.my.plugins.XmlFileOverwritePlugin"></plugin>
+		<plugin type="org.mybatis.generator.my.plugins.InsertBatchPlugin"></plugin>
+		<plugin type="org.mybatis.generator.my.plugins.UpdateBatchPlugin"></plugin>
+		<plugin type="org.mybatis.generator.my.plugins.MapperPlugin"></plugin>
+
+		<commentGenerator type="org.mybatis.generator.my.plugins.TableCommentGenerator">
+			<!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+			<!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+			<property name="suppressDate" value="true" />
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection
+			driverClass="${jdbc.driver}"
+			connectionURL="${jdbc.url}"
+			userId="${jdbc.username}"
+			password="${jdbc.password}">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<!-- This property is used to specify whether MyBatis Generator should
+				force the use of java.math.BigDecimal for DECIMAL and NUMERIC fields, -->
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+
+		<!--生成Model类存放位置 -->
+		<javaModelGenerator targetPackage="${model.package}"
+			targetProject="${model.target.project}">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!--生成映射文件存放位置 -->
+		<sqlMapGenerator targetPackage="${xml.mapper.package}"
+			targetProject="${xml.target.project}">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!--生成Dao类存放位置 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="${dao.package}" targetProject="${dao.target.project}">
+			<property name="enableSubPackages" value="true" />
+			<property name="rootInterface" value="org.mybatis.generator.my.mapper.Mapper" />
+		</javaClientGenerator>
+
+		<!--<table schema="tgm" tableName="truck_fleet_truck" domainObjectName="TruckFleetTruck"-->
+		<!--enableCountByExample="true" enableUpdateByExample="true"-->
+		<!--enableDeleteByExample="true" enableSelectByExample="true"-->
+		<!--selectByExampleQueryId="true">-->
+		<!--<generatedKey column="truck_fleet_truck_id" sqlStatement="JDBC" identity="true" />-->
+		<!--</table>-->
+
+		<!--<table schema="tgm" tableName="project" domainObjectName="Project"-->
+		<!--</table>-->
+
+		<!--<table schema="tgm" tableName="reconciliation_extra_for_payable" domainObjectName="ReconciliationExtraForPayable"
+			   enableCountByExample="true" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="extra_id" sqlStatement="JDBC" identity="true" />
+			<columnOverride column="is_invoice" javaType="java.lang.Boolean" />
+		</table>-->
+
+		<table schema="tgm" tableName="project" domainObjectName="Project"
+			   enableCountByExample="true" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="project_id" sqlStatement="JDBC" identity="true" />
+			<columnOverride column="try_work_pass_attachment" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<columnOverride column="is_running" javaType="java.lang.Boolean" jdbcType="TINYINT" />
+			<columnOverride column="is_receivable_first" javaType="java.lang.Boolean" jdbcType="TINYINT" />
+			<columnOverride column="is_enable" javaType="java.lang.Boolean" jdbcType="TINYINT" />
+			<columnOverride column="is_receiveDaily_sms" javaType="java.lang.Boolean" jdbcType="TINYINT" />
+		</table>
+
+		<!--<table schema="tgm" tableName="waybill_amount" domainObjectName="WaybillAmount"
+			   enableCountByExample="true" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="waybill_amount_id" sqlStatement="JDBC" identity="true" />
+		</table>-->
+
+		<!--<table schema="tgm" tableName="adjust_for_master" domainObjectName="AdjustForMaster"
+			   enableCountByExample="true" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="adjust_id" sqlStatement="JDBC" identity="true" />
+			<columnOverride column="is_delete" javaType="java.lang.Integer"/>
+		</table>-->
+
+		<!--<table schema="tgm" tableName="adjust_for_item" domainObjectName="AdjustForItem"-->
+		<!--enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"-->
+		<!--enableSelectByExample="true" selectByExampleQueryId="true">-->
+		<!--<generatedKey column="adjust_item_id" sqlStatement="JDBC" identity="true"/>-->
+		<!--<columnOverride column="is_delete" javaType="java.lang.Integer"/>-->
+		<!--</table>-->
+
+		<!--<table schema="tgm" tableName="adjust_for_waybill_temp" domainObjectName="AdjustForWaybillTemp"-->
+		<!--enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"-->
+		<!--enableSelectByExample="true" selectByExampleQueryId="true">-->
+		<!--<generatedKey column="adjust_temp_id" sqlStatement="JDBC" identity="true"/>-->
+		<!--<columnOverride column="valid_status" javaType="java.lang.Integer"/>-->
+		<!--</table>-->
+
+		<!--<table schema="tgm" tableName="adjust_for_freight_attach" domainObjectName="AdjustForFreightAttach"
+			enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+			enableSelectByExample="true" selectByExampleQueryId="true">
+			<generatedKey column="attach_id" sqlStatement="JDBC" identity="true"/>
+			<columnOverride column="is_delete" javaType="java.lang.Integer"/>
+		</table>-->
+
+	</context>
+</generatorConfiguration>
+

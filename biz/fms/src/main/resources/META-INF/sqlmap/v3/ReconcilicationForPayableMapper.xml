@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.fms.dao.v3.ReconcilicationForPayableMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.ReconcilicationForPayable">
+    <id column="reconcilication_id" jdbcType="INTEGER" property="reconcilicationId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="pay_to_company_credit_code" jdbcType="VARCHAR" property="payToCompanyCreditCode" />
+    <result column="reconcilication_no" jdbcType="VARCHAR" property="reconcilicationNo" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="payable_with_tax" jdbcType="DECIMAL" property="payableWithTax" />
+    <result column="driver_transport_fee" jdbcType="DECIMAL" property="driverTransportFee" />
+    <result column="temporary_transport_fee" jdbcType="DECIMAL" property="temporaryTransportFee" />
+    <result column="process_instance_id" jdbcType="VARCHAR" property="processInstanceId" />
+    <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+    <result column="submit_user_id" jdbcType="INTEGER" property="submitUserId" />
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    reconcilication_id, tenant_id, tenant_code, area_code, department_id, pay_to_company_credit_code, 
+    reconcilication_no, customer_id, customer_name, project_id, project_name, payable_with_tax, 
+    driver_transport_fee, temporary_transport_fee, process_instance_id, submit_time, 
+    submit_user_id, approval_status, create_time, create_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from reconcilication_for_payable
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from reconcilication_for_payable
+    where reconcilication_id = #{reconcilicationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from reconcilication_for_payable
+    where reconcilication_id = #{reconcilicationId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableExample">
+    delete from reconcilication_for_payable
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="reconcilication_id" keyProperty="reconcilicationId" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayable" useGeneratedKeys="true">
+    insert into reconcilication_for_payable (tenant_id, tenant_code, area_code, 
+      department_id, pay_to_company_credit_code, reconcilication_no, 
+      customer_id, customer_name, project_id, 
+      project_name, payable_with_tax, driver_transport_fee, 
+      temporary_transport_fee, process_instance_id, 
+      submit_time, submit_user_id, approval_status, 
+      create_time, create_user_id)
+    values (#{tenantId,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, #{areaCode,jdbcType=VARCHAR}, 
+      #{departmentId,jdbcType=INTEGER}, #{payToCompanyCreditCode,jdbcType=VARCHAR}, #{reconcilicationNo,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
+      #{projectName,jdbcType=VARCHAR}, #{payableWithTax,jdbcType=DECIMAL}, #{driverTransportFee,jdbcType=DECIMAL}, 
+      #{temporaryTransportFee,jdbcType=DECIMAL}, #{processInstanceId,jdbcType=VARCHAR}, 
+      #{submitTime,jdbcType=TIMESTAMP}, #{submitUserId,jdbcType=INTEGER}, #{approvalStatus,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="reconcilication_id" keyProperty="reconcilicationId" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayable" useGeneratedKeys="true">
+    insert into reconcilication_for_payable
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        pay_to_company_credit_code,
+      </if>
+      <if test="reconcilicationNo != null">
+        reconcilication_no,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="payableWithTax != null">
+        payable_with_tax,
+      </if>
+      <if test="driverTransportFee != null">
+        driver_transport_fee,
+      </if>
+      <if test="temporaryTransportFee != null">
+        temporary_transport_fee,
+      </if>
+      <if test="processInstanceId != null">
+        process_instance_id,
+      </if>
+      <if test="submitTime != null">
+        submit_time,
+      </if>
+      <if test="submitUserId != null">
+        submit_user_id,
+      </if>
+      <if test="approvalStatus != null">
+        approval_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcilicationNo != null">
+        #{reconcilicationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="payableWithTax != null">
+        #{payableWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="driverTransportFee != null">
+        #{driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="temporaryTransportFee != null">
+        #{temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="processInstanceId != null">
+        #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTime != null">
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitUserId != null">
+        #{submitUserId,jdbcType=INTEGER},
+      </if>
+      <if test="approvalStatus != null">
+        #{approvalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayableExample" resultType="java.lang.Long">
+    select count(*) from reconcilication_for_payable
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update reconcilication_for_payable
+    <set>
+      <if test="record.reconcilicationId != null">
+        reconcilication_id = #{record.reconcilicationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaCode != null">
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentId != null">
+        department_id = #{record.departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.payToCompanyCreditCode != null">
+        pay_to_company_credit_code = #{record.payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reconcilicationNo != null">
+        reconcilication_no = #{record.reconcilicationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerId != null">
+        customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerName != null">
+        customer_name = #{record.customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectName != null">
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payableWithTax != null">
+        payable_with_tax = #{record.payableWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.driverTransportFee != null">
+        driver_transport_fee = #{record.driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.temporaryTransportFee != null">
+        temporary_transport_fee = #{record.temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.processInstanceId != null">
+        process_instance_id = #{record.processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitTime != null">
+        submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.submitUserId != null">
+        submit_user_id = #{record.submitUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.approvalStatus != null">
+        approval_status = #{record.approvalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update reconcilication_for_payable
+    set reconcilication_id = #{record.reconcilicationId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=INTEGER},
+      pay_to_company_credit_code = #{record.payToCompanyCreditCode,jdbcType=VARCHAR},
+      reconcilication_no = #{record.reconcilicationNo,jdbcType=VARCHAR},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      customer_name = #{record.customerName,jdbcType=VARCHAR},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      payable_with_tax = #{record.payableWithTax,jdbcType=DECIMAL},
+      driver_transport_fee = #{record.driverTransportFee,jdbcType=DECIMAL},
+      temporary_transport_fee = #{record.temporaryTransportFee,jdbcType=DECIMAL},
+      process_instance_id = #{record.processInstanceId,jdbcType=VARCHAR},
+      submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
+      submit_user_id = #{record.submitUserId,jdbcType=INTEGER},
+      approval_status = #{record.approvalStatus,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayable">
+    update reconcilication_for_payable
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        pay_to_company_credit_code = #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcilicationNo != null">
+        reconcilication_no = #{reconcilicationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="payableWithTax != null">
+        payable_with_tax = #{payableWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="driverTransportFee != null">
+        driver_transport_fee = #{driverTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="temporaryTransportFee != null">
+        temporary_transport_fee = #{temporaryTransportFee,jdbcType=DECIMAL},
+      </if>
+      <if test="processInstanceId != null">
+        process_instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="submitTime != null">
+        submit_time = #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitUserId != null">
+        submit_user_id = #{submitUserId,jdbcType=INTEGER},
+      </if>
+      <if test="approvalStatus != null">
+        approval_status = #{approvalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where reconcilication_id = #{reconcilicationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForPayable">
+    update reconcilication_for_payable
+    set tenant_id = #{tenantId,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=INTEGER},
+      pay_to_company_credit_code = #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      reconcilication_no = #{reconcilicationNo,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=INTEGER},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      payable_with_tax = #{payableWithTax,jdbcType=DECIMAL},
+      driver_transport_fee = #{driverTransportFee,jdbcType=DECIMAL},
+      temporary_transport_fee = #{temporaryTransportFee,jdbcType=DECIMAL},
+      process_instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      submit_time = #{submitTime,jdbcType=TIMESTAMP},
+      submit_user_id = #{submitUserId,jdbcType=INTEGER},
+      approval_status = #{approvalStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER}
+    where reconcilication_id = #{reconcilicationId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="reconcilicationId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into reconcilication_for_payable
+    (tenant_id,tenant_code,area_code,department_id,pay_to_company_credit_code,reconcilication_no,customer_id,customer_name,project_id,project_name,payable_with_tax,driver_transport_fee,temporary_transport_fee,process_instance_id,submit_time,submit_user_id,approval_status,create_time,create_user_id) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.tenantId},#{item.tenantCode},#{item.areaCode},#{item.departmentId},#{item.payToCompanyCreditCode},#{item.reconcilicationNo},#{item.customerId},#{item.customerName},#{item.projectId},#{item.projectName},#{item.payableWithTax},#{item.driverTransportFee},#{item.temporaryTransportFee},#{item.processInstanceId},#{item.submitTime},#{item.submitUserId},#{item.approvalStatus},#{item.createTime},#{item.createUserId})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update reconcilication_for_payable
+      <set>
+        reconcilication_id = #{item.reconcilicationId},
+        tenant_id = #{item.tenantId},
+        tenant_code = #{item.tenantCode},
+        area_code = #{item.areaCode},
+        department_id = #{item.departmentId},
+        pay_to_company_credit_code = #{item.payToCompanyCreditCode},
+        reconcilication_no = #{item.reconcilicationNo},
+        customer_id = #{item.customerId},
+        customer_name = #{item.customerName},
+        project_id = #{item.projectId},
+        project_name = #{item.projectName},
+        payable_with_tax = #{item.payableWithTax},
+        driver_transport_fee = #{item.driverTransportFee},
+        temporary_transport_fee = #{item.temporaryTransportFee},
+        process_instance_id = #{item.processInstanceId},
+        submit_time = #{item.submitTime},
+        submit_user_id = #{item.submitUserId},
+        approval_status = #{item.approvalStatus},
+        create_time = #{item.createTime},
+        create_user_id = #{item.createUserId},
+      </set>
+      where reconcilication_id = #{item.reconcilicationId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update reconcilication_for_payable
+      <set>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantCode != null">
+          tenant_code = #{item.tenantCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.areaCode != null">
+          area_code = #{item.areaCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.departmentId != null">
+          department_id = #{item.departmentId,jdbcType=INTEGER},
+        </if>
+        <if test="item.payToCompanyCreditCode != null">
+          pay_to_company_credit_code = #{item.payToCompanyCreditCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.reconcilicationNo != null">
+          reconcilication_no = #{item.reconcilicationNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.customerId != null">
+          customer_id = #{item.customerId,jdbcType=INTEGER},
+        </if>
+        <if test="item.customerName != null">
+          customer_name = #{item.customerName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.projectId != null">
+          project_id = #{item.projectId,jdbcType=INTEGER},
+        </if>
+        <if test="item.projectName != null">
+          project_name = #{item.projectName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.payableWithTax != null">
+          payable_with_tax = #{item.payableWithTax,jdbcType=DECIMAL},
+        </if>
+        <if test="item.driverTransportFee != null">
+          driver_transport_fee = #{item.driverTransportFee,jdbcType=DECIMAL},
+        </if>
+        <if test="item.temporaryTransportFee != null">
+          temporary_transport_fee = #{item.temporaryTransportFee,jdbcType=DECIMAL},
+        </if>
+        <if test="item.processInstanceId != null">
+          process_instance_id = #{item.processInstanceId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.submitTime != null">
+          submit_time = #{item.submitTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.submitUserId != null">
+          submit_user_id = #{item.submitUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.approvalStatus != null">
+          approval_status = #{item.approvalStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+      </set>
+      where reconcilication_id = #{item.reconcilicationId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

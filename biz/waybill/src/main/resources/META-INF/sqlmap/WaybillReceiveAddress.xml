@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillReceiveAddressDao">
+  <sql id="QUERY_COLUMN_LIST">
+    address_id AS addressId, 
+    waybill_id AS waybillId, 
+    region_code AS regionCode, 
+    address_name AS addressName,
+    address_detail AS addressDetail, 
+    contact_name AS contactName, 
+    contact_phone AS contactPhone, 
+    coordinates AS coordinates, 
+    is_delete AS isDelete, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId,
+    is_arrived AS isArrived,
+    sequence AS sequence
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM waybill_receive_address]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="addressId != null"><![CDATA[AND address_id = #{addressId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="regionCode != null and regionCode != ''"><![CDATA[AND region_code = #{regionCode}]]></if>
+      <if test="addressName != null and addressName != ''"><![CDATA[AND address_name = #{addressName}]]></if>
+      <if test="addressDetail != null and addressDetail != ''"><![CDATA[AND address_detail = #{addressDetail}]]></if>
+      <if test="contactName != null and contactName != ''"><![CDATA[AND contact_name = #{contactName}]]></if>
+      <if test="contactPhone != null and contactPhone != ''"><![CDATA[AND contact_phone = #{contactPhone}]]></if>
+      <if test="coordinates != null and coordinates != ''"><![CDATA[AND coordinates = #{coordinates}]]></if>
+      <if test="isArrived != null"><![CDATA[AND is_arrived = #{isArrived}]]></if>
+    </where>
+  </sql>
+
+  <sql id="QUERY_ORDER_LIMIT_CONDTION">
+    <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+    <if test="orderField == null and orderFieldType == null"><![CDATA[ORDER BY id DESC]]></if>
+    <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="addressId != null"><![CDATA[address_id = #{addressId},]]></if>
+      <if test="waybillId != null"><![CDATA[waybill_id = #{waybillId},]]></if>
+      <if test="regionCode != null and regionCode != ''"><![CDATA[region_code = #{regionCode},]]></if>
+      <if test="addressName != null and addressName != ''"><![CDATA[address_name = #{addressName},]]></if>
+      <if test="addressDetail != null and addressDetail != ''"><![CDATA[address_detail = #{addressDetail},]]></if>
+      <if test="contactName != null and contactName != ''"><![CDATA[contact_name = #{contactName},]]></if>
+      <if test="contactPhone != null and contactPhone != ''"><![CDATA[contact_phone = #{contactPhone},]]></if>
+      <if test="coordinates != null and coordinates != ''"><![CDATA[coordinates = #{coordinates},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+      <if test="isArrived != null"><![CDATA[is_arrived = #{isArrived},]]></if>
+
+    </set>
+  </sql>
+  <insert id="insert" parameterType="waybillReceiveAddress" useGeneratedKeys = "true" keyProperty ="addressId">
+    <![CDATA[
+      insert into waybill_receive_address
+		(waybill_id, region_code,address_name, address_detail, contact_name, contact_phone, coordinates, is_delete, create_time, create_user_id, last_update_time, last_update_user_id,is_arrived)
+	values
+		(#{waybillId}, #{regionCode},#{addressName}, #{addressDetail}, #{contactName}, #{contactPhone}, #{coordinates}, #{isDelete}, now(),#{createUserId}, #{lastUpdateTime}, #{lastUpdateUserId}, 0)
+
+	]]>
+  </insert>
+
+
+  <insert id ="batchInsert" parameterType="List" >
+    <![CDATA[
+   insert into waybill_receive_address
+		(waybill_id, region_code,address_name, address_detail, contact_name, contact_phone, coordinates, is_delete, create_time, create_user_id, last_update_time, last_update_user_id,is_arrived)
+    values ]]>
+    <foreach collection ="list" item ="item" index ="index" separator =",">
+      (#{item.waybillId}, #{item.regionCode},#{item.addressName}, #{item.addressDetail}, #{item.contactName}, #{item.contactPhone}, #{item.coordinates}, #{item.isDelete}, now(),#{item.createUserId}, #{item.lastUpdateTime}, #{item.lastUpdateUserId},0)
+    </foreach >
+  </insert >
+
+
+  <select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+  <update id="deleteAll" parameterType="java.lang.reflect.Array" >
+    <![CDATA[update waybill_receive_address set is_delete=1,last_update_time=now() WHERE id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </update>
+  <delete id="delete" parameterType="waybillReceiveAddress" >
+  	<![CDATA[delete from waybill_receive_address where address_id=#{addressId}]]>
+  </delete>
+  <delete id="deleteByWaybillId" parameterType="java.lang.Integer" >
+  	<![CDATA[delete from waybill_receive_address where waybill_id=#{waybillId}]]>
+  </delete>
+  <update id="update" parameterType="waybillReceiveAddress" >
+    <![CDATA[UPDATE waybill_receive_address]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE address_id = #{addressId}]]>
+  </update>
+  <select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="waybillReceiveAddress">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </select>
+  <select id="get" parameterType="java.lang.Integer" resultType="waybillReceiveAddress">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where address_id=#{addressId}]]>
+  </select>
+  <select id="loadAll" resultType="waybillReceiveAddress">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="waybillReceiveAddress" resultType="waybillReceiveAddress">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="findByWaybillId" parameterType="waybillReceiveAddress" resultType="waybillReceiveAddress">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    where waybill_id = #{waybillId} limit 1
+  </select>
+  <select id="selectEntryListCount" parameterType="waybillReceiveAddress" resultType="int">
+    <![CDATA[SELECT COUNT(id) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findNumByWaybillId" parameterType="int" resultType="int">
+    <![CDATA[SELECT COUNT(1) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    where waybill_id = #{waybillId}
+  </select>
+  <select id="findNumListByWaybillId" parameterType="java.util.List" resultType="waybillReceiveAddress">
+    <![CDATA[SELECT waybill_id as waybillId, COUNT(1) AS addressId]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    where waybill_id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+       #{item}
+    </foreach>
+    group by waybill_id
+  </select>
+
+  <select id="getWaybillReceiveLastAddress" parameterType="int" resultType="waybillReceiveAddress">
+    SELECT
+      a.address_id AS addressId,
+      a.waybill_id AS waybillId,
+      a.region_code AS regionCode,
+      a.address_name AS addressName,
+      a.address_detail AS addressDetail,
+      a.contact_name AS contactName,
+      a.contact_phone AS contactPhone,
+      a.coordinates AS coordinates,
+      a.is_delete AS isDelete,
+      a.create_time AS createTime,
+      a.create_user_id AS createUserId,
+      a.last_update_time AS lastUpdateTime,
+      a.last_update_user_id AS lastUpdateUserId
+    FROM  waybill_receive_address a,
+      (
+        SELECT max(address_id) aid, address_detail
+        FROM  waybill_receive_address
+        where create_user_id=#{userId}
+        GROUP BY address_detail
+        ORDER BY aid DESC
+      ) b
+    WHERE a.address_id = b.aid
+    order by address_id desc limit 0,5
+  </select>
+</mapper>

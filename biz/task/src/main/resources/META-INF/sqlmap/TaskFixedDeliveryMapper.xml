@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.TaskFixedDeliveryMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskFixedDelivery">
+    <id column="fixed_id" jdbcType="INTEGER" property="fixedId" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="link_man" jdbcType="VARCHAR" property="linkMan" />
+    <result column="link_man_tel" jdbcType="VARCHAR" property="linkManTel" />
+    <result column="address_name" jdbcType="VARCHAR" property="addressName" />
+    <result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />
+    <result column="coordinates" jdbcType="VARCHAR" property="coordinates" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fixed_id, task_id, link_man, link_man_tel, address_name, address_detail, coordinates
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.task.domain.TaskFixedDeliveryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from task_fixed_delivery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from task_fixed_delivery
+    where fixed_id = #{fixedId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from task_fixed_delivery
+    where fixed_id = #{fixedId,jdbcType=INTEGER}
+  </delete>
+  <select id="countByExample" parameterType="com.juma.tgm.task.domain.TaskFixedDeliveryExample" resultType="java.lang.Long">
+    select count(*) from task_fixed_delivery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <insert id="insert" keyColumn="fixed_id" keyProperty="fixedId" parameterType="com.juma.tgm.task.domain.TaskFixedDelivery" useGeneratedKeys="true">
+    insert into task_fixed_delivery (task_id, link_man, link_man_tel, 
+      address_name, address_detail, coordinates
+      )
+    values (#{taskId,jdbcType=INTEGER}, #{linkMan,jdbcType=VARCHAR}, #{linkManTel,jdbcType=VARCHAR}, 
+      #{addressName,jdbcType=VARCHAR}, #{addressDetail,jdbcType=VARCHAR}, #{coordinates,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="fixed_id" keyProperty="fixedId" parameterType="com.juma.tgm.task.domain.TaskFixedDelivery" useGeneratedKeys="true">
+    insert into task_fixed_delivery
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="linkMan != null">
+        link_man,
+      </if>
+      <if test="linkManTel != null">
+        link_man_tel,
+      </if>
+      <if test="addressName != null">
+        address_name,
+      </if>
+      <if test="addressDetail != null">
+        address_detail,
+      </if>
+      <if test="coordinates != null">
+        coordinates,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="linkMan != null">
+        #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="linkManTel != null">
+        #{linkManTel,jdbcType=VARCHAR},
+      </if>
+      <if test="addressName != null">
+        #{addressName,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetail != null">
+        #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinates != null">
+        #{coordinates,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.task.domain.TaskFixedDelivery">
+    update task_fixed_delivery
+    <set>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="linkMan != null">
+        link_man = #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="linkManTel != null">
+        link_man_tel = #{linkManTel,jdbcType=VARCHAR},
+      </if>
+      <if test="addressName != null">
+        address_name = #{addressName,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetail != null">
+        address_detail = #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinates != null">
+        coordinates = #{coordinates,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fixed_id = #{fixedId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.task.domain.TaskFixedDelivery">
+    update task_fixed_delivery
+    set task_id = #{taskId,jdbcType=INTEGER},
+      link_man = #{linkMan,jdbcType=VARCHAR},
+      link_man_tel = #{linkManTel,jdbcType=VARCHAR},
+      address_name = #{addressName,jdbcType=VARCHAR},
+      address_detail = #{addressDetail,jdbcType=VARCHAR},
+      coordinates = #{coordinates,jdbcType=VARCHAR}
+    where fixed_id = #{fixedId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="fixedId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into task_fixed_delivery
+    (task_id,link_man,link_man_tel,address_name,address_detail,coordinates) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.taskId},#{item.linkMan},#{item.linkManTel},#{item.addressName},#{item.addressDetail},#{item.coordinates})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_fixed_delivery
+      <set>
+        fixed_id = #{item.fixedId},
+        task_id = #{item.taskId},
+        link_man = #{item.linkMan},
+        link_man_tel = #{item.linkManTel},
+        address_name = #{item.addressName},
+        address_detail = #{item.addressDetail},
+        coordinates = #{item.coordinates},
+      </set>
+      where fixed_id = #{item.fixedId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_fixed_delivery
+      <set>
+        <if test="item.taskId != null">
+          task_id = #{item.taskId,jdbcType=INTEGER},
+        </if>
+        <if test="item.linkMan != null">
+          link_man = #{item.linkMan,jdbcType=VARCHAR},
+        </if>
+        <if test="item.linkManTel != null">
+          link_man_tel = #{item.linkManTel,jdbcType=VARCHAR},
+        </if>
+        <if test="item.addressName != null">
+          address_name = #{item.addressName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.addressDetail != null">
+          address_detail = #{item.addressDetail,jdbcType=VARCHAR},
+        </if>
+        <if test="item.coordinates != null">
+          coordinates = #{item.coordinates,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where fixed_id = #{item.fixedId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

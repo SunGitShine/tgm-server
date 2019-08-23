@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.cms.dao.ExportTaskDao">
+  <sql id="QUERY_COLUMN_LIST">
+    export_task_id AS exportTaskId, 
+    task_sign AS taskSign, 
+    name AS name, 
+    status AS status, 
+    cost_time AS costTime, 
+    file_url AS fileUrl, 
+    failed_reson AS failedReson, 
+    remark AS remark, 
+    md5_digest AS md5Digest, 
+    is_delete AS isDelete, 
+    create_time AS createTime, 
+    create_user_id AS createUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM export_task]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="exportTaskId != null"><![CDATA[ AND export_task_id = #{exportTaskId}]]></if>
+      <if test="taskSign != null"><![CDATA[ AND task_sign = #{taskSign}]]></if>
+      <if test="name != null"><![CDATA[ AND name = #{name}]]></if>
+      <if test="status != null"><![CDATA[ AND status = #{status}]]></if>
+      <if test="costTime != null"><![CDATA[ AND cost_time = #{costTime}]]></if>
+      <if test="md5Digest != null"><![CDATA[ AND md5_digest = #{md5Digest}]]></if>
+      <if test="fileUrl != null"><![CDATA[ AND file_url = #{fileUrl}]]></if>
+      <if test="isDelete != null"><![CDATA[ AND is_delete = #{isDelete}]]></if>
+      <if test="createTime != null"><![CDATA[ AND create_time = #{createTime}]]></if>
+      <if test="startTime != null"><![CDATA[ AND create_time >= #{startTime}]]></if>
+      <if test="createUserId != null"><![CDATA[ AND create_user_id = #{createUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.exportTaskId != null"><![CDATA[ AND export_task_id = #{filters.exportTaskId}]]></if>
+      <if test="filters.taskSign != null"><![CDATA[ AND task_sign = #{filters.taskSign}]]></if>
+      <if test="filters.name != null"><![CDATA[ AND name = #{filters.name}]]></if>
+      <if test="filters.status != null"><![CDATA[ AND status = #{filters.status}]]></if>
+      <if test="filters.costTime != null"><![CDATA[ AND cost_time = #{filters.costTime}]]></if>
+      <if test="filters.md5Digest != null"><![CDATA[ AND md5_digest = #{filters.md5Digest}]]></if>
+      <if test="filters.fileUrl != null"><![CDATA[ AND file_url = #{filters.fileUrl}]]></if>
+      <if test="filters.isDelete != null"><![CDATA[ AND is_delete = #{filters.isDelete}]]></if>
+      <if test="filters.createTime != null"><![CDATA[ AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[ AND create_user_id = #{filters.createUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="taskSign != null"><![CDATA[task_sign = #{taskSign},]]></if>
+      <if test="name != null"><![CDATA[name = #{name},]]></if>
+      <if test="status != null"><![CDATA[status = #{status},]]></if>
+      <if test="costTime != null"><![CDATA[cost_time = #{costTime},]]></if>
+      <if test="fileUrl != null"><![CDATA[file_url = #{fileUrl},]]></if>
+      <if test="failedReson != null"><![CDATA[failed_reson = #{failedReson},]]></if>
+      <if test="remark != null"><![CDATA[remark = #{remark},]]></if>
+      <if test="md5Digest != null"><![CDATA[md5_digest = #{md5Digest},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="exportTask" useGeneratedKeys = "true" keyProperty ="exportTaskId">
+    <![CDATA[
+      insert into export_task
+		(task_sign, name, status, cost_time, file_url, failed_reson, remark, md5_digest, is_delete, create_time, create_user_id)
+	values
+		(#{taskSign}, #{name}, #{status}, #{costTime}, #{fileUrl}, #{failedReson}, #{remark}, #{md5Digest}, false, now(),#{createUserId})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="exportTask" >
+    <![CDATA[UPDATE export_task]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE export_task_id = #{exportTaskId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="exportTask">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE export_task_id = #{exportTaskId}]]>
+  </select>
+  <select id="loadAll" resultType="exportTask">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="exportTask" resultType="exportTask">
+    <![CDATA[ SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/>
+    <![CDATA[ ORDER BY create_time desc ]]>
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="exportTask">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

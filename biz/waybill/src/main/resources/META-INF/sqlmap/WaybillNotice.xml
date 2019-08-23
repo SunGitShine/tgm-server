@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillNoticeDao">
+  <sql id="QUERY_COLUMN_LIST">
+    waybill_notice_id AS waybillNoticeId, 
+    waybill_id AS waybillId, 
+    notice_driver_num AS noticeDriverNum, 
+    notice_time AS noticeTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM waybill_notice]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="waybillNoticeId != null"><![CDATA[AND waybill_notice_id = #{waybillNoticeId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="noticeDriverNum != null"><![CDATA[AND notice_driver_num = #{noticeDriverNum}]]></if>
+      <if test="noticeTime != null"><![CDATA[AND notice_time = #{noticeTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.waybillNoticeId != null"><![CDATA[AND waybill_notice_id = #{filters.waybillNoticeId}]]></if>
+      <if test="filters.waybillId != null"><![CDATA[AND waybill_id = #{filters.waybillId}]]></if>
+      <if test="filters.noticeDriverNum != null"><![CDATA[AND notice_driver_num = #{filters.noticeDriverNum}]]></if>
+      <if test="filters.noticeTime != null"><![CDATA[AND notice_time = #{filters.noticeTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="waybillId != null"><![CDATA[waybill_id = #{waybillId},]]></if>
+      <if test="noticeDriverNum != null"><![CDATA[notice_driver_num = #{noticeDriverNum},]]></if>
+      <if test="noticeTime != null"><![CDATA[notice_time = #{noticeTime},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="waybillNotice" useGeneratedKeys = "true" keyProperty ="waybill_notice_id">
+    <![CDATA[
+      insert into waybill_notice
+		(waybill_id, notice_driver_num, notice_time)
+	values
+		(#{waybillId}, #{noticeDriverNum}, #{noticeTime})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="waybillNotice" >
+    <![CDATA[UPDATE waybill_notice]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE waybill_notice_id = #{waybillNoticeId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="waybillNotice">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE waybill_notice_id = #{waybillNoticeId}]]>
+  </select>
+  <select id="loadAll" resultType="waybillNotice">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="waybillNotice" resultType="waybillNotice">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="waybillNotice">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

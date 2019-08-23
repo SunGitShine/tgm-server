@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.project.dao.ProjectDepotMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.project.domain.v2.ProjectDepot">
+    <id column="depot_id" jdbcType="INTEGER" property="depotId" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="depot_name" jdbcType="VARCHAR" property="depotName" />
+    <result column="depot_address" jdbcType="VARCHAR" property="depotAddress" />
+    <result column="depot_coordinates" jdbcType="VARCHAR" property="depotCoordinates" />
+    <result column="link_man" jdbcType="VARCHAR" property="linkMan" />
+    <result column="link_man_phone" jdbcType="VARCHAR" property="linkManPhone" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    depot_id, project_id, depot_name, depot_address, depot_coordinates, link_man, link_man_phone, 
+    is_delete, create_user_id, create_time, last_update_user_id, last_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.project.domain.v2.ProjectDepotExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from project_depot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_depot
+    where depot_id = #{depotId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from project_depot
+    where depot_id = #{depotId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.project.domain.v2.ProjectDepotExample">
+    delete from project_depot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <select id="countByExample" parameterType="com.juma.tgm.project.domain.v2.ProjectDepotExample" resultType="java.lang.Long">
+    select count(*) from project_depot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <insert id="insert" keyColumn="depot_id" keyProperty="depotId" parameterType="com.juma.tgm.project.domain.v2.ProjectDepot" useGeneratedKeys="true">
+    insert into project_depot (project_id, depot_name, depot_address, 
+      depot_coordinates, link_man, link_man_phone, 
+      is_delete, create_user_id, create_time, 
+      last_update_user_id, last_update_time)
+    values (#{projectId,jdbcType=INTEGER}, #{depotName,jdbcType=VARCHAR}, #{depotAddress,jdbcType=VARCHAR}, 
+      #{depotCoordinates,jdbcType=VARCHAR}, #{linkMan,jdbcType=VARCHAR}, #{linkManPhone,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastUpdateUserId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="depot_id" keyProperty="depotId" parameterType="com.juma.tgm.project.domain.v2.ProjectDepot" useGeneratedKeys="true">
+    insert into project_depot
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="depotName != null">
+        depot_name,
+      </if>
+      <if test="depotAddress != null">
+        depot_address,
+      </if>
+      <if test="depotCoordinates != null">
+        depot_coordinates,
+      </if>
+      <if test="linkMan != null">
+        link_man,
+      </if>
+      <if test="linkManPhone != null">
+        link_man_phone,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="depotName != null">
+        #{depotName,jdbcType=VARCHAR},
+      </if>
+      <if test="depotAddress != null">
+        #{depotAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="depotCoordinates != null">
+        #{depotCoordinates,jdbcType=VARCHAR},
+      </if>
+      <if test="linkMan != null">
+        #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="linkManPhone != null">
+        #{linkManPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.project.domain.v2.ProjectDepot">
+    update project_depot
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="depotName != null">
+        depot_name = #{depotName,jdbcType=VARCHAR},
+      </if>
+      <if test="depotAddress != null">
+        depot_address = #{depotAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="depotCoordinates != null">
+        depot_coordinates = #{depotCoordinates,jdbcType=VARCHAR},
+      </if>
+      <if test="linkMan != null">
+        link_man = #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="linkManPhone != null">
+        link_man_phone = #{linkManPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where depot_id = #{depotId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.project.domain.v2.ProjectDepot">
+    update project_depot
+    set project_id = #{projectId,jdbcType=INTEGER},
+      depot_name = #{depotName,jdbcType=VARCHAR},
+      depot_address = #{depotAddress,jdbcType=VARCHAR},
+      depot_coordinates = #{depotCoordinates,jdbcType=VARCHAR},
+      link_man = #{linkMan,jdbcType=VARCHAR},
+      link_man_phone = #{linkManPhone,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where depot_id = #{depotId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="depotId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into project_depot
+    (project_id,depot_name,depot_address,depot_coordinates,link_man,link_man_phone,is_delete,create_user_id,create_time,last_update_user_id,last_update_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.projectId},#{item.depotName},#{item.depotAddress},#{item.depotCoordinates},#{item.linkMan},#{item.linkManPhone},#{item.isDelete},#{item.createUserId},#{item.createTime},#{item.lastUpdateUserId},#{item.lastUpdateTime})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update project_depot
+      <set>
+        depot_id = #{item.depotId},
+        project_id = #{item.projectId},
+        depot_name = #{item.depotName},
+        depot_address = #{item.depotAddress},
+        depot_coordinates = #{item.depotCoordinates},
+        link_man = #{item.linkMan},
+        link_man_phone = #{item.linkManPhone},
+        is_delete = #{item.isDelete},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+        last_update_time = #{item.lastUpdateTime},
+      </set>
+      where depot_id = #{item.depotId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update project_depot
+      <set>
+        <if test="item.projectId != null">
+          project_id = #{item.projectId,jdbcType=INTEGER},
+        </if>
+        <if test="item.depotName != null">
+          depot_name = #{item.depotName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.depotAddress != null">
+          depot_address = #{item.depotAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="item.depotCoordinates != null">
+          depot_coordinates = #{item.depotCoordinates,jdbcType=VARCHAR},
+        </if>
+        <if test="item.linkMan != null">
+          link_man = #{item.linkMan,jdbcType=VARCHAR},
+        </if>
+        <if test="item.linkManPhone != null">
+          link_man_phone = #{item.linkManPhone,jdbcType=VARCHAR},
+        </if>
+        <if test="item.isDelete != null">
+          is_delete = #{item.isDelete,jdbcType=TINYINT},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where depot_id = #{item.depotId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

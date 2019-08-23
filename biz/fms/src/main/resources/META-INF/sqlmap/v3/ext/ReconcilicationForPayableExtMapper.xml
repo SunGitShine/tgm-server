@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.fms.dao.v3.ext.ReconcilicationForPayableExtMapper">
+    <sql id="QUERY_COLUMN_LIST">
+        customer_Id AS customerId,
+        customer_name AS customerName,
+        project_id AS projectId,
+        project_name AS projectName,
+        pay_to_company AS departmentId,
+        SUM(show4_driver_freight) AS vendorAmountNotReconciled
+    </sql>
+
+    <sql id="QUERY_WAYBILL_COLUMN_LIST">
+        customer_Id AS customerId,
+        customer_name AS customerName,
+        project_id AS projectId,
+        project_name AS projectName,
+        department_id AS departmentId,
+        pay_to_company AS departmentId,
+		waybill_id AS waybillId,
+        waybill_no as waybillNo,
+        show4_driver_freight AS show4DriverFreight,
+        estimate_freight AS estimateFreight,
+        after_tax_freight AS afterTaxFreight
+	</sql>
+
+    <sql id="QUERY_FROM_TABLE"><![CDATA[FROM waybill]]></sql>
+
+    <sql id="SEARCH_WHERE_CLAUSE">
+        <where>
+            <if test="filters.customerId != null"><![CDATA[ AND customer_Id = #{filters.customerId} ]]></if>
+            <if test="filters.projectId != null"><![CDATA[ AND project_id = #{filters.projectId} ]]></if>
+            <if test="filters.payToCompany != null"><![CDATA[ AND pay_to_company = #{filters.payToCompany}]]></if>
+            <if test="filters.customerName != null"><![CDATA[ AND customer_name = #{filters.customerName} ]]></if>
+            <if test="filters.projectName != null"><![CDATA[ AND project_name = #{filters.projectName} ]]></if>
+            <if test="filters.startTime != null"><![CDATA[ AND plan_delivery_time >= #{filters.startTime} ]]></if>
+			<if test="filters.endTime != null"><![CDATA[ AND plan_delivery_time <= #{filters.endTime} ]]></if>
+            <if test="filters.tenantId != null"><![CDATA[ AND tenant_id = #{filters.tenantId} ]]></if>
+            <if test="filters.statusView != null"><![CDATA[ AND status_view = #{filters.statusView} ]]></if>
+            <if test="filters.reconciliationStatus != null"><![CDATA[ AND reconciliation_status = #{filters.reconciliationStatus} ]]></if>
+            <if test="filters.areaCodeList != null">
+                <![CDATA[ AND ]]>
+                <foreach collection="filters.areaCodeList" item="item" open="(" separator="or" close=")">
+                    <![CDATA[ area_code like concat(#{item}, '%') ]]>
+                </foreach>
+            </if>
+            <![CDATA[ AND is_delete = false and customer_id is not null ]]>
+        </where>
+    </sql>
+
+    <sql id="SEARCH_ORDERBY_LIMIT">
+        <!-- <choose>
+            <when test="orderBy == null">
+                order by create_time desc
+            </when>
+            <otherwise>
+                order by ${orderBy} ${orderSort}
+            </otherwise>
+        </choose> -->
+        limit #{startOffSet}, #{endOffSet}
+    </sql>
+
+    <select id="searchCount" resultType="int" parameterType="com.giants.common.tools.PageCondition">
+        <![CDATA[ select count(1) from (select count(1) ]]>
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="SEARCH_WHERE_CLAUSE" />
+        <![CDATA[ GROUP BY pay_to_company, customer_id, project_id) w ]]>
+    </select>
+
+    <select id="search" resultType="com.juma.tgm.fms.domain.v3.bo.ReconcilicationForPayApply" parameterType="com.giants.common.tools.PageCondition">
+        <![CDATA[ select ]]>
+        <include refid="QUERY_COLUMN_LIST" />
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="SEARCH_WHERE_CLAUSE" />
+        <![CDATA[ GROUP BY pay_to_company, customer_id, project_id  ORDER BY customer_id DESC ]]>
+        <include refid="SEARCH_ORDERBY_LIMIT" />
+    </select>
+
+    <select id="selectByFilter" resultType="com.juma.tgm.waybill.domain.Waybill" parameterType="com.giants.common.tools.PageCondition">
+        <![CDATA[ select ]]>
+        <include refid="QUERY_WAYBILL_COLUMN_LIST" />
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="SEARCH_WHERE_CLAUSE" />
+    </select>
+
+    <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.ReconcilicationForPayable" >
+        <id column="reconcilication_id" property="reconcilicationId" jdbcType="INTEGER" />
+        <result column="tenant_id" property="tenantId" jdbcType="INTEGER" />
+        <result column="tenant_code" property="tenantCode" jdbcType="VARCHAR" />
+        <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+        <result column="reconcilication_no" property="reconcilicationNo" jdbcType="VARCHAR" />
+        <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+        <result column="project_id" property="projectId" jdbcType="INTEGER" />
+        <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+        <result column="payable_with_tax" property="payableWithTax" jdbcType="DECIMAL" />
+        <result column="driver_transport_fee" property="driverTransportFee" jdbcType="DECIMAL" />
+        <result column="temporary_transport_fee" property="temporaryTransportFee" jdbcType="DECIMAL" />
+        <result column="process_instance_id" property="processInstanceId" jdbcType="VARCHAR" />
+        <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
+        <result column="submit_user_id" property="submitUserId" jdbcType="INTEGER" />
+        <result column="approval_status" property="approvalStatus" jdbcType="INTEGER" />
+    </resultMap>
+
+  <sql id="Base_Column_List" >
+    reconcilication_id, tenant_id, tenant_code, area_code, department_id, reconcilication_no,
+    customer_id, customer_name, project_id, project_name, payable_with_tax, driver_transport_fee,
+    temporary_transport_fee, process_instance_id, submit_time, submit_user_id, approval_status,
+    create_time, create_user_id
+  </sql>
+
+    <sql id="PAGE_Where_Clause">
+        <where>
+            <if test="filters.reconcilicationNo != null"><![CDATA[ AND reconcilication_no = #{filters.reconcilicationNo}]]></if>
+            <if test="filters.startTime != null"><![CDATA[AND submit_time >= #{filters.startTime}]]></if>
+            <if test="filters.endTime != null"><![CDATA[AND submit_time <= #{filters.endTime}]]></if>
+            <if test="filters.customerId != null"><![CDATA[ AND customer_Id = #{filters.customerId} ]]></if>
+            <if test="filters.projectId != null"><![CDATA[ AND project_id = #{filters.projectId} ]]></if>
+            <if test="filters.customerName != null"><![CDATA[ AND customer_name = #{filters.customerName} ]]></if>
+            <if test="filters.projectName != null"><![CDATA[ AND project_name = #{filters.projectName} ]]></if>
+            <if test="filters.tenantId != null"><![CDATA[ AND tenant_id = #{filters.tenantId} ]]></if>
+            <if test="filters.approvalStatus != null"><![CDATA[ AND approval_status = #{filters.approvalStatus} ]]></if>
+            <if test="filters.areaCodeList != null">
+                <![CDATA[ AND ]]>
+                <foreach collection="filters.areaCodeList" item="item" open="(" separator="or" close=")">
+                    <![CDATA[ area_code like concat(#{item}, '%') ]]>
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <select id="vendorCount" resultType="java.lang.Integer">
+        select count(1) from reconcilication_for_payable
+        <include refid="PAGE_Where_Clause"/>
+    </select>
+
+    <select id="vendorSearch" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from reconcilication_for_payable
+        <include refid="PAGE_Where_Clause" />
+        <choose>
+            <when test="orderBy == null">
+                order by reconcilication_id desc
+            </when>
+            <otherwise>
+                order by ${orderBy} ${orderSort}
+            </otherwise>
+        </choose>
+        limit #{startOffSet}, #{endOffSet}
+    </select>
+
+</mapper>

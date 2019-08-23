@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.TaskAckMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskAck">
+    <id column="ack_id" jdbcType="INTEGER" property="ackId" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="vendor_id" jdbcType="INTEGER" property="vendorId" />
+    <result column="bill_period" jdbcType="INTEGER" property="billPeriod" />
+    <result column="bill_period_reason" jdbcType="VARCHAR" property="billPeriodReason" />
+    <result column="truck_id" jdbcType="INTEGER" property="truckId" />
+    <result column="driver_id" jdbcType="INTEGER" property="driverId" />
+    <result column="ack_status" jdbcType="INTEGER" property="ackStatus" />
+    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ack_id, task_id, tenant_id, project_id, vendor_id, bill_period, bill_period_reason, 
+    truck_id, driver_id, ack_status, refuse_reason, create_user_id, create_time, last_update_user_id, 
+    last_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.task.domain.TaskAckExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from task_ack
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from task_ack
+    where ack_id = #{ackId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from task_ack
+    where ack_id = #{ackId,jdbcType=INTEGER}
+  </delete>
+  <select id="countByExample" parameterType="com.juma.tgm.task.domain.TaskAckExample" resultType="java.lang.Long">
+    select count(*) from task_ack
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <insert id="insert" keyColumn="ack_id" keyProperty="ackId" parameterType="com.juma.tgm.task.domain.TaskAck" useGeneratedKeys="true">
+    insert into task_ack (task_id, tenant_id, project_id, 
+      vendor_id, bill_period, bill_period_reason, 
+      truck_id, driver_id, ack_status, 
+      refuse_reason, create_user_id, create_time, 
+      last_update_user_id, last_update_time)
+    values (#{taskId,jdbcType=INTEGER}, #{tenantId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, 
+      #{vendorId,jdbcType=INTEGER}, #{billPeriod,jdbcType=INTEGER}, #{billPeriodReason,jdbcType=VARCHAR}, 
+      #{truckId,jdbcType=INTEGER}, #{driverId,jdbcType=INTEGER}, #{ackStatus,jdbcType=INTEGER}, 
+      #{refuseReason,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastUpdateUserId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="ack_id" keyProperty="ackId" parameterType="com.juma.tgm.task.domain.TaskAck" useGeneratedKeys="true">
+    insert into task_ack
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="vendorId != null">
+        vendor_id,
+      </if>
+      <if test="billPeriod != null">
+        bill_period,
+      </if>
+      <if test="billPeriodReason != null">
+        bill_period_reason,
+      </if>
+      <if test="truckId != null">
+        truck_id,
+      </if>
+      <if test="driverId != null">
+        driver_id,
+      </if>
+      <if test="ackStatus != null">
+        ack_status,
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="billPeriod != null">
+        #{billPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="billPeriodReason != null">
+        #{billPeriodReason,jdbcType=VARCHAR},
+      </if>
+      <if test="truckId != null">
+        #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null">
+        #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="ackStatus != null">
+        #{ackStatus,jdbcType=INTEGER},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.task.domain.TaskAck">
+    update task_ack
+    <set>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null">
+        vendor_id = #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="billPeriod != null">
+        bill_period = #{billPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="billPeriodReason != null">
+        bill_period_reason = #{billPeriodReason,jdbcType=VARCHAR},
+      </if>
+      <if test="truckId != null">
+        truck_id = #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null">
+        driver_id = #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="ackStatus != null">
+        ack_status = #{ackStatus,jdbcType=INTEGER},
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ack_id = #{ackId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.task.domain.TaskAck">
+    update task_ack
+    set task_id = #{taskId,jdbcType=INTEGER},
+      tenant_id = #{tenantId,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=INTEGER},
+      vendor_id = #{vendorId,jdbcType=INTEGER},
+      bill_period = #{billPeriod,jdbcType=INTEGER},
+      bill_period_reason = #{billPeriodReason,jdbcType=VARCHAR},
+      truck_id = #{truckId,jdbcType=INTEGER},
+      driver_id = #{driverId,jdbcType=INTEGER},
+      ack_status = #{ackStatus,jdbcType=INTEGER},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where ack_id = #{ackId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="ackId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into task_ack
+    (task_id,tenant_id,project_id,vendor_id,bill_period,bill_period_reason,truck_id,driver_id,ack_status,refuse_reason,create_user_id,create_time,last_update_user_id,last_update_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.taskId},#{item.tenantId},#{item.projectId},#{item.vendorId},#{item.billPeriod},#{item.billPeriodReason},#{item.truckId},#{item.driverId},#{item.ackStatus},#{item.refuseReason},#{item.createUserId},#{item.createTime},#{item.lastUpdateUserId},#{item.lastUpdateTime})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_ack
+      <set>
+        ack_id = #{item.ackId},
+        task_id = #{item.taskId},
+        tenant_id = #{item.tenantId},
+        project_id = #{item.projectId},
+        vendor_id = #{item.vendorId},
+        bill_period = #{item.billPeriod},
+        bill_period_reason = #{item.billPeriodReason},
+        truck_id = #{item.truckId},
+        driver_id = #{item.driverId},
+        ack_status = #{item.ackStatus},
+        refuse_reason = #{item.refuseReason},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+        last_update_time = #{item.lastUpdateTime},
+      </set>
+      where ack_id = #{item.ackId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_ack
+      <set>
+        <if test="item.taskId != null">
+          task_id = #{item.taskId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.projectId != null">
+          project_id = #{item.projectId,jdbcType=INTEGER},
+        </if>
+        <if test="item.vendorId != null">
+          vendor_id = #{item.vendorId,jdbcType=INTEGER},
+        </if>
+        <if test="item.billPeriod != null">
+          bill_period = #{item.billPeriod,jdbcType=INTEGER},
+        </if>
+        <if test="item.billPeriodReason != null">
+          bill_period_reason = #{item.billPeriodReason,jdbcType=VARCHAR},
+        </if>
+        <if test="item.truckId != null">
+          truck_id = #{item.truckId,jdbcType=INTEGER},
+        </if>
+        <if test="item.driverId != null">
+          driver_id = #{item.driverId,jdbcType=INTEGER},
+        </if>
+        <if test="item.ackStatus != null">
+          ack_status = #{item.ackStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.refuseReason != null">
+          refuse_reason = #{item.refuseReason,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where ack_id = #{item.ackId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.ext.TaskCalendarExtMapper">
+
+    <select id="groupByTaskWorkStatus" parameterType="int" resultType="com.juma.tgm.task.domain.ext.GroupTaskWorkStatus">
+        <![CDATA[ select work_status as workStatus,count(1) days from task_calendar where task_id = #{taskId} group by work_status]]>
+    </select>
+
+    <select id="groupByWorkStatusCount" parameterType="com.juma.tgm.task.dto.gateway.GroupTaskCalendarFilter" resultType="com.juma.tgm.task.domain.ext.GroupTaskCalendar">
+        <![CDATA[
+        SELECT count(1) AS task_calendar_count,tc.work_status FROM task_calendar tc
+          WHERE EXISTS (SELECT task_id FROM task_scheduled ts WHERE ts.project_id = #{projectId} AND ts.task_id = tc.task_id)
+            AND tc.work_start_time >= #{startTime}
+            AND tc.work_start_time <= #{endTime}
+          GROUP BY tc.work_status
+        ]]>
+    </select>
+
+    <select id="groupByDeliveryStatusCount" parameterType="com.juma.tgm.task.dto.gateway.GroupTaskCalendarFilter" resultType="com.juma.tgm.task.domain.ext.GroupTaskCalendar">
+        <![CDATA[
+        SELECT count(1) AS task_calendar_count,tc.delivery_status FROM task_calendar tc
+          WHERE EXISTS (SELECT task_id FROM task_scheduled ts WHERE ts.project_id = #{projectId} AND ts.task_id = tc.task_id)
+            AND tc.work_start_time >= #{startTime}
+            AND tc.work_start_time <= #{endTime}
+            AND tc.work_status = 0
+          GROUP BY tc.delivery_status
+        ]]>
+    </select>
+
+    <select id="getCalendarBy" parameterType="com.juma.tgm.task.dto.gateway.GroupTaskCalendarFilter" resultType="com.juma.tgm.task.vo.gateway.TaskCalendarByProject">
+        SELECT tc.* FROM task_calendar tc
+          WHERE EXISTS (SELECT task_id FROM task_scheduled ts WHERE ts.project_id = #{projectId} AND ts.task_id = tc.task_id)
+            AND tc.work_start_time <![CDATA[ >= ]]> #{startTime}
+            AND tc.work_start_time <![CDATA[ <= ]]> #{endTime}
+            <choose>
+                <when test="workStatus == 2">
+                    AND (tc.work_status = 2 or tc.work_status = 3)
+                </when>
+                <otherwise>
+                    AND tc.work_status = #{workStatus}
+                </otherwise>
+            </choose>
+            <if test="deliveryStatus != null"><![CDATA[ and delivery_status = #{deliveryStatus} ]]></if>
+    </select>
+
+</mapper>

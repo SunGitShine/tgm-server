@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.user.dao.DepartmentAcDao">
+  <sql id="QUERY_COLUMN_LIST">
+    department_ac_id AS departmentAcId, 
+    department_id AS departmentId, 
+    department_code AS departmentCode,
+    link_department_ids AS linkDepartmentIds,
+    region_ids AS regionIds, 
+    region_codes AS regionCodes,
+    rule_keys AS ruleKeys, 
+    create_user_id AS createUserId, 
+    create_time AS createTime, 
+    last_update_user_id AS lastUpdateUserId, 
+    last_update_time AS lastUpdateTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM department_ac]]></sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.departmentAcId != null"><![CDATA[AND department_ac_id = #{filters.departmentAcId}]]></if>
+      <if test="filters.departmentId != null"><![CDATA[AND department_id = #{filters.departmentId}]]></if>
+      <if test="filters.departmentCode != null"><![CDATA[AND department_code = #{filters.departmentCode}]]></if>
+      <if test="filters.regionIds != null and filters.regionIds != ''"><![CDATA[AND region_ids = #{filters.regionIds}]]></if>
+      <if test="filters.regionCodes != null and filters.regionCodes != ''"><![CDATA[AND region_codes = #{filters.regionCodes}]]></if>
+      <if test="filters.ruleKeys != null and filters.ruleKeys != ''"><![CDATA[AND rule_keys = #{filters.ruleKeys}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="departmentId != null"><![CDATA[department_id = #{departmentId},]]></if>
+      <if test="departmentCode != null"><![CDATA[department_code = #{departmentCode},]]></if>
+      <if test="linkDepartmentIds != null"><![CDATA[link_department_ids = #{linkDepartmentIds},]]></if>
+      <if test="regionIds != null and regionIds != ''"><![CDATA[region_ids = #{regionIds},]]></if>
+      <if test="regionCodes != null and regionCodes != ''"><![CDATA[region_codes = #{regionCodes},]]></if>
+      <if test="ruleKeys != null and ruleKeys != ''"><![CDATA[rule_keys = #{ruleKeys},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="departmentAc" useGeneratedKeys = "true" keyProperty ="department_ac_id">
+    <![CDATA[
+      insert into department_ac
+		(department_id,department_code,link_department_ids, region_ids,region_codes, rule_keys, create_user_id, create_time, last_update_user_id, last_update_time)
+	values
+		(#{departmentId},#{departmentCode},#{linkDepartmentIds}, #{regionIds},#{regionCodes}, #{ruleKeys}, #{createUserId}, now(),#{lastUpdateUserId}, #{lastUpdateTime})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="departmentAc" >
+    <![CDATA[UPDATE department_ac]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE department_ac_id = #{departmentAcId}]]>
+  </update>
+  <update id="updateByDepartmentId" parameterType="departmentAc" >
+    <![CDATA[UPDATE department_ac]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE department_id = #{departmentId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="departmentAc">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE department_ac_id = #{departmentAcId}]]>
+  </select>
+  <select id="findByDepartmentId" parameterType="int" resultType="departmentAc">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE department_id = #{departmentId}]]>
+  </select>
+  <select id="findByRegionCode" parameterType="string" resultType="departmentAc">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE FIND_IN_SET(#{regionCode}, region_codes)]]>
+  </select>
+  <select id="findByDepartmentIds" parameterType="java.util.List" resultType="departmentAc">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <where>
+    	<![CDATA[AND department_id in ]]>
+	    <foreach collection="list" item="item" open="(" separator="," close=")">
+	      <![CDATA[#{item}]]>
+	    </foreach>
+    </where>
+  </select>
+  <select id="loadAll" resultType="departmentAc">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchDetails" parameterType="com.giants.common.tools.PageCondition" resultType="departmentAc">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

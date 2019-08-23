@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.ContactHistoryDao">
+  <sql id="QUERY_COLUMN_LIST">
+    contact_id AS contactId,
+    contact_name AS contactName,
+    contact_phone AS contactPhone,
+    spare_contact_phone AS spareContactPhone,
+    address_id AS addressId,
+    md5 AS md5,
+    last_update_time AS lastUpdateTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM contact_history]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="contactId != null"><![CDATA[AND contact_id = #{contactId}]]></if>
+      <if test="contactName != null"><![CDATA[AND contact_name = #{contactName}]]></if>
+      <if test="contactPhone != null"><![CDATA[AND contact_phone = #{contactPhone}]]></if>
+      <if test="addressId != null"><![CDATA[AND address_id = #{addressId}]]></if>
+      <if test="spareContactPhone != null"><![CDATA[AND spare_contact_phone = #{spareContactPhone}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.contactId != null"><![CDATA[AND contact_id=#{filters.contactId}]]></if>
+      <if test="filters.contactName != null"><![CDATA[AND cantact_name=#{filters.contactName}]]></if>
+      <if test="filters.contactPhone != null"><![CDATA[AND contact_phone=#{filters.contactPhone}]]></if>
+      <if test="filters.addressId != null"><![CDATA[AND address_id = #{filters.addressId}]]></if>
+    </where>
+  </sql>
+  <sql id="SEARCH_ORDER_BY_AND_LIMIT">
+    <choose>
+        <when test="orderBy == null">
+            order by last_update_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy}
+        </otherwise>
+    </choose>
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="contactId != null"><![CDATA[contact_id = #{contactId},]]></if>
+      <if test="contactName != null"><![CDATA[contact_name = #{contactName},]]></if>
+      <if test="contactPhone != null"><![CDATA[contact_phone = #{contactPhone},]]></if>
+      <if test="spareContactPhone != null"><![CDATA[spare_contact_phone = #{spareContactPhone},]]></if>
+      <if test="addressId != null"><![CDATA[address_id = #{addressId},]]></if>
+      <if test="md5 != null"><![CDATA[md5 = #{md5},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="contactHistory" useGeneratedKeys = "true" keyProperty ="id">
+    <![CDATA[
+      insert into contact_history
+		(contact_name, contact_phone, address_id, spare_contact_phone, md5,last_update_time)
+	values
+		(#{contactName}, #{contactPhone},#{addressId}, #{spareContactPhone}, #{md5},now())
+	]]>
+	<selectKey resultType="java.lang.Integer" keyProperty="contactId" >
+	        select last_insert_id()
+	 </selectKey>
+  </insert>
+  <select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+  <update id="deleteAll" parameterType="java.lang.reflect.Array" >
+    <![CDATA[update contact_history set WHERE id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </update>
+  <update id="delete" parameterType="contactHistory" >
+  	<![CDATA[delete from contact_history ]]>
+  	<include refid="QUERY_WHERE_CLAUSE"/>
+  </update>
+  <update id="update" parameterType="contactHistory" >
+    <![CDATA[UPDATE contact_history ]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE contact_id = #{contactId}]]>
+  </update>
+  <select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="contactHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE contact_id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </select>
+  <select id="get" parameterType="java.lang.Integer" resultType="contactHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where contact_id=#{contactId}]]>
+  </select>
+  <select id="findByExample" parameterType="contactHistory" resultType="contactHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="selectEntryListCount" parameterType="contactHistory" resultType="int">
+    <![CDATA[SELECT COUNT(contact_id) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="search" resultType="contactHistory" parameterType="com.giants.common.tools.PageCondition">
+  	select
+  	<include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+    <include refid="SEARCH_ORDER_BY_AND_LIMIT"/>
+  </select>
+</mapper>

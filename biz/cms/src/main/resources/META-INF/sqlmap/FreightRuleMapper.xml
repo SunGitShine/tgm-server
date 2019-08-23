@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.configure.dao.FreightRuleMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.configure.domain.FreightRule">
+    <id column="freight_rule_id" jdbcType="INTEGER" property="freightRuleId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+    <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+    <result column="base_miles" jdbcType="INTEGER" property="baseMiles" />
+    <result column="base_volume" jdbcType="INTEGER" property="baseVolume" />
+    <result column="base_weight" jdbcType="INTEGER" property="baseWeight" />
+    <result column="base_freight" jdbcType="DECIMAL" property="baseFreight" />
+    <result column="over_miles_unit" jdbcType="DECIMAL" property="overMilesUnit" />
+    <result column="over_volume_unit" jdbcType="DECIMAL" property="overVolumeUnit" />
+    <result column="over_weight_unit" jdbcType="DECIMAL" property="overWeightUnit" />
+    <result column="max_miles" jdbcType="INTEGER" property="maxMiles" />
+    <result column="max_weight" jdbcType="INTEGER" property="maxWeight" />
+    <result column="max_volume" jdbcType="INTEGER" property="maxVolume" />
+    <result column="is_enable" jdbcType="BIT" property="isEnable" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    freight_rule_id, tenant_id, tenant_code, region_code, region_name, base_miles, base_volume, 
+    base_weight, base_freight, over_miles_unit, over_volume_unit, over_weight_unit, max_miles, 
+    max_weight, max_volume, is_enable, create_time, create_user_id, last_update_time, 
+    last_update_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.configure.domain.FreightRuleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from freight_rule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null">
+      <if test="startOffSet&gt;=0">
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from freight_rule
+    where freight_rule_id = #{freightRuleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from freight_rule
+    where freight_rule_id = #{freightRuleId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.configure.domain.FreightRuleExample">
+    delete from freight_rule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.juma.tgm.configure.domain.FreightRule">
+    insert into freight_rule (freight_rule_id, tenant_id, tenant_code, 
+      region_code, region_name, base_miles, 
+      base_volume, base_weight, base_freight, 
+      over_miles_unit, over_volume_unit, over_weight_unit, 
+      max_miles, max_weight, max_volume, 
+      is_enable, create_time, create_user_id, 
+      last_update_time, last_update_user_id)
+    values (#{freightRuleId,jdbcType=INTEGER}, #{tenantId,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, 
+      #{regionCode,jdbcType=VARCHAR}, #{regionName,jdbcType=VARCHAR}, #{baseMiles,jdbcType=INTEGER}, 
+      #{baseVolume,jdbcType=INTEGER}, #{baseWeight,jdbcType=INTEGER}, #{baseFreight,jdbcType=DECIMAL}, 
+      #{overMilesUnit,jdbcType=DECIMAL}, #{overVolumeUnit,jdbcType=DECIMAL}, #{overWeightUnit,jdbcType=DECIMAL}, 
+      #{maxMiles,jdbcType=INTEGER}, #{maxWeight,jdbcType=INTEGER}, #{maxVolume,jdbcType=INTEGER}, 
+      #{isEnable,jdbcType=BIT}, now(), #{createUserId,jdbcType=INTEGER}, 
+      #{lastUpdateTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.juma.tgm.configure.domain.FreightRule">
+    insert into freight_rule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="freightRuleId != null">
+        freight_rule_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="regionCode != null">
+        region_code,
+      </if>
+      <if test="regionName != null">
+        region_name,
+      </if>
+      <if test="baseMiles != null">
+        base_miles,
+      </if>
+      <if test="baseVolume != null">
+        base_volume,
+      </if>
+      <if test="baseWeight != null">
+        base_weight,
+      </if>
+      <if test="baseFreight != null">
+        base_freight,
+      </if>
+      <if test="overMilesUnit != null">
+        over_miles_unit,
+      </if>
+      <if test="overVolumeUnit != null">
+        over_volume_unit,
+      </if>
+      <if test="overWeightUnit != null">
+        over_weight_unit,
+      </if>
+      <if test="maxMiles != null">
+        max_miles,
+      </if>
+      <if test="maxWeight != null">
+        max_weight,
+      </if>
+      <if test="maxVolume != null">
+        max_volume,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+      create_time,
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="freightRuleId != null">
+        #{freightRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null">
+        #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="baseMiles != null">
+        #{baseMiles,jdbcType=INTEGER},
+      </if>
+      <if test="baseVolume != null">
+        #{baseVolume,jdbcType=INTEGER},
+      </if>
+      <if test="baseWeight != null">
+        #{baseWeight,jdbcType=INTEGER},
+      </if>
+      <if test="baseFreight != null">
+        #{baseFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="overMilesUnit != null">
+        #{overMilesUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="overVolumeUnit != null">
+        #{overVolumeUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="overWeightUnit != null">
+        #{overWeightUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="maxMiles != null">
+        #{maxMiles,jdbcType=INTEGER},
+      </if>
+      <if test="maxWeight != null">
+        #{maxWeight,jdbcType=INTEGER},
+      </if>
+      <if test="maxVolume != null">
+        #{maxVolume,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=BIT},
+      </if>
+      now(),
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.configure.domain.FreightRuleExample" resultType="java.lang.Long">
+    select count(*) from freight_rule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update freight_rule
+    <set>
+      <if test="record.freightRuleId != null">
+        freight_rule_id = #{record.freightRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionCode != null">
+        region_code = #{record.regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionName != null">
+        region_name = #{record.regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.baseMiles != null">
+        base_miles = #{record.baseMiles,jdbcType=INTEGER},
+      </if>
+      <if test="record.baseVolume != null">
+        base_volume = #{record.baseVolume,jdbcType=INTEGER},
+      </if>
+      <if test="record.baseWeight != null">
+        base_weight = #{record.baseWeight,jdbcType=INTEGER},
+      </if>
+      <if test="record.baseFreight != null">
+        base_freight = #{record.baseFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.overMilesUnit != null">
+        over_miles_unit = #{record.overMilesUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.overVolumeUnit != null">
+        over_volume_unit = #{record.overVolumeUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.overWeightUnit != null">
+        over_weight_unit = #{record.overWeightUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.maxMiles != null">
+        max_miles = #{record.maxMiles,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxWeight != null">
+        max_weight = #{record.maxWeight,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxVolume != null">
+        max_volume = #{record.maxVolume,jdbcType=INTEGER},
+      </if>
+      <if test="record.isEnable != null">
+        is_enable = #{record.isEnable,jdbcType=BIT},
+      </if>
+      last_update_time = now(),
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update freight_rule
+    set freight_rule_id = #{record.freightRuleId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      region_code = #{record.regionCode,jdbcType=VARCHAR},
+      region_name = #{record.regionName,jdbcType=VARCHAR},
+      base_miles = #{record.baseMiles,jdbcType=INTEGER},
+      base_volume = #{record.baseVolume,jdbcType=INTEGER},
+      base_weight = #{record.baseWeight,jdbcType=INTEGER},
+      base_freight = #{record.baseFreight,jdbcType=DECIMAL},
+      over_miles_unit = #{record.overMilesUnit,jdbcType=DECIMAL},
+      over_volume_unit = #{record.overVolumeUnit,jdbcType=DECIMAL},
+      over_weight_unit = #{record.overWeightUnit,jdbcType=DECIMAL},
+      max_miles = #{record.maxMiles,jdbcType=INTEGER},
+      max_weight = #{record.maxWeight,jdbcType=INTEGER},
+      max_volume = #{record.maxVolume,jdbcType=INTEGER},
+      is_enable = #{record.isEnable,jdbcType=BIT},
+      last_update_time = now(),
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.configure.domain.FreightRule">
+    update freight_rule
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        region_code = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null">
+        region_name = #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="baseMiles != null">
+        base_miles = #{baseMiles,jdbcType=INTEGER},
+      </if>
+      <if test="baseVolume != null">
+        base_volume = #{baseVolume,jdbcType=INTEGER},
+      </if>
+      <if test="baseWeight != null">
+        base_weight = #{baseWeight,jdbcType=INTEGER},
+      </if>
+      <if test="baseFreight != null">
+        base_freight = #{baseFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="overMilesUnit != null">
+        over_miles_unit = #{overMilesUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="overVolumeUnit != null">
+        over_volume_unit = #{overVolumeUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="overWeightUnit != null">
+        over_weight_unit = #{overWeightUnit,jdbcType=DECIMAL},
+      </if>
+      <if test="maxMiles != null">
+        max_miles = #{maxMiles,jdbcType=INTEGER},
+      </if>
+      <if test="maxWeight != null">
+        max_weight = #{maxWeight,jdbcType=INTEGER},
+      </if>
+      <if test="maxVolume != null">
+        max_volume = #{maxVolume,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=BIT},
+      </if>
+      last_update_time = now(),
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where freight_rule_id = #{freightRuleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.configure.domain.FreightRule">
+    update freight_rule
+    set tenant_id = #{tenantId,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      region_code = #{regionCode,jdbcType=VARCHAR},
+      region_name = #{regionName,jdbcType=VARCHAR},
+      base_miles = #{baseMiles,jdbcType=INTEGER},
+      base_volume = #{baseVolume,jdbcType=INTEGER},
+      base_weight = #{baseWeight,jdbcType=INTEGER},
+      base_freight = #{baseFreight,jdbcType=DECIMAL},
+      over_miles_unit = #{overMilesUnit,jdbcType=DECIMAL},
+      over_volume_unit = #{overVolumeUnit,jdbcType=DECIMAL},
+      over_weight_unit = #{overWeightUnit,jdbcType=DECIMAL},
+      max_miles = #{maxMiles,jdbcType=INTEGER},
+      max_weight = #{maxWeight,jdbcType=INTEGER},
+      max_volume = #{maxVolume,jdbcType=INTEGER},
+      is_enable = #{isEnable,jdbcType=BIT},
+      last_update_time = now(),
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER}
+    where freight_rule_id = #{freightRuleId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.TaskNotfixedDeliveryMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskNotfixedDelivery">
+    <id column="notfixed_id" jdbcType="INTEGER" property="notfixedId" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="min_stops" jdbcType="INTEGER" property="minStops" />
+    <result column="max_stops" jdbcType="INTEGER" property="maxStops" />
+    <result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    notfixed_id, task_id, min_stops, max_stops, address_detail
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.task.domain.TaskNotfixedDeliveryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from task_notfixed_delivery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from task_notfixed_delivery
+    where notfixed_id = #{notfixedId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from task_notfixed_delivery
+    where notfixed_id = #{notfixedId,jdbcType=INTEGER}
+  </delete>
+  <select id="countByExample" parameterType="com.juma.tgm.task.domain.TaskDeviceExample" resultType="java.lang.Long">
+    select count(*) from task_notfixed_delivery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <insert id="insert" keyColumn="notfixed_id" keyProperty="notfixedId" parameterType="com.juma.tgm.task.domain.TaskNotfixedDelivery" useGeneratedKeys="true">
+    insert into task_notfixed_delivery (task_id, min_stops, max_stops, 
+      address_detail)
+    values (#{taskId,jdbcType=INTEGER}, #{minStops,jdbcType=INTEGER}, #{maxStops,jdbcType=INTEGER}, 
+      #{addressDetail,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="notfixed_id" keyProperty="notfixedId" parameterType="com.juma.tgm.task.domain.TaskNotfixedDelivery" useGeneratedKeys="true">
+    insert into task_notfixed_delivery
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="minStops != null">
+        min_stops,
+      </if>
+      <if test="maxStops != null">
+        max_stops,
+      </if>
+      <if test="addressDetail != null">
+        address_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="minStops != null">
+        #{minStops,jdbcType=INTEGER},
+      </if>
+      <if test="maxStops != null">
+        #{maxStops,jdbcType=INTEGER},
+      </if>
+      <if test="addressDetail != null">
+        #{addressDetail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.task.domain.TaskNotfixedDelivery">
+    update task_notfixed_delivery
+    <set>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="minStops != null">
+        min_stops = #{minStops,jdbcType=INTEGER},
+      </if>
+      <if test="maxStops != null">
+        max_stops = #{maxStops,jdbcType=INTEGER},
+      </if>
+      <if test="addressDetail != null">
+        address_detail = #{addressDetail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where notfixed_id = #{notfixedId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.task.domain.TaskNotfixedDelivery">
+    update task_notfixed_delivery
+    set task_id = #{taskId,jdbcType=INTEGER},
+      min_stops = #{minStops,jdbcType=INTEGER},
+      max_stops = #{maxStops,jdbcType=INTEGER},
+      address_detail = #{addressDetail,jdbcType=VARCHAR}
+    where notfixed_id = #{notfixedId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="notfixedId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into task_notfixed_delivery
+    (task_id,min_stops,max_stops,address_detail) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.taskId},#{item.minStops},#{item.maxStops},#{item.addressDetail})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_notfixed_delivery
+      <set>
+        notfixed_id = #{item.notfixedId},
+        task_id = #{item.taskId},
+        min_stops = #{item.minStops},
+        max_stops = #{item.maxStops},
+        address_detail = #{item.addressDetail},
+      </set>
+      where notfixed_id = #{item.notfixedId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_notfixed_delivery
+      <set>
+        <if test="item.taskId != null">
+          task_id = #{item.taskId,jdbcType=INTEGER},
+        </if>
+        <if test="item.minStops != null">
+          min_stops = #{item.minStops,jdbcType=INTEGER},
+        </if>
+        <if test="item.maxStops != null">
+          max_stops = #{item.maxStops,jdbcType=INTEGER},
+        </if>
+        <if test="item.addressDetail != null">
+          address_detail = #{item.addressDetail,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where notfixed_id = #{item.notfixedId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

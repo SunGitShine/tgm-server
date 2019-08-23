@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.TaskCalendarReasonMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskCalendarReason">
+    <id column="reason_id" jdbcType="INTEGER" property="reasonId" />
+    <result column="calendar_id" jdbcType="INTEGER" property="calendarId" />
+    <result column="reason_type" jdbcType="INTEGER" property="reasonType" />
+    <result column="reason_sort" jdbcType="INTEGER" property="reasonSort" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    reason_id, calendar_id, reason_type, reason_sort, reason, create_user_id, create_time, 
+    last_update_user_id, last_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.task.domain.TaskCalendarReasonExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from task_calendar_reason
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from task_calendar_reason
+    where reason_id = #{reasonId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from task_calendar_reason
+    where reason_id = #{reasonId,jdbcType=INTEGER}
+  </delete>
+  <select id="countByExample" parameterType="com.juma.tgm.task.domain.TaskCalendarExample" resultType="java.lang.Long">
+    select count(*) from task_calendar_reason
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <insert id="insert" keyColumn="reason_id" keyProperty="reasonId" parameterType="com.juma.tgm.task.domain.TaskCalendarReason" useGeneratedKeys="true">
+    insert into task_calendar_reason (calendar_id, reason_type, reason_sort, 
+      reason, create_user_id, create_time, 
+      last_update_user_id, last_update_time)
+    values (#{calendarId,jdbcType=INTEGER}, #{reasonType,jdbcType=INTEGER}, #{reasonSort,jdbcType=INTEGER}, 
+      #{reason,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastUpdateUserId,jdbcType=INTEGER}, #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="reason_id" keyProperty="reasonId" parameterType="com.juma.tgm.task.domain.TaskCalendarReason" useGeneratedKeys="true">
+    insert into task_calendar_reason
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="calendarId != null">
+        calendar_id,
+      </if>
+      <if test="reasonType != null">
+        reason_type,
+      </if>
+      <if test="reasonSort != null">
+        reason_sort,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="calendarId != null">
+        #{calendarId,jdbcType=INTEGER},
+      </if>
+      <if test="reasonType != null">
+        #{reasonType,jdbcType=INTEGER},
+      </if>
+      <if test="reasonSort != null">
+        #{reasonSort,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.task.domain.TaskCalendarReason">
+    update task_calendar_reason
+    <set>
+      <if test="calendarId != null">
+        calendar_id = #{calendarId,jdbcType=INTEGER},
+      </if>
+      <if test="reasonType != null">
+        reason_type = #{reasonType,jdbcType=INTEGER},
+      </if>
+      <if test="reasonSort != null">
+        reason_sort = #{reasonSort,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where reason_id = #{reasonId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.task.domain.TaskCalendarReason">
+    update task_calendar_reason
+    set calendar_id = #{calendarId,jdbcType=INTEGER},
+      reason_type = #{reasonType,jdbcType=INTEGER},
+      reason_sort = #{reasonSort,jdbcType=INTEGER},
+      reason = #{reason,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where reason_id = #{reasonId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="reasonId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into task_calendar_reason
+    (calendar_id,reason_type,reason_sort,reason,create_user_id,create_time,last_update_user_id,last_update_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.calendarId},#{item.reasonType},#{item.reasonSort},#{item.reason},#{item.createUserId},#{item.createTime},#{item.lastUpdateUserId},#{item.lastUpdateTime})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_calendar_reason
+      <set>
+        reason_id = #{item.reasonId},
+        calendar_id = #{item.calendarId},
+        reason_type = #{item.reasonType},
+        reason_sort = #{item.reasonSort},
+        reason = #{item.reason},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+        last_update_time = #{item.lastUpdateTime},
+      </set>
+      where reason_id = #{item.reasonId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_calendar_reason
+      <set>
+        <if test="item.calendarId != null">
+          calendar_id = #{item.calendarId,jdbcType=INTEGER},
+        </if>
+        <if test="item.reasonType != null">
+          reason_type = #{item.reasonType,jdbcType=INTEGER},
+        </if>
+        <if test="item.reasonSort != null">
+          reason_sort = #{item.reasonSort,jdbcType=INTEGER},
+        </if>
+        <if test="item.reason != null">
+          reason = #{item.reason,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where reason_id = #{item.reasonId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

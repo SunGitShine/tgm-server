@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.TaskPeriodMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskPeriod">
+    <id column="period_id" jdbcType="INTEGER" property="periodId" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="is_standard_time" jdbcType="TINYINT" property="isStandardTime" />
+    <result column="delivery_period" jdbcType="VARCHAR" property="deliveryPeriod" />
+    <result column="delivery_period_time" jdbcType="VARCHAR" property="deliveryPeriodTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    period_id, task_id, is_standard_time, delivery_period, delivery_period_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.task.domain.TaskPeriodExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from task_period
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from task_period
+    where period_id = #{periodId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from task_period
+    where period_id = #{periodId,jdbcType=INTEGER}
+  </delete>
+  <select id="countByExample" parameterType="com.juma.tgm.task.domain.TaskPeriodExample" resultType="java.lang.Long">
+    select count(*) from task_period
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <insert id="insert" keyColumn="period_id" keyProperty="periodId" parameterType="com.juma.tgm.task.domain.TaskPeriod" useGeneratedKeys="true">
+    insert into task_period (task_id, is_standard_time, delivery_period, 
+      delivery_period_time)
+    values (#{taskId,jdbcType=INTEGER}, #{isStandardTime,jdbcType=TINYINT}, #{deliveryPeriod,jdbcType=VARCHAR}, 
+      #{deliveryPeriodTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="period_id" keyProperty="periodId" parameterType="com.juma.tgm.task.domain.TaskPeriod" useGeneratedKeys="true">
+    insert into task_period
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="isStandardTime != null">
+        is_standard_time,
+      </if>
+      <if test="deliveryPeriod != null">
+        delivery_period,
+      </if>
+      <if test="deliveryPeriodTime != null">
+        delivery_period_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="isStandardTime != null">
+        #{isStandardTime,jdbcType=TINYINT},
+      </if>
+      <if test="deliveryPeriod != null">
+        #{deliveryPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryPeriodTime != null">
+        #{deliveryPeriodTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.task.domain.TaskPeriod">
+    update task_period
+    <set>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="isStandardTime != null">
+        is_standard_time = #{isStandardTime,jdbcType=TINYINT},
+      </if>
+      <if test="deliveryPeriod != null">
+        delivery_period = #{deliveryPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryPeriodTime != null">
+        delivery_period_time = #{deliveryPeriodTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where period_id = #{periodId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.task.domain.TaskPeriod">
+    update task_period
+    set task_id = #{taskId,jdbcType=INTEGER},
+      is_standard_time = #{isStandardTime,jdbcType=TINYINT},
+      delivery_period = #{deliveryPeriod,jdbcType=VARCHAR},
+      delivery_period_time = #{deliveryPeriodTime,jdbcType=VARCHAR}
+    where period_id = #{periodId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="periodId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into task_period
+    (task_id,is_standard_time,delivery_period,delivery_period_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.taskId},#{item.isStandardTime},#{item.deliveryPeriod},#{item.deliveryPeriodTime})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_period
+      <set>
+        period_id = #{item.periodId},
+        task_id = #{item.taskId},
+        is_standard_time = #{item.isStandardTime},
+        delivery_period = #{item.deliveryPeriod},
+        delivery_period_time = #{item.deliveryPeriodTime},
+      </set>
+      where period_id = #{item.periodId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_period
+      <set>
+        <if test="item.taskId != null">
+          task_id = #{item.taskId,jdbcType=INTEGER},
+        </if>
+        <if test="item.isStandardTime != null">
+          is_standard_time = #{item.isStandardTime,jdbcType=TINYINT},
+        </if>
+        <if test="item.deliveryPeriod != null">
+          delivery_period = #{item.deliveryPeriod,jdbcType=VARCHAR},
+        </if>
+        <if test="item.deliveryPeriodTime != null">
+          delivery_period_time = #{item.deliveryPeriodTime,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where period_id = #{item.periodId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

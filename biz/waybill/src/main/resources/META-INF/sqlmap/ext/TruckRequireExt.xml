@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.TruckRequireDao">
+
+	<sql id="QUERY_WHERE_CLAUSE_EXT">
+		<where>
+			<if test="waybillIds != null and !waybillIds.isEmpty">
+				AND waybill_id IN
+				<foreach collection="waybillIds" item="code" open="(" separator="," close=")">
+					<![CDATA[#{code}]]>
+				</foreach>
+			</if>
+			<if test="truckRequireId != null"><![CDATA[AND truck_require_id = #{truckRequireId}]]></if>
+			<if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+			<if test="truckTypeId != null"><![CDATA[AND truck_type_id = #{truckTypeId}]]></if>
+			<if test="additionalFunctionIds != null"><![CDATA[AND additional_function_ids = #{additionalFunctionIds}]]></if>
+			<if test="goodsType != null"><![CDATA[AND goods_type = #{goodsType}]]></if>
+			<if test="goodsWeight != null"><![CDATA[AND goods_weight = #{goodsWeight}]]></if>
+			<if test="goodsVolume != null"><![CDATA[AND goods_volume = #{goodsVolume}]]></if>
+			<if test="goodsAmount != null"><![CDATA[AND goods_amount = #{goodsAmount}]]></if>
+			<if test="taxRateValue != null"><![CDATA[AND tax_rate_value = #{taxRateValue}]]></if>
+			<if test="isTailBoard != null"><![CDATA[AND is_tail_board = #{isTailBoard}]]></if>
+			<if test="remark != null"><![CDATA[AND remark = #{remark}]]></if>
+			<if test="vehicleBoxType != null"><![CDATA[AND vehicle_box_type = #{vehicleBoxType}]]></if>
+		</where>
+	</sql>
+
+	<select id="selectByExample" parameterType="com.juma.tgm.waybill.domain.vo.TruckRequireFilter" resultType="truckRequire">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE_EXT"/>
+	</select>
+
+</mapper>

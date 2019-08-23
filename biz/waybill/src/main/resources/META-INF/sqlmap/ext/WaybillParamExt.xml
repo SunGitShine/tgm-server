@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillParamDao">
+
+	<sql id="QUERY_WHERE_CLAUSE_EXT">
+		<where>
+			<if test="waybillIds != null and !waybillIds.isEmpty">
+				AND waybill_id IN
+				<foreach collection="waybillIds" item="code" open="(" separator="," close=")">
+					<![CDATA[#{code}]]>
+				</foreach>
+			</if>
+			<if test="paramId != null">and param_id = #{paramId}</if>
+			<if test="waybillId != null">and waybill_id = #{waybillId}</if>
+			<if test="transformBillLinkId != null">and transform_bill_link_id = #{transformBillLinkId}</if>
+		</where>
+	</sql>
+
+	<select id="selectByExample" parameterType="com.juma.tgm.waybill.domain.vo.WaybillParamFilter" resultType="WaybillParam">
+		<![CDATA[SELECT]]>
+		<include refid="Base_Column_List"/>
+		from waybill_param
+		<include refid="QUERY_WHERE_CLAUSE_EXT"/>
+	</select>
+
+</mapper>

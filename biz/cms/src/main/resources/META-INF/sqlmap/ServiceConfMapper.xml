@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.configure.dao.ServiceConfMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.configure.domain.ServiceConf">
+    <id column="service_conf_id" jdbcType="INTEGER" property="serviceConfId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="parent_region_code" jdbcType="VARCHAR" property="parentRegionCode" />
+    <result column="parent_region_name" jdbcType="VARCHAR" property="parentRegionName" />
+    <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+    <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+    <result column="is_open_service_region" jdbcType="BIT" property="isOpenServiceRegion" />
+    <result column="is_open_entry_region" jdbcType="BIT" property="isOpenEntryRegion" />
+    <result column="is_prohibition_zone" jdbcType="BIT" property="isProhibitionZone" />
+    <result column="customer_service_tel" jdbcType="VARCHAR" property="customerServiceTel" />
+    <result column="operation_specialist" jdbcType="VARCHAR" property="operationSpecialist" />
+    <result column="operation_specialist_tel" jdbcType="VARCHAR" property="operationSpecialistTel" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    service_conf_id, tenant_id, tenant_code, parent_region_code, parent_region_name, 
+    region_code, region_name, is_open_service_region, is_open_entry_region, is_prohibition_zone, 
+    customer_service_tel, operation_specialist, operation_specialist_tel, create_time, 
+    create_user_id, last_update_time, last_update_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.configure.domain.ServiceConfExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from service_conf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null">
+      <if test="startOffSet>=0">
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from service_conf
+    where service_conf_id = #{serviceConfId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from service_conf
+    where service_conf_id = #{serviceConfId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.configure.domain.ServiceConfExample">
+    delete from service_conf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.juma.tgm.configure.domain.ServiceConf">
+    insert into service_conf (service_conf_id, tenant_id, tenant_code, 
+      parent_region_code, parent_region_name, region_code, 
+      region_name, is_open_service_region, is_open_entry_region, 
+      is_prohibition_zone, customer_service_tel, operation_specialist, 
+      operation_specialist_tel, create_time, create_user_id, 
+      last_update_time, last_update_user_id)
+    values (#{serviceConfId,jdbcType=INTEGER}, #{tenantId,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, 
+      #{parentRegionCode,jdbcType=VARCHAR}, #{parentRegionName,jdbcType=VARCHAR}, #{regionCode,jdbcType=VARCHAR}, 
+      #{regionName,jdbcType=VARCHAR}, #{isOpenServiceRegion,jdbcType=BIT}, #{isOpenEntryRegion,jdbcType=BIT}, 
+      #{isProhibitionZone,jdbcType=BIT}, #{customerServiceTel,jdbcType=VARCHAR}, #{operationSpecialist,jdbcType=VARCHAR}, 
+      #{operationSpecialistTel,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{lastUpdateTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.juma.tgm.configure.domain.ServiceConf">
+    insert into service_conf
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceConfId != null">
+        service_conf_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="parentRegionCode != null">
+        parent_region_code,
+      </if>
+      <if test="parentRegionName != null">
+        parent_region_name,
+      </if>
+      <if test="regionCode != null">
+        region_code,
+      </if>
+      <if test="regionName != null">
+        region_name,
+      </if>
+      <if test="isOpenServiceRegion != null">
+        is_open_service_region,
+      </if>
+      <if test="isOpenEntryRegion != null">
+        is_open_entry_region,
+      </if>
+      <if test="isProhibitionZone != null">
+        is_prohibition_zone,
+      </if>
+      <if test="customerServiceTel != null">
+        customer_service_tel,
+      </if>
+      <if test="operationSpecialist != null">
+        operation_specialist,
+      </if>
+      <if test="operationSpecialistTel != null">
+        operation_specialist_tel,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceConfId != null">
+        #{serviceConfId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentRegionCode != null">
+        #{parentRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentRegionName != null">
+        #{parentRegionName,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null">
+        #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="isOpenServiceRegion != null">
+        #{isOpenServiceRegion,jdbcType=BIT},
+      </if>
+      <if test="isOpenEntryRegion != null">
+        #{isOpenEntryRegion,jdbcType=BIT},
+      </if>
+      <if test="isProhibitionZone != null">
+        #{isProhibitionZone,jdbcType=BIT},
+      </if>
+      <if test="customerServiceTel != null">
+        #{customerServiceTel,jdbcType=VARCHAR},
+      </if>
+      <if test="operationSpecialist != null">
+        #{operationSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="operationSpecialistTel != null">
+        #{operationSpecialistTel,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.configure.domain.ServiceConfExample" resultType="java.lang.Long">
+    select count(*) from service_conf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update service_conf
+    <set>
+      <if test="record.serviceConfId != null">
+        service_conf_id = #{record.serviceConfId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentRegionCode != null">
+        parent_region_code = #{record.parentRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentRegionName != null">
+        parent_region_name = #{record.parentRegionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionCode != null">
+        region_code = #{record.regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionName != null">
+        region_name = #{record.regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isOpenServiceRegion != null">
+        is_open_service_region = #{record.isOpenServiceRegion,jdbcType=BIT},
+      </if>
+      <if test="record.isOpenEntryRegion != null">
+        is_open_entry_region = #{record.isOpenEntryRegion,jdbcType=BIT},
+      </if>
+      <if test="record.isProhibitionZone != null">
+        is_prohibition_zone = #{record.isProhibitionZone,jdbcType=BIT},
+      </if>
+      <if test="record.customerServiceTel != null">
+        customer_service_tel = #{record.customerServiceTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operationSpecialist != null">
+        operation_specialist = #{record.operationSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operationSpecialistTel != null">
+        operation_specialist_tel = #{record.operationSpecialistTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update service_conf
+    set service_conf_id = #{record.serviceConfId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      parent_region_code = #{record.parentRegionCode,jdbcType=VARCHAR},
+      parent_region_name = #{record.parentRegionName,jdbcType=VARCHAR},
+      region_code = #{record.regionCode,jdbcType=VARCHAR},
+      region_name = #{record.regionName,jdbcType=VARCHAR},
+      is_open_service_region = #{record.isOpenServiceRegion,jdbcType=BIT},
+      is_open_entry_region = #{record.isOpenEntryRegion,jdbcType=BIT},
+      is_prohibition_zone = #{record.isProhibitionZone,jdbcType=BIT},
+      customer_service_tel = #{record.customerServiceTel,jdbcType=VARCHAR},
+      operation_specialist = #{record.operationSpecialist,jdbcType=VARCHAR},
+      operation_specialist_tel = #{record.operationSpecialistTel,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.configure.domain.ServiceConf">
+    update service_conf
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentRegionCode != null">
+        parent_region_code = #{parentRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentRegionName != null">
+        parent_region_name = #{parentRegionName,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        region_code = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null">
+        region_name = #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="isOpenServiceRegion != null">
+        is_open_service_region = #{isOpenServiceRegion,jdbcType=BIT},
+      </if>
+      <if test="isOpenEntryRegion != null">
+        is_open_entry_region = #{isOpenEntryRegion,jdbcType=BIT},
+      </if>
+      <if test="isProhibitionZone != null">
+        is_prohibition_zone = #{isProhibitionZone,jdbcType=BIT},
+      </if>
+      <if test="customerServiceTel != null">
+        customer_service_tel = #{customerServiceTel,jdbcType=VARCHAR},
+      </if>
+      <if test="operationSpecialist != null">
+        operation_specialist = #{operationSpecialist,jdbcType=VARCHAR},
+      </if>
+      <if test="operationSpecialistTel != null">
+        operation_specialist_tel = #{operationSpecialistTel,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where service_conf_id = #{serviceConfId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.configure.domain.ServiceConf">
+    update service_conf
+    set tenant_id = #{tenantId,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      parent_region_code = #{parentRegionCode,jdbcType=VARCHAR},
+      parent_region_name = #{parentRegionName,jdbcType=VARCHAR},
+      region_code = #{regionCode,jdbcType=VARCHAR},
+      region_name = #{regionName,jdbcType=VARCHAR},
+      is_open_service_region = #{isOpenServiceRegion,jdbcType=BIT},
+      is_open_entry_region = #{isOpenEntryRegion,jdbcType=BIT},
+      is_prohibition_zone = #{isProhibitionZone,jdbcType=BIT},
+      customer_service_tel = #{customerServiceTel,jdbcType=VARCHAR},
+      operation_specialist = #{operationSpecialist,jdbcType=VARCHAR},
+      operation_specialist_tel = #{operationSpecialistTel,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER}
+    where service_conf_id = #{serviceConfId,jdbcType=INTEGER}
+  </update>
+</mapper>

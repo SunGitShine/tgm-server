@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillDeliveryAddressDao">
+	<resultMap id="BaseResultMap"
+		type="com.juma.tgm.waybill.domain.WaybillDeliveryAddress">
+		<id column="address_id" jdbcType="INTEGER" property="addressId" />
+		<result column="waybill_id" jdbcType="INTEGER" property="waybillId" />
+		<result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+		<result column="address_name" jdbcType="VARCHAR" property="addressName" />
+		<result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />
+		<result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+		<result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+		<result column="coordinates" jdbcType="VARCHAR" property="coordinates" />
+		<result column="is_arrived" jdbcType="BIT" property="isArrived" />
+		<result column="sequence" jdbcType="INTEGER" property="sequence" />
+		<result column="is_delete" jdbcType="BIT" property="isDelete" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+		<result column="last_update_time" jdbcType="TIMESTAMP"
+			property="lastUpdateTime" />
+		<result column="last_update_user_id" jdbcType="INTEGER"
+			property="lastUpdateUserId" />
+		<result column="spare_contact_phone" jdbcType="VARCHAR"
+			property="spareContactPhone" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		address_id, waybill_id, region_code, address_name, address_detail, contact_name,
+		contact_phone, coordinates, is_arrived,sequence, is_delete, create_time,
+		create_user_id, last_update_time,
+		last_update_user_id, spare_contact_phone
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.juma.tgm.waybill.domain.example.WaybillDeliveryAddressExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from waybill_delivery_address
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<update id="batchUpdate" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			update waybill_delivery_address
+			<set>
+				sequence=${item.sequence},
+				last_update_user_id=#{item.lastUpdateUserId},
+				last_update_time =now()
+			</set>
+			where address_id = ${item.addressId}
+		</foreach>
+	</update>
+</mapper>

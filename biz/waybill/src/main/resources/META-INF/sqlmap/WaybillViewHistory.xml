@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillViewHistoryDao">
+  <sql id="QUERY_COLUMN_LIST">
+    waybill_view_history_id AS waybillViewHistoryId, 
+    waybill_id AS waybillId,
+    driver_id AS driverId, 
+    view_time AS viewTime, 
+    cost_second AS costSecond
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM waybill_view_history]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="waybillViewHistoryId != null"><![CDATA[AND waybill_view_history_id = #{waybillViewHistoryId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="driverId != null"><![CDATA[AND driver_id = #{driverId}]]></if>
+      <if test="viewTime != null"><![CDATA[AND view_time = #{viewTime}]]></if>
+      <if test="costSecond != null"><![CDATA[AND cost_second = #{costSecond}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.waybillViewHistoryId != null"><![CDATA[AND waybill_view_history_id = #{filters.waybillViewHistoryId}]]></if>
+      <if test="filters.driverId != null"><![CDATA[AND driver_id = #{filters.driverId}]]></if>
+      <if test="filters.viewTime != null"><![CDATA[AND view_time = #{filters.viewTime}]]></if>
+      <if test="filters.costSecond != null"><![CDATA[AND cost_second = #{filters.costSecond}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="driverId != null"><![CDATA[driver_id = #{driverId},]]></if>
+      <if test="viewTime != null"><![CDATA[view_time = #{viewTime},]]></if>
+      <if test="costSecond != null"><![CDATA[cost_second = #{costSecond},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="waybillViewHistory" useGeneratedKeys = "true" keyProperty ="waybill_view_history_id">
+    <![CDATA[
+      insert into waybill_view_history
+		(driver_id,waybill_id, view_time, cost_second)
+	values
+		(#{driverId},#{waybillId}, #{viewTime}, #{costSecond})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="waybillViewHistory" >
+    <![CDATA[UPDATE waybill_view_history]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE waybill_view_history_id = #{waybillViewHistoryId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="waybillViewHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE waybill_view_history_id = #{waybillViewHistoryId}]]>
+  </select>
+  <select id="loadAll" resultType="waybillViewHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="waybillViewHistory" resultType="waybillViewHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="waybillViewHistory">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

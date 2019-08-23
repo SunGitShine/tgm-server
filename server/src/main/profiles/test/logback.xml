@@ -1,0 +1,123 @@
+<configuration scan="true">
+
+    <property name="LOG_HOME" value="/export/logs/tgm-server/" />
+
+    <appender name="errorLogAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <Encoding>UTF-8</Encoding>
+        <file>${LOG_HOME}/error-tgm-server.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/error-tgm-server-%d{yyyy-MM-dd}.%i.log.zip
+            </fileNamePattern>
+            <MaxHistory>30</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}||[%thread]||%-5level||%logger||%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="rollingLogAppender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>UTF-8</Encoding>
+        <file>${LOG_HOME}/tgm-server.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/tgm-server-%d{yyyy-MM-dd}.%i.log.zip
+            </fileNamePattern>
+            <MaxHistory>30</MaxHistory>
+            <!-- 超过maxFileSize大小，进行${date}-i的方式分割 -->
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}||[%thread]||%-5level||%logger||%msg%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="datacenterAppender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_HOME}/vod-datacenter.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/vod-datacenter-%d{yyyy-MM-dd}.log.zip
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}||[%thread]||%-5level||%logger||%msg%n</pattern>
+        </layout>
+    </appender>
+
+    <!--消息队列发送日志 -->
+    <appender name="mqAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <file>${LOG_HOME}/mq-send-info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/mq-record/mq-send-info-%d{yyyy-MM-dd}.log.zip
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}||[%thread]||%-5level||%logger||%msg%n</pattern>
+        </layout>
+    </appender>
+
+    <logger name="mqAppender" additivity="false" level="INFO">
+        <appender-ref ref="mqAppender"/>
+    </logger>
+
+    <logger name="com.juma.tgm.landing.waybill" level="INFO"
+            additivity="false">
+        <appender-ref ref="datacenterAppender" />
+    </logger>
+
+    <logger name="com.bruce.tool" level="DEBUG" additivity="false">
+        <appender-ref ref="rollingLogAppender" />
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="rollingLogAppender" />
+        <appender-ref ref="errorLogAppender" />
+        <appender-ref ref="monthlyBillAppender" />
+        <appender-ref ref="mqAppender" />
+    </root>
+
+    <!--月账单日志 -->
+    <appender name="monthlyBillAppender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <file>${LOG_HOME}/monthly-bill.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/monthly-bill-%d{yyyy-MM-dd}.log.zip
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}||[%thread]||%-5level||%logger||%msg%n</pattern>
+        </layout>
+    </appender>
+
+    <logger name="monthlyBillAppender" additivity="false" level="INFO">
+        <appender-ref ref="monthlyBillAppender" />
+    </logger>
+
+    <logger name="org.springframework.amqp.rabbit.listener" level="ERROR"/>
+    <logger name="org.apache.zookeeper.ClientCnxn" level="ERROR"/>
+    <logger name="druid.sql.Statement" level="DEBUG" />
+
+</configuration>

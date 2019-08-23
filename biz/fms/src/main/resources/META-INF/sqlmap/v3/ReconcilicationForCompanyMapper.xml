@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.fms.dao.v3.ReconcilicationForCompanyMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.ReconcilicationForCompany">
+    <id column="reconcilication_company_id" jdbcType="INTEGER" property="reconcilicationCompanyId" />
+    <result column="reconcilication_company_no" jdbcType="VARCHAR" property="reconcilicationCompanyNo" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="reconcilication_receivable_id" jdbcType="INTEGER" property="reconcilicationReceivableId" />
+    <result column="contract_to_company" jdbcType="INTEGER" property="contractToCompany" />
+    <result column="contract_to_company_credit_code" jdbcType="VARCHAR" property="contractToCompanyCreditCode" />
+    <result column="pay_to_company" jdbcType="INTEGER" property="payToCompany" />
+    <result column="pay_to_company_credit_code" jdbcType="VARCHAR" property="payToCompanyCreditCode" />
+    <result column="freight_with_tax" jdbcType="DECIMAL" property="freightWithTax" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    reconcilication_company_id, reconcilication_company_no, tenant_id, tenant_code, area_code, 
+    reconcilication_receivable_id, contract_to_company, contract_to_company_credit_code, 
+    pay_to_company, pay_to_company_credit_code, freight_with_tax, create_user_id, create_time, 
+    last_update_user_id, last_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForCompanyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from reconcilication_for_company
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from reconcilication_for_company
+    where reconcilication_company_id = #{reconcilicationCompanyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from reconcilication_for_company
+    where reconcilication_company_id = #{reconcilicationCompanyId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForCompanyExample">
+    delete from reconcilication_for_company
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="reconcilication_company_id" keyProperty="reconcilicationCompanyId" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForCompany" useGeneratedKeys="true">
+    insert into reconcilication_for_company (reconcilication_company_no, tenant_id, 
+      tenant_code, area_code, reconcilication_receivable_id, 
+      contract_to_company, contract_to_company_credit_code, 
+      pay_to_company, pay_to_company_credit_code, freight_with_tax, 
+      create_user_id, create_time, last_update_user_id, 
+      last_update_time)
+    values (#{reconcilicationCompanyNo,jdbcType=VARCHAR}, #{tenantId,jdbcType=INTEGER}, 
+      #{tenantCode,jdbcType=VARCHAR}, #{areaCode,jdbcType=VARCHAR}, #{reconcilicationReceivableId,jdbcType=INTEGER}, 
+      #{contractToCompany,jdbcType=INTEGER}, #{contractToCompanyCreditCode,jdbcType=VARCHAR}, 
+      #{payToCompany,jdbcType=INTEGER}, #{payToCompanyCreditCode,jdbcType=VARCHAR}, #{freightWithTax,jdbcType=DECIMAL}, 
+      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER}, 
+      #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="reconcilication_company_id" keyProperty="reconcilicationCompanyId" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForCompany" useGeneratedKeys="true">
+    insert into reconcilication_for_company
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="reconcilicationCompanyNo != null">
+        reconcilication_company_no,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="reconcilicationReceivableId != null">
+        reconcilication_receivable_id,
+      </if>
+      <if test="contractToCompany != null">
+        contract_to_company,
+      </if>
+      <if test="contractToCompanyCreditCode != null">
+        contract_to_company_credit_code,
+      </if>
+      <if test="payToCompany != null">
+        pay_to_company,
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        pay_to_company_credit_code,
+      </if>
+      <if test="freightWithTax != null">
+        freight_with_tax,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="reconcilicationCompanyNo != null">
+        #{reconcilicationCompanyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcilicationReceivableId != null">
+        #{reconcilicationReceivableId,jdbcType=INTEGER},
+      </if>
+      <if test="contractToCompany != null">
+        #{contractToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="contractToCompanyCreditCode != null">
+        #{contractToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="payToCompany != null">
+        #{payToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="freightWithTax != null">
+        #{freightWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForCompanyExample" resultType="java.lang.Long">
+    select count(*) from reconcilication_for_company
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update reconcilication_for_company
+    <set>
+      <if test="record.reconcilicationCompanyId != null">
+        reconcilication_company_id = #{record.reconcilicationCompanyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.reconcilicationCompanyNo != null">
+        reconcilication_company_no = #{record.reconcilicationCompanyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaCode != null">
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reconcilicationReceivableId != null">
+        reconcilication_receivable_id = #{record.reconcilicationReceivableId,jdbcType=INTEGER},
+      </if>
+      <if test="record.contractToCompany != null">
+        contract_to_company = #{record.contractToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="record.contractToCompanyCreditCode != null">
+        contract_to_company_credit_code = #{record.contractToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payToCompany != null">
+        pay_to_company = #{record.payToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="record.payToCompanyCreditCode != null">
+        pay_to_company_credit_code = #{record.payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.freightWithTax != null">
+        freight_with_tax = #{record.freightWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update reconcilication_for_company
+    set reconcilication_company_id = #{record.reconcilicationCompanyId,jdbcType=INTEGER},
+      reconcilication_company_no = #{record.reconcilicationCompanyNo,jdbcType=VARCHAR},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      reconcilication_receivable_id = #{record.reconcilicationReceivableId,jdbcType=INTEGER},
+      contract_to_company = #{record.contractToCompany,jdbcType=INTEGER},
+      contract_to_company_credit_code = #{record.contractToCompanyCreditCode,jdbcType=VARCHAR},
+      pay_to_company = #{record.payToCompany,jdbcType=INTEGER},
+      pay_to_company_credit_code = #{record.payToCompanyCreditCode,jdbcType=VARCHAR},
+      freight_with_tax = #{record.freightWithTax,jdbcType=DECIMAL},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForCompany">
+    update reconcilication_for_company
+    <set>
+      <if test="reconcilicationCompanyNo != null">
+        reconcilication_company_no = #{reconcilicationCompanyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcilicationReceivableId != null">
+        reconcilication_receivable_id = #{reconcilicationReceivableId,jdbcType=INTEGER},
+      </if>
+      <if test="contractToCompany != null">
+        contract_to_company = #{contractToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="contractToCompanyCreditCode != null">
+        contract_to_company_credit_code = #{contractToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="payToCompany != null">
+        pay_to_company = #{payToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        pay_to_company_credit_code = #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="freightWithTax != null">
+        freight_with_tax = #{freightWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where reconcilication_company_id = #{reconcilicationCompanyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForCompany">
+    update reconcilication_for_company
+    set reconcilication_company_no = #{reconcilicationCompanyNo,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      reconcilication_receivable_id = #{reconcilicationReceivableId,jdbcType=INTEGER},
+      contract_to_company = #{contractToCompany,jdbcType=INTEGER},
+      contract_to_company_credit_code = #{contractToCompanyCreditCode,jdbcType=VARCHAR},
+      pay_to_company = #{payToCompany,jdbcType=INTEGER},
+      pay_to_company_credit_code = #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      freight_with_tax = #{freightWithTax,jdbcType=DECIMAL},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where reconcilication_company_id = #{reconcilicationCompanyId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="reconcilicationCompanyId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into reconcilication_for_company
+    (reconcilication_company_no,tenant_id,tenant_code,area_code,reconcilication_receivable_id,contract_to_company,contract_to_company_credit_code,pay_to_company,pay_to_company_credit_code,freight_with_tax,create_user_id,create_time,last_update_user_id,last_update_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.reconcilicationCompanyNo},#{item.tenantId},#{item.tenantCode},#{item.areaCode},#{item.reconcilicationReceivableId},#{item.contractToCompany},#{item.contractToCompanyCreditCode},#{item.payToCompany},#{item.payToCompanyCreditCode},#{item.freightWithTax},#{item.createUserId},#{item.createTime},#{item.lastUpdateUserId},#{item.lastUpdateTime})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update reconcilication_for_company
+      <set>
+        reconcilication_company_id = #{item.reconcilicationCompanyId},
+        reconcilication_company_no = #{item.reconcilicationCompanyNo},
+        tenant_id = #{item.tenantId},
+        tenant_code = #{item.tenantCode},
+        area_code = #{item.areaCode},
+        reconcilication_receivable_id = #{item.reconcilicationReceivableId},
+        contract_to_company = #{item.contractToCompany},
+        contract_to_company_credit_code = #{item.contractToCompanyCreditCode},
+        pay_to_company = #{item.payToCompany},
+        pay_to_company_credit_code = #{item.payToCompanyCreditCode},
+        freight_with_tax = #{item.freightWithTax},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+        last_update_time = #{item.lastUpdateTime},
+      </set>
+      where reconcilication_company_id = #{item.reconcilicationCompanyId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update reconcilication_for_company
+      <set>
+        <if test="item.reconcilicationCompanyNo != null">
+          reconcilication_company_no = #{item.reconcilicationCompanyNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantCode != null">
+          tenant_code = #{item.tenantCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.areaCode != null">
+          area_code = #{item.areaCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.reconcilicationReceivableId != null">
+          reconcilication_receivable_id = #{item.reconcilicationReceivableId,jdbcType=INTEGER},
+        </if>
+        <if test="item.contractToCompany != null">
+          contract_to_company = #{item.contractToCompany,jdbcType=INTEGER},
+        </if>
+        <if test="item.contractToCompanyCreditCode != null">
+          contract_to_company_credit_code = #{item.contractToCompanyCreditCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.payToCompany != null">
+          pay_to_company = #{item.payToCompany,jdbcType=INTEGER},
+        </if>
+        <if test="item.payToCompanyCreditCode != null">
+          pay_to_company_credit_code = #{item.payToCompanyCreditCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.freightWithTax != null">
+          freight_with_tax = #{item.freightWithTax,jdbcType=DECIMAL},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where reconcilication_company_id = #{item.reconcilicationCompanyId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

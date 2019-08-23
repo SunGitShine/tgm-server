@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.crm.dao.PrivateCustomerDao">
+	<sql id="QUERY_COLUMN_LIST">
+		private_customer_id AS privateCustomerId,
+		name AS name,
+		user_id AS userId,
+		industry AS industry,
+		region_code AS regionCode,
+		address AS address,
+		remark AS remark,
+		manager_user_id AS managerUserId,
+		department_id AS departmentId,
+		check_out AS checkOut,
+		contract_num AS contractNum,
+		contract_pic AS contractPic,
+		identity_num AS identityNum,
+		identity_pic AS identityPic,
+		create_time AS createTime,
+		create_user_id AS createUserId,
+		last_update_time AS lastUpdateTime,
+		last_update_user_id AS lastUpdateUserId
+	</sql>
+
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM private_customer]]></sql>
+
+	<sql id="SEARCH_WHERE_CLAUSE">
+		<where>
+			<if test="filters != null">
+				<if test="filters.privateCustomerId != null"><![CDATA[AND private_customer_id = #{filters.privateCustomerId}]]></if>
+				<if test="filters.name != null and filters.name != ''"><![CDATA[AND name like concat('%',#{filters.name},'%')]]></if>
+				<if test="filters.userId != null"><![CDATA[AND user_id = #{filters.userId}]]></if>
+				<if test="filters.industry != null and filters.industry != ''"><![CDATA[AND industry = #{filters.industry}]]></if>
+				<if test="filters.regionCode != null and filters.regionCode != ''"><![CDATA[AND region_code = #{filters.regionCode}]]></if>
+				<if test="filters.address != null and filters.address != ''"><![CDATA[AND address = #{filters.address}]]></if>
+				<if test="filters.remark != null and filters.remark != ''"><![CDATA[AND remark = #{filters.remark}]]></if>
+				<if test="filters.managerUserId != null"><![CDATA[AND manager_user_id = #{filters.managerUserId}]]></if>
+				<if test="filters.departmentId != null"><![CDATA[AND department_id = #{filters.departmentId}]]></if>
+				<if test="filters.checkOut != null"><![CDATA[AND check_out = #{filters.checkOut}]]></if>
+				<if test="filters.contractNum != null and filters.contractNum != ''"><![CDATA[AND contract_num = #{filters.contractNum}]]></if>
+				<if test="filters.contractPic != null and filters.contractPic != ''"><![CDATA[AND contract_pic = #{filters.contractPic}]]></if>
+				<if test="filters.identityNum != null and filters.identityNum != ''"><![CDATA[AND identity_num = #{filters.identityNum}]]></if>
+				<if test="filters.identityPic != null and filters.identityPic != ''"><![CDATA[AND identity_pic = #{filters.identityPic}]]></if>
+				<if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+				<if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+				<if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+				<if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+			</if>
+		</where>
+	</sql>
+
+	<sql id="SEARCH_ORDERBY_LIMIT">
+		<choose>
+			<when test="orderBy == null">
+				order by create_time desc
+			</when>
+			<otherwise>
+				order by ${orderBy} ${orderSort}
+			</otherwise>
+		</choose>
+		limit #{startOffSet}, #{endOffSet}
+	</sql>
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="name != null and name != ''"><![CDATA[name = #{name},]]></if>
+			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
+			<if test="industry != null and industry != ''"><![CDATA[industry = #{industry},]]></if>
+			<if test="regionCode != null and regionCode != ''"><![CDATA[region_code = #{regionCode},]]></if>
+			<if test="address != null and address != ''"><![CDATA[address = #{address},]]></if>
+			<if test="remark != null and remark != ''"><![CDATA[remark = #{remark},]]></if>
+			<if test="managerUserId != null"><![CDATA[manager_user_id = #{managerUserId},]]></if>
+			<if test="departmentId != null"><![CDATA[department_id = #{departmentId},]]></if>
+			<if test="checkOut != null"><![CDATA[check_out = #{checkOut},]]></if>
+			<if test="contractNum != null and contractNum != ''"><![CDATA[contract_num = #{contractNum},]]></if>
+			<if test="contractPic != null and contractPic != ''"><![CDATA[contract_pic = #{contractPic},]]></if>
+			<if test="identityNum != null and identityNum != ''"><![CDATA[identity_num = #{identityNum},]]></if>
+			<if test="identityPic != null and identityPic != ''"><![CDATA[identity_pic = #{identityPic},]]></if>
+			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+			<if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+			<![CDATA[last_update_time = now(),]]>
+			<if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+		</set>
+	</sql>
+	<insert id="insert" parameterType="privateCustomer"
+		useGeneratedKeys="true" keyProperty="private_customer_id">
+    <![CDATA[
+      insert into private_customer
+		(name, user_id, industry, region_code, address, remark, manager_user_id, department_id, check_out, contract_num, contract_pic, identity_num, identity_pic, create_time, create_user_id, last_update_time, last_update_user_id)
+	values
+		(#{name}, #{userId}, #{industry}, #{regionCode}, #{address}, #{remark}, #{managerUserId}, #{departmentId}, #{checkOut}, #{contractNum}, #{contractPic}, #{identityNum}, #{identityPic}, now(),#{createUserId}, #{lastUpdateTime}, #{lastUpdateUserId})
+
+	]]>
+	</insert>
+	<update id="update" parameterType="privateCustomer">
+    <![CDATA[UPDATE private_customer]]>
+		<include refid="UPDATE_COLUMN_SET" />
+    <![CDATA[WHERE private_customer_id = #{privateCustomerId}]]>
+	</update>
+	<select id="get" parameterType="int" resultType="privateCustomer">
+    <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+    <![CDATA[WHERE private_customer_id = #{privateCustomerId}]]>
+	</select>
+	<select id="searchCount" parameterType="com.giants.common.tools.PageCondition"
+		resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="SEARCH_WHERE_CLAUSE" />
+	</select>
+	<select id="search" parameterType="com.giants.common.tools.PageCondition"
+		resultType="privateCustomer">
+    <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="SEARCH_WHERE_CLAUSE" />
+		<include refid="SEARCH_ORDERBY_LIMIT" />
+	</select>
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.fms.dao.v3.ext.AdjustForReceivableExtraMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.AdjustForReceivable" >
+    <id column="adjust_id" property="adjustId" jdbcType="INTEGER" />
+    <result column="waybill_id" property="waybillId" jdbcType="INTEGER" />
+    <result column="waybill_no" property="waybillNo" jdbcType="VARCHAR" />
+    <result column="receivable_with_tax" property="receivableWithTax" jdbcType="DECIMAL" />
+    <result column="receivable_with_tax_adjust" property="receivableWithTaxAdjust" jdbcType="DECIMAL" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="tax_rate_adjust" property="taxRateAdjust" jdbcType="DECIMAL" />
+    <result column="adjust_remark" property="adjustRemark" jdbcType="VARCHAR" />
+    <result column="adjust_user_id" property="adjustUserId" jdbcType="INTEGER" />
+    <result column="adjust_time" property="adjustTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    adjust_id, waybill_id, waybill_no, receivable_with_tax, receivable_with_tax_adjust, tax_rate,
+    tax_rate_adjust, adjust_remark, adjust_user_id, adjust_time
+  </sql>
+
+  <insert id="insertSelective" parameterType="com.juma.tgm.fms.domain.v3.AdjustForReceivable" >
+    <selectKey resultType="java.lang.Integer" keyProperty="adjustId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into adjust_for_receivable
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="waybillId != null" >
+        waybill_id,
+      </if>
+      <if test="waybillNo != null and waybillNo != ''" >
+        waybill_no,
+      </if>
+      <if test="receivableWithTax != null" >
+        receivable_with_tax,
+      </if>
+      <if test="receivableWithTaxAdjust != null" >
+        receivable_with_tax_adjust,
+      </if>
+      <if test="taxRate != null" >
+        tax_rate,
+      </if>
+      <if test="taxRateAdjust != null" >
+        tax_rate_adjust,
+      </if>
+      <if test="adjustRemark != null and adjustRemark != ''" >
+        adjust_remark,
+      </if>
+      <if test="adjustUserId != null" >
+        adjust_user_id,
+      </if>
+      <if test="adjustTime != null" >
+        adjust_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="waybillId != null" >
+        #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillNo != null and waybillNo != ''" >
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="receivableWithTax != null" >
+        #{receivableWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="receivableWithTaxAdjust != null" >
+        #{receivableWithTaxAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRate != null" >
+        #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="taxRateAdjust != null" >
+        #{taxRateAdjust,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustRemark != null" >
+        #{adjustRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustUserId != null" >
+        #{adjustUserId,jdbcType=INTEGER},
+      </if>
+      <if test="adjustTime != null" >
+        #{adjustTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="findFirst" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from adjust_for_receivable
+    WHERE waybill_id = #{waybillId,jdbcType=INTEGER}
+    ORDER BY adjust_id ASC LIMIT 1
+  </select>
+
+  <select id="findAdjustBypage" parameterType="com.giants.common.tools.PageCondition" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from adjust_for_receivable
+    WHERE 1=1
+    <if test="filters.waybillId != null" >
+      AND waybill_id = #{filters.waybillId,jdbcType=INTEGER}
+    </if>
+    ORDER BY adjust_time DESC
+    limit #{startOffSet}, #{endOffSet}
+  </select>
+
+  <select id="findAdjustCount" parameterType="com.giants.common.tools.PageCondition" resultType="java.lang.Integer">
+    select COUNT(1) from adjust_for_receivable
+    WHERE 1=1
+    <if test="filters.waybillId != null" >
+      AND waybill_id = #{filters.waybillId,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="findLast" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM adjust_for_receivable
+    WHERE waybill_id = #{waybillId,jdbcType=INTEGER}
+    ORDER BY adjust_id DESC LIMIT 1
+  </select>
+</mapper>

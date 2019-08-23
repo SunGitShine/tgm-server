@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.truck.dao.TruckTypeFreightDao">
+  <sql id="QUERY_COLUMN_LIST">
+    freight_id AS freightId, 
+    price_per_day AS pricePerDay,
+    truck_type_id AS truckTypeId, 
+    lowest_freight AS lowestFreight, 
+    lowest_mileage AS lowestMileage, 
+    beyond_unit_price AS beyondUnitPrice,
+    distribution_point_price AS distributionPointPrice,
+    highest_freight AS highestFreight, 
+    note AS note, 
+    city_manage_id AS cityManageId, 
+    is_delete AS isDelete, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId
+  </sql>
+  <sql id="QUERY_JOIN_COLUMN_LIST">
+    f.freight_id AS freightId, 
+    f.price_per_day AS pricePerDay,
+    f.truck_type_id AS truckTypeId, 
+    f.lowest_freight AS lowestFreight, 
+    f.lowest_mileage AS lowestMileage, 
+    f.beyond_unit_price AS beyondUnitPrice,
+    f.distribution_point_price AS distributionPointPrice,
+    f.highest_freight AS highestFreight, 
+    f.note AS note, 
+    f.city_manage_id AS cityManageId, 
+    f.is_delete AS isDelete, 
+    f.create_time AS createTime, 
+    f.create_user_id AS createUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[ FROM truck_type_freight ]]></sql>
+
+  <sql id="QUERY_JOIN_FROM_TABLE"><![CDATA[ FROM truck_type_freight f join truck_type t on f.truck_type_id = t.truck_type_id ]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="freightId != null"><![CDATA[AND freight_id = #{freightId}]]></if>
+      <if test="truckTypeId != null"><![CDATA[AND truck_type_id = #{truckTypeId}]]></if>
+      <if test="lowestFreight != null"><![CDATA[AND lowest_freight = #{lowestFreight}]]></if>
+      <if test="lowestMileage != null"><![CDATA[AND lowest_mileage = #{lowestMileage}]]></if>
+      <if test="beyondUnitPrice != null"><![CDATA[AND beyond_unit_price = #{beyondUnitPrice}]]></if>
+      <if test="distributionPointPrice != null"><![CDATA[AND distribution_point_price = #{distributionPointPrice}]]></if>
+      <if test="highestFreight != null"><![CDATA[AND highest_freight = #{highestFreight}]]></if>
+      <if test="note != null and note != ''"><![CDATA[AND note = #{note}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+      <if test="cityManageId != null"><![CDATA[AND city_manage_id = #{cityManageId}]]></if>
+    </where>
+  </sql>
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters != null">
+        <if test="filters.cityManageId != null"><![CDATA[AND city_manage_id = #{filters.cityManageId}]]></if>
+      </if>
+    </where>
+  </sql>
+  <sql id="SEARCH_JOIN_WHERE_CLAUSE">
+    <where>
+        <if test="filters.tenantId != null"><![CDATA[AND t.tenant_id = #{filters.tenantId}]]></if>
+        <if test="filters.cityManageId != null"><![CDATA[AND f.city_manage_id = #{filters.cityManageId}]]></if>
+    </where>
+  </sql>
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by create_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+  <sql id="searchJoinorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by f.create_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <sql id="QUERY_ORDER_LIMIT_CONDTION">
+    <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+    <if test="orderField == null and orderFieldType == null"><![CDATA[ORDER BY id DESC]]></if>
+    <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="truckTypeId != null"><![CDATA[truck_type_id = #{truckTypeId},]]></if>
+      <if test="pricePerDay != null"><![CDATA[price_per_day = #{pricePerDay},]]></if>
+      <if test="lowestFreight != null"><![CDATA[lowest_freight = #{lowestFreight},]]></if>
+      <if test="lowestMileage != null"><![CDATA[lowest_mileage = #{lowestMileage},]]></if>
+      <if test="beyondUnitPrice != null"><![CDATA[beyond_unit_price = #{beyondUnitPrice},]]></if>
+      <if test="distributionPointPrice != null"><![CDATA[distribution_point_price = #{distributionPointPrice},]]></if>   
+      <if test="highestFreight != null"><![CDATA[highest_freight = #{highestFreight},]]></if>
+      <if test="note != null and note != ''"><![CDATA[note = #{note},]]></if>
+      <if test="cityManageId != null"><![CDATA[city_manage_id = #{cityManageId},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="truckTypeFreight" useGeneratedKeys = "true" keyProperty ="freightId">
+      insert into truck_type_freight
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="truckTypeId != null">
+          truck_type_id,
+        </if>
+        <if test="pricePerDay != null">
+          price_per_day,
+        </if>
+        <if test="lowestFreight != null">
+          lowest_freight,
+        </if>
+        <if test="lowestMileage != null">
+          lowest_mileage,
+        </if>
+        <if test="beyondUnitPrice != null">
+          beyond_unit_price,
+        </if>
+        <if test="distributionPointPrice != null">
+          distribution_point_price,
+        </if>
+        <if test="highestFreight != null">
+          highest_freight,
+        </if>
+        <if test="note != null and note != ''">
+          note,
+        </if>
+        <if test="cityManageId != null">
+          city_manage_id,
+        </if>
+        is_delete,
+        create_time,
+        create_user_id,
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="truckTypeId != null">
+          #{truckTypeId},
+        </if>
+        <if test="pricePerDay != null">
+          #{pricePerDay},
+        </if>
+        <if test="lowestFreight != null">
+          #{lowestFreight},
+        </if>
+        <if test="lowestMileage != null">
+          #{lowestMileage},
+        </if>
+        <if test="beyondUnitPrice != null">
+          #{beyondUnitPrice},
+        </if>
+        <if test="distributionPointPrice != null">
+          #{distributionPointPrice},
+        </if>
+        <if test="highestFreight != null">
+          #{highestFreight},
+        </if>
+        <if test="note != null and note != ''">
+          #{note},
+        </if>
+        <if test="cityManageId != null">
+          #{cityManageId},
+        </if>
+        false,
+        now(),
+        #{createUserId},
+      </trim>
+  </insert>
+  <select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+  <update id="deleteAll" parameterType="java.lang.reflect.Array" >
+    <![CDATA[update truck_type_freight set is_delete=1,last_update_time=now() WHERE id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </update>
+  <update id="delete" parameterType="truckTypeFreight" >
+  	update truck_type_freight
+	set is_delete = true, last_update_time = now(), last_update_user_id = #{lastUpdateUserId}
+    where freight_id = #{freightId}
+  </update>
+  <update id="update" parameterType="truckTypeFreight" >
+    <![CDATA[UPDATE truck_type_freight]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE freight_id = #{freightId}]]>
+  </update>
+  <select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="truckTypeFreight">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </select>
+  <select id="get" parameterType="int" resultType="truckTypeFreight">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where freight_id=#{id}]]>
+  </select>
+
+  <select id="loadAll" resultType="truckTypeFreight">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="truckTypeFreight" resultType="truckTypeFreight">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="selectEntryListCount" parameterType="truckTypeFreight" resultType="int">
+    <![CDATA[SELECT COUNT(id) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+
+  <!--  -->
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="java.lang.Integer">
+    select count(1)
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+  </select>
+  <!--  -->
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="truckTypeFreight">
+    select
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+    <include refid="searchorderByAndLimitSql"/>
+  </select>
+  <!--  -->
+  <select id="searchCountJoin" parameterType="com.giants.common.tools.PageCondition" resultType="java.lang.Integer">
+    select count(1)
+    <include refid="QUERY_JOIN_FROM_TABLE"/>
+    <include refid="SEARCH_JOIN_WHERE_CLAUSE"/>
+  </select>
+  <!--  -->
+  <select id="searchJoin" parameterType="com.giants.common.tools.PageCondition" resultType="truckTypeFreight">
+    select
+    <include refid="QUERY_JOIN_COLUMN_LIST"/>
+    <include refid="QUERY_JOIN_FROM_TABLE"/>
+    <include refid="SEARCH_JOIN_WHERE_CLAUSE"/>
+    <include refid="searchJoinorderByAndLimitSql"/>
+  </select>
+</mapper>

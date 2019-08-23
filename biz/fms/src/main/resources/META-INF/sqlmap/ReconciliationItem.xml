@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.fms.dao.ReconciliationItemDao">
+  <sql id="QUERY_COLUMN_LIST">
+    reconciliation_item_id AS reconciliationItemId, 
+    reconciliation_id AS reconciliationId, 
+    waybill_id AS waybillId, 
+    customer_id AS customerId,
+    customer_name AS customerName, 
+    project_id AS projectId,
+    project_name AS projectName, 
+    truck_id AS truckId,
+    plate_number AS plateNumber,
+    area_code AS areaCode,
+    estimate_freight AS estimateFreight, 
+    after_tax_freight AS afterTaxFreight, 
+    rebate_fee AS rebateFee, 
+    driver_handling_fee AS driverHandlingFee, 
+    laborer_handling_fee AS laborerHandlingFee, 
+    show4_driver_freight AS show4DriverFreight,
+    update_freight_remark AS updateFreightRemark
+    
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM reconciliation_item]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="reconciliationItemId != null"><![CDATA[AND reconciliation_item_id = #{reconciliationItemId}]]></if>
+      <if test="reconciliationId != null"><![CDATA[AND reconciliation_id = #{reconciliationId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.reconciliationItemId != null"><![CDATA[AND reconciliation_item_id = #{filters.reconciliationItemId}]]></if>
+      <if test="filters.reconciliationId != null"><![CDATA[AND reconciliation_id = #{filters.reconciliationId}]]></if>
+      <if test="filters.waybillId != null"><![CDATA[AND waybill_id = #{filters.waybillId}]]></if>
+      <if test="filters.customerName != null"><![CDATA[AND customer_name = #{filters.customerName}]]></if>
+      <if test="filters.projectName != null"><![CDATA[AND project_name = #{filters.projectName}]]></if>
+      <if test="filters.plateNumber != null"><![CDATA[AND plate_number = #{filters.plateNumber}]]></if>
+      <if test="filters.estimateFreight != null"><![CDATA[AND estimate_freight = #{filters.estimateFreight}]]></if>
+      <if test="filters.afterTaxFreight != null"><![CDATA[AND after_tax_freight = #{filters.afterTaxFreight}]]></if>
+      <if test="filters.rebateFee != null"><![CDATA[AND rebate_fee = #{filters.rebateFee}]]></if>
+      <if test="filters.driverHandlingFee != null"><![CDATA[AND driver_handling_fee = #{filters.driverHandlingFee}]]></if>
+      <if test="filters.laborerHandlingFee != null"><![CDATA[AND laborer_handling_fee = #{filters.laborerHandlingFee}]]></if>
+      <if test="filters.show4DriverFreight != null"><![CDATA[AND show4_driver_freight = #{filters.show4DriverFreight}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="estimateFreight != null"><![CDATA[estimate_freight = #{estimateFreight},]]></if>
+      <if test="afterTaxFreight != null"><![CDATA[after_tax_freight = #{afterTaxFreight},]]></if>
+      <if test="rebateFee != null"><![CDATA[rebate_fee = #{rebateFee},]]></if>
+      <if test="driverHandlingFee != null"><![CDATA[driver_handling_fee = #{driverHandlingFee},]]></if>
+      <if test="laborerHandlingFee != null"><![CDATA[laborer_handling_fee = #{laborerHandlingFee},]]></if>
+      <if test="show4DriverFreight != null"><![CDATA[show4_driver_freight = #{show4DriverFreight},]]></if>
+      <if test="taxRateValue != null"><![CDATA[tax_rate_value = #{taxRateValue},]]></if>
+      <if test="updateFreightRemark != null"><![CDATA[update_freight_remark = #{updateFreightRemark},]]></if>
+      <if test="customerName != null"><![CDATA[customer_name = #{customerName},]]></if>
+      <if test="projectName != null"><![CDATA[project_name = #{projectName},]]></if>
+      <if test="plateNumber != null"><![CDATA[plate_number = #{plateNumber},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="reconciliationItem" useGeneratedKeys = "true" keyProperty ="reconciliation_item_id">
+    <![CDATA[
+      insert into reconciliation_item
+		(reconciliation_id, waybill_id,waybill_no, customer_id,customer_name, project_id,project_name, truck_id, plate_number, area_code,estimate_freight, after_tax_freight, rebate_fee,tax_rate_value, driver_handling_fee, laborer_handling_fee, show4_driver_freight,update_freight_remark)
+	values
+		(#{reconciliationId}, #{waybillId},#{waybillNo},#{customerId}, #{customerName}, #{projectId},#{projectName},#{truckId},#{plateNumber}, #{areaCode},#{estimateFreight}, #{afterTaxFreight}, #{rebateFee},#{taxRateValue}, #{driverHandlingFee}, #{laborerHandlingFee}, #{show4DriverFreight},#{updateFreightRemark})
+
+	]]>
+  </insert>
+  <insert id="insertAll" parameterType="java.util.List">
+	  <![CDATA[
+	    	 insert into reconciliation_item
+			(reconciliation_id, waybill_id,waybill_no, customer_id,customer_name, project_id,project_name, truck_id, plate_number, area_code,estimate_freight, after_tax_freight, rebate_fee, tax_rate_value,driver_handling_fee, laborer_handling_fee, show4_driver_freight,update_freight_remark)
+		values 
+	    ]]>
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+		(#{item.reconciliationId}, #{item.waybillId},#{item.waybillNo},#{item.customerId}, #{item.customerName}, #{item.projectId},#{item.projectName}, #{item.truckId},#{item.plateNumber},#{item.areaCode}, #{item.estimateFreight}, #{item.afterTaxFreight}, #{item.rebateFee},#{item.taxRateValue}, #{item.driverHandlingFee}, #{item.laborerHandlingFee}, #{item.show4DriverFreight},#{item.updateFreightRemark})
+		</foreach>
+	</insert>
+	
+	<delete id="delete" parameterType="reconciliationItem" >
+		<![CDATA[DELETE FROM reconciliation_item ]]>
+    	<![CDATA[WHERE reconciliation_id = #{reconciliationId}]]>
+	</delete>
+	
+	<update id="updateAll" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index"
+			separator=";">
+			update reconciliation_item
+			<include refid="UPDATE_COLUMN_SET"/>
+			where reconciliation_item_id = #{reconciliationItemId}
+		</foreach>
+	</update>
+	
+  <update id="update" parameterType="reconciliationItem" >
+    <![CDATA[UPDATE reconciliation_item]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <include refid="QUERY_WHERE_CLAUSE"></include>
+  </update>
+	
+  <update id="updateReconciliationItemBatch" parameterType="reconciliationItem" >
+    <![CDATA[UPDATE reconciliation_item]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <where>
+      <if test="customerId != null"><![CDATA[ and customer_id = #{customerId}]]></if>
+      <if test="projectId != null"><![CDATA[ and project_id = #{projectId}]]></if>
+      <if test="waybillId != null"><![CDATA[ and waybill_id = #{waybillId}]]></if>
+    </where>
+    
+  </update>
+  
+  <select id="sumItemByReconciliationId" parameterType="com.juma.tgm.fms.domain.bo.ReconciliationMaster" resultType="com.juma.tgm.fms.domain.bo.ReconciliationMaster">
+	<![CDATA[
+		SELECT count(*) total,SUM(estimate_freight) estimateFreight,SUM(after_tax_freight) afterTaxFreight,SUM(show4_driver_freight) show4DriverFreight 
+		FROM reconciliation_item 
+	]]>
+	<where>
+	 <if test="reconciliationItemIds != null and reconciliationItemIds.size >0">
+	        AND reconciliation_item_id in
+            <foreach collection="reconciliationItemIds" item="item" open="(" separator="," close=")">
+                <![CDATA[#{item}]]>
+            </foreach>
+        </if>
+        AND reconciliation_id = #{reconciliationId}
+	</where>
+	</select>
+  
+  <select id="get" parameterType="int" resultType="reconciliationItem">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE reconciliation_item_id = #{reconciliationItemId}]]>
+  </select>
+  <select id="loadAll" resultType="reconciliationItem">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="reconciliationItem" resultType="reconciliationItem">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchDetails" parameterType="com.giants.common.tools.PageCondition" resultType="reconciliationItem">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

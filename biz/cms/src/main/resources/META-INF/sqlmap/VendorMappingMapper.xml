@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.vendor.dao.VendorMappingMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.vendor.domain.VendorMapping" >
+    <id column="vendor_mapping_id" property="vendorMappingId" jdbcType="INTEGER" />
+    <result column="vendor_id" property="vendorId" jdbcType="INTEGER" />
+    <result column="vendor_tenant_id" property="vendorTenantId" jdbcType="INTEGER" />
+    <result column="vendor_name" property="vendorName" jdbcType="VARCHAR" />
+    <result column="vendor_customer_id" property="vendorCustomerId" jdbcType="INTEGER" />
+    <result column="customer_tenant_id" property="customerTenantId" jdbcType="INTEGER" />
+    <result column="vendor_customer_name" property="vendorCustomerName" jdbcType="VARCHAR" />
+    <result column="department_code" property="departmentCode" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="BIT" />
+    <result column="last_update_user_id" property="lastUpdateUserId" jdbcType="INTEGER" />
+    <result column="last_update_user_name" property="lastUpdateUserName" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    vendor_mapping_id, vendor_id, vendor_tenant_id, vendor_name, vendor_customer_id,
+    customer_tenant_id, vendor_customer_name, department_code, create_time, create_user_id,
+    is_delete, last_update_user_id, last_update_user_name
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.juma.tgm.vendor.domain.VendorMappingExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from vendor_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null" >
+      <if test="startOffSet>=0" >
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.vendor.domain.VendorMappingExample" >
+    delete from vendor_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.juma.tgm.vendor.domain.VendorMapping" >
+    <selectKey resultType="java.lang.Integer" keyProperty="vendorMappingId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vendor_mapping
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vendorId != null" >
+        vendor_id,
+      </if>
+      <if test="vendorTenantId != null" >
+        vendor_tenant_id,
+      </if>
+      <if test="vendorName != null" >
+        vendor_name,
+      </if>
+      <if test="vendorCustomerId != null" >
+        vendor_customer_id,
+      </if>
+      <if test="customerTenantId != null" >
+        customer_tenant_id,
+      </if>
+      <if test="vendorCustomerName != null" >
+        vendor_customer_name,
+      </if>
+      <if test="departmentCode != null" >
+        department_code,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="lastUpdateUserId != null" >
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateUserName != null" >
+        last_update_user_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vendorId != null" >
+        #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorTenantId != null" >
+        #{vendorTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorName != null" >
+        #{vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorCustomerId != null" >
+        #{vendorCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerTenantId != null" >
+        #{customerTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorCustomerName != null" >
+        #{vendorCustomerName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentCode != null" >
+        #{departmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="lastUpdateUserId != null" >
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateUserName != null" >
+        #{lastUpdateUserName,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.vendor.domain.VendorMappingExample" resultType="java.lang.Integer" >
+    select count(*) from vendor_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update vendor_mapping
+    <set >
+      <if test="record.vendorMappingId != null" >
+        vendor_mapping_id = #{record.vendorMappingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorId != null" >
+        vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorTenantId != null" >
+        vendor_tenant_id = #{record.vendorTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorName != null" >
+        vendor_name = #{record.vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendorCustomerId != null" >
+        vendor_customer_id = #{record.vendorCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerTenantId != null" >
+        customer_tenant_id = #{record.customerTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorCustomerName != null" >
+        vendor_customer_name = #{record.vendorCustomerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentCode != null" >
+        department_code = #{record.departmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.lastUpdateUserId != null" >
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateUserName != null" >
+        last_update_user_name = #{record.lastUpdateUserName,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update vendor_mapping
+    set vendor_mapping_id = #{record.vendorMappingId,jdbcType=INTEGER},
+    vendor_id = #{record.vendorId,jdbcType=INTEGER},
+    vendor_tenant_id = #{record.vendorTenantId,jdbcType=INTEGER},
+    vendor_name = #{record.vendorName,jdbcType=VARCHAR},
+    vendor_customer_id = #{record.vendorCustomerId,jdbcType=INTEGER},
+    customer_tenant_id = #{record.customerTenantId,jdbcType=INTEGER},
+    vendor_customer_name = #{record.vendorCustomerName,jdbcType=VARCHAR},
+    department_code = #{record.departmentCode,jdbcType=VARCHAR},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    create_user_id = #{record.createUserId,jdbcType=INTEGER},
+    is_delete = #{record.isDelete,jdbcType=BIT},
+    last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+    last_update_user_name = #{record.lastUpdateUserName,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.vendor.domain.VendorMapping" >
+    update vendor_mapping
+    <set >
+      <if test="vendorId != null" >
+        vendor_id = #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorTenantId != null" >
+        vendor_tenant_id = #{vendorTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorName != null" >
+        vendor_name = #{vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorCustomerId != null" >
+        vendor_customer_id = #{vendorCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerTenantId != null" >
+        customer_tenant_id = #{customerTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorCustomerName != null" >
+        vendor_customer_name = #{vendorCustomerName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentCode != null" >
+        department_code = #{departmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="lastUpdateUserId != null" >
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateUserName != null" >
+        last_update_user_name = #{lastUpdateUserName,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where vendor_mapping_id = #{vendorMappingId,jdbcType=INTEGER}
+  </update>
+</mapper>

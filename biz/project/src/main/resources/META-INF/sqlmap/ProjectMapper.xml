@@ -1,0 +1,1152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.project.dao.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.project.domain.v2.Project">
+    <id column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="project_no" jdbcType="VARCHAR" property="projectNo" />
+    <result column="project_type" jdbcType="INTEGER" property="projectType" />
+    <result column="project_status" jdbcType="INTEGER" property="projectStatus" />
+    <result column="pay_to_company" jdbcType="INTEGER" property="payToCompany" />
+    <result column="pay_to_company_credit_code" jdbcType="VARCHAR" property="payToCompanyCreditCode" />
+    <result column="contract_no" jdbcType="VARCHAR" property="contractNo" />
+    <result column="contract_to_company" jdbcType="INTEGER" property="contractToCompany" />
+    <result column="contract_to_company_credit_code" jdbcType="VARCHAR" property="contractToCompanyCreditCode" />
+    <result column="project_manager_user_id" jdbcType="INTEGER" property="projectManagerUserId" />
+    <result column="try_work_pass_attachment" jdbcType="VARCHAR" property="tryWorkPassAttachment" />
+    <result column="try_work_protocol" jdbcType="VARCHAR" property="tryWorkProtocol" />
+    <result column="project_start_date" jdbcType="DATE" property="projectStartDate" />
+    <result column="project_end_date" jdbcType="DATE" property="projectEndDate" />
+    <result column="is_running" jdbcType="TINYINT" property="isRunning" />
+    <result column="running_time" jdbcType="DATE" property="runningTime" />
+    <result column="business_linkman" jdbcType="VARCHAR" property="businessLinkman" />
+    <result column="business_linktel" jdbcType="VARCHAR" property="businessLinktel" />
+    <result column="business_linkemail" jdbcType="VARCHAR" property="businessLinkemail" />
+    <result column="finance_linkman" jdbcType="VARCHAR" property="financeLinkman" />
+    <result column="finance_linktel" jdbcType="VARCHAR" property="financeLinktel" />
+    <result column="finance_linkemail" jdbcType="VARCHAR" property="financeLinkemail" />
+    <result column="delivery_address_type" jdbcType="VARCHAR" property="deliveryAddressType" />
+    <result column="old_id" jdbcType="INTEGER" property="oldId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="rebate_rate" jdbcType="DECIMAL" property="rebateRate" />
+    <result column="estimate_time_consumption" jdbcType="INTEGER" property="estimateTimeConsumption" />
+    <result column="truck_require_remark" jdbcType="VARCHAR" property="truckRequireRemark" />
+    <result column="additional_function_ids" jdbcType="VARCHAR" property="additionalFunctionIds" />
+    <result column="fixed_no" jdbcType="INTEGER" property="fixedNo" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="logistics_label" jdbcType="VARCHAR" property="logisticsLabel" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="truck_customer_id" jdbcType="INTEGER" property="truckCustomerId" />
+    <result column="manager_id" jdbcType="INTEGER" property="managerId" />
+    <result column="goods_type" jdbcType="VARCHAR" property="goodsType" />
+    <result column="tax_rate_value" jdbcType="DECIMAL" property="taxRateValue" />
+    <result column="is_receivable_first" jdbcType="TINYINT" property="isReceivableFirst" />
+    <result column="is_enable" jdbcType="TINYINT" property="isEnable" />
+    <result column="only_load_cargo" jdbcType="TINYINT" property="onlyLoadCargo" />
+    <result column="need_delivery_point_note" jdbcType="TINYINT" property="needDeliveryPointNote" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="is_receive_daily_sms" jdbcType="TINYINT" property="isReceiveDailySms" />
+    <result column="profit_rate" jdbcType="DECIMAL" property="profitRate" />
+    <result column="bill_period" jdbcType="INTEGER" property="billPeriod" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    project_id, project_no, project_type, project_status, pay_to_company, pay_to_company_credit_code, 
+    contract_no, contract_to_company, contract_to_company_credit_code, project_manager_user_id, 
+    try_work_pass_attachment, try_work_protocol, project_start_date, project_end_date, 
+    is_running, running_time, business_linkman, business_linktel, business_linkemail, 
+    finance_linkman, finance_linktel, finance_linkemail, delivery_address_type, old_id, 
+    tenant_id, rebate_rate, estimate_time_consumption, truck_require_remark, additional_function_ids, 
+    fixed_no, tenant_code, area_code, name, logistics_label, type, customer_id, customer_name, 
+    truck_customer_id, manager_id, goods_type, tax_rate_value, is_receivable_first, is_enable, 
+    only_load_cargo, need_delivery_point_note, create_time, create_user_id, is_receive_daily_sms, 
+    profit_rate, bill_period
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.project.domain.v2.ProjectExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from project
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from project
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.project.domain.v2.ProjectExample">
+    delete from project
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="project_id" keyProperty="projectId" parameterType="com.juma.tgm.project.domain.v2.Project" useGeneratedKeys="true">
+    insert into project (project_no, project_type, project_status, 
+      pay_to_company, pay_to_company_credit_code, contract_no, 
+      contract_to_company, contract_to_company_credit_code, 
+      project_manager_user_id, try_work_pass_attachment, 
+      try_work_protocol, project_start_date, project_end_date, 
+      is_running, running_time, business_linkman, 
+      business_linktel, business_linkemail, finance_linkman, 
+      finance_linktel, finance_linkemail, delivery_address_type, 
+      old_id, tenant_id, rebate_rate, 
+      estimate_time_consumption, truck_require_remark, 
+      additional_function_ids, fixed_no, tenant_code, 
+      area_code, name, logistics_label, 
+      type, customer_id, customer_name, 
+      truck_customer_id, manager_id, goods_type, 
+      tax_rate_value, is_receivable_first, is_enable, 
+      only_load_cargo, need_delivery_point_note, create_time, 
+      create_user_id, is_receive_daily_sms, profit_rate, 
+      bill_period)
+    values (#{projectNo,jdbcType=VARCHAR}, #{projectType,jdbcType=INTEGER}, #{projectStatus,jdbcType=INTEGER}, 
+      #{payToCompany,jdbcType=INTEGER}, #{payToCompanyCreditCode,jdbcType=VARCHAR}, #{contractNo,jdbcType=VARCHAR}, 
+      #{contractToCompany,jdbcType=INTEGER}, #{contractToCompanyCreditCode,jdbcType=VARCHAR}, 
+      #{projectManagerUserId,jdbcType=INTEGER}, #{tryWorkPassAttachment,jdbcType=VARCHAR}, 
+      #{tryWorkProtocol,jdbcType=VARCHAR}, #{projectStartDate,jdbcType=DATE}, #{projectEndDate,jdbcType=DATE}, 
+      #{isRunning,jdbcType=TINYINT}, #{runningTime,jdbcType=DATE}, #{businessLinkman,jdbcType=VARCHAR}, 
+      #{businessLinktel,jdbcType=VARCHAR}, #{businessLinkemail,jdbcType=VARCHAR}, #{financeLinkman,jdbcType=VARCHAR}, 
+      #{financeLinktel,jdbcType=VARCHAR}, #{financeLinkemail,jdbcType=VARCHAR}, #{deliveryAddressType,jdbcType=VARCHAR}, 
+      #{oldId,jdbcType=INTEGER}, #{tenantId,jdbcType=INTEGER}, #{rebateRate,jdbcType=DECIMAL}, 
+      #{estimateTimeConsumption,jdbcType=INTEGER}, #{truckRequireRemark,jdbcType=VARCHAR}, 
+      #{additionalFunctionIds,jdbcType=VARCHAR}, #{fixedNo,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, 
+      #{areaCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{logisticsLabel,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{customerId,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, 
+      #{truckCustomerId,jdbcType=INTEGER}, #{managerId,jdbcType=INTEGER}, #{goodsType,jdbcType=VARCHAR}, 
+      #{taxRateValue,jdbcType=DECIMAL}, #{isReceivableFirst,jdbcType=TINYINT}, #{isEnable,jdbcType=TINYINT}, 
+      #{onlyLoadCargo,jdbcType=TINYINT}, #{needDeliveryPointNote,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{isReceiveDailySms,jdbcType=TINYINT}, #{profitRate,jdbcType=DECIMAL}, 
+      #{billPeriod,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="project_id" keyProperty="projectId" parameterType="com.juma.tgm.project.domain.v2.Project" useGeneratedKeys="true">
+    insert into project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectNo != null">
+        project_no,
+      </if>
+      <if test="projectType != null">
+        project_type,
+      </if>
+      <if test="projectStatus != null">
+        project_status,
+      </if>
+      <if test="payToCompany != null">
+        pay_to_company,
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        pay_to_company_credit_code,
+      </if>
+      <if test="contractNo != null">
+        contract_no,
+      </if>
+      <if test="contractToCompany != null">
+        contract_to_company,
+      </if>
+      <if test="contractToCompanyCreditCode != null">
+        contract_to_company_credit_code,
+      </if>
+      <if test="projectManagerUserId != null">
+        project_manager_user_id,
+      </if>
+      <if test="tryWorkPassAttachment != null">
+        try_work_pass_attachment,
+      </if>
+      <if test="tryWorkProtocol != null">
+        try_work_protocol,
+      </if>
+      <if test="projectStartDate != null">
+        project_start_date,
+      </if>
+      <if test="projectEndDate != null">
+        project_end_date,
+      </if>
+      <if test="isRunning != null">
+        is_running,
+      </if>
+      <if test="runningTime != null">
+        running_time,
+      </if>
+      <if test="businessLinkman != null">
+        business_linkman,
+      </if>
+      <if test="businessLinktel != null">
+        business_linktel,
+      </if>
+      <if test="businessLinkemail != null">
+        business_linkemail,
+      </if>
+      <if test="financeLinkman != null">
+        finance_linkman,
+      </if>
+      <if test="financeLinktel != null">
+        finance_linktel,
+      </if>
+      <if test="financeLinkemail != null">
+        finance_linkemail,
+      </if>
+      <if test="deliveryAddressType != null">
+        delivery_address_type,
+      </if>
+      <if test="oldId != null">
+        old_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="rebateRate != null">
+        rebate_rate,
+      </if>
+      <if test="estimateTimeConsumption != null">
+        estimate_time_consumption,
+      </if>
+      <if test="truckRequireRemark != null">
+        truck_require_remark,
+      </if>
+      <if test="additionalFunctionIds != null">
+        additional_function_ids,
+      </if>
+      <if test="fixedNo != null">
+        fixed_no,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="logisticsLabel != null">
+        logistics_label,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="truckCustomerId != null">
+        truck_customer_id,
+      </if>
+      <if test="managerId != null">
+        manager_id,
+      </if>
+      <if test="goodsType != null">
+        goods_type,
+      </if>
+      <if test="taxRateValue != null">
+        tax_rate_value,
+      </if>
+      <if test="isReceivableFirst != null">
+        is_receivable_first,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+      <if test="onlyLoadCargo != null">
+        only_load_cargo,
+      </if>
+      <if test="needDeliveryPointNote != null">
+        need_delivery_point_note,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="isReceiveDailySms != null">
+        is_receive_daily_sms,
+      </if>
+      <if test="profitRate != null">
+        profit_rate,
+      </if>
+      <if test="billPeriod != null">
+        bill_period,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectNo != null">
+        #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectType != null">
+        #{projectType,jdbcType=INTEGER},
+      </if>
+      <if test="projectStatus != null">
+        #{projectStatus,jdbcType=INTEGER},
+      </if>
+      <if test="payToCompany != null">
+        #{payToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null">
+        #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractToCompany != null">
+        #{contractToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="contractToCompanyCreditCode != null">
+        #{contractToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectManagerUserId != null">
+        #{projectManagerUserId,jdbcType=INTEGER},
+      </if>
+      <if test="tryWorkPassAttachment != null">
+        #{tryWorkPassAttachment,jdbcType=VARCHAR},
+      </if>
+      <if test="tryWorkProtocol != null">
+        #{tryWorkProtocol,jdbcType=VARCHAR},
+      </if>
+      <if test="projectStartDate != null">
+        #{projectStartDate,jdbcType=DATE},
+      </if>
+      <if test="projectEndDate != null">
+        #{projectEndDate,jdbcType=DATE},
+      </if>
+      <if test="isRunning != null">
+        #{isRunning,jdbcType=TINYINT},
+      </if>
+      <if test="runningTime != null">
+        #{runningTime,jdbcType=DATE},
+      </if>
+      <if test="businessLinkman != null">
+        #{businessLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLinktel != null">
+        #{businessLinktel,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLinkemail != null">
+        #{businessLinkemail,jdbcType=VARCHAR},
+      </if>
+      <if test="financeLinkman != null">
+        #{financeLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="financeLinktel != null">
+        #{financeLinktel,jdbcType=VARCHAR},
+      </if>
+      <if test="financeLinkemail != null">
+        #{financeLinkemail,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryAddressType != null">
+        #{deliveryAddressType,jdbcType=VARCHAR},
+      </if>
+      <if test="oldId != null">
+        #{oldId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="rebateRate != null">
+        #{rebateRate,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateTimeConsumption != null">
+        #{estimateTimeConsumption,jdbcType=INTEGER},
+      </if>
+      <if test="truckRequireRemark != null">
+        #{truckRequireRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="additionalFunctionIds != null">
+        #{additionalFunctionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="fixedNo != null">
+        #{fixedNo,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsLabel != null">
+        #{logisticsLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="truckCustomerId != null">
+        #{truckCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="managerId != null">
+        #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsType != null">
+        #{goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRateValue != null">
+        #{taxRateValue,jdbcType=DECIMAL},
+      </if>
+      <if test="isReceivableFirst != null">
+        #{isReceivableFirst,jdbcType=TINYINT},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="onlyLoadCargo != null">
+        #{onlyLoadCargo,jdbcType=TINYINT},
+      </if>
+      <if test="needDeliveryPointNote != null">
+        #{needDeliveryPointNote,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="isReceiveDailySms != null">
+        #{isReceiveDailySms,jdbcType=TINYINT},
+      </if>
+      <if test="profitRate != null">
+        #{profitRate,jdbcType=DECIMAL},
+      </if>
+      <if test="billPeriod != null">
+        #{billPeriod,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.project.domain.v2.ProjectExample" resultType="java.lang.Long">
+    select count(*) from project
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update project
+    <set>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectNo != null">
+        project_no = #{record.projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectType != null">
+        project_type = #{record.projectType,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectStatus != null">
+        project_status = #{record.projectStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.payToCompany != null">
+        pay_to_company = #{record.payToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="record.payToCompanyCreditCode != null">
+        pay_to_company_credit_code = #{record.payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractNo != null">
+        contract_no = #{record.contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractToCompany != null">
+        contract_to_company = #{record.contractToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="record.contractToCompanyCreditCode != null">
+        contract_to_company_credit_code = #{record.contractToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectManagerUserId != null">
+        project_manager_user_id = #{record.projectManagerUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tryWorkPassAttachment != null">
+        try_work_pass_attachment = #{record.tryWorkPassAttachment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tryWorkProtocol != null">
+        try_work_protocol = #{record.tryWorkProtocol,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectStartDate != null">
+        project_start_date = #{record.projectStartDate,jdbcType=DATE},
+      </if>
+      <if test="record.projectEndDate != null">
+        project_end_date = #{record.projectEndDate,jdbcType=DATE},
+      </if>
+      <if test="record.isRunning != null">
+        is_running = #{record.isRunning,jdbcType=TINYINT},
+      </if>
+      <if test="record.runningTime != null">
+        running_time = #{record.runningTime,jdbcType=DATE},
+      </if>
+      <if test="record.businessLinkman != null">
+        business_linkman = #{record.businessLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessLinktel != null">
+        business_linktel = #{record.businessLinktel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessLinkemail != null">
+        business_linkemail = #{record.businessLinkemail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financeLinkman != null">
+        finance_linkman = #{record.financeLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financeLinktel != null">
+        finance_linktel = #{record.financeLinktel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financeLinkemail != null">
+        finance_linkemail = #{record.financeLinkemail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryAddressType != null">
+        delivery_address_type = #{record.deliveryAddressType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oldId != null">
+        old_id = #{record.oldId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.rebateRate != null">
+        rebate_rate = #{record.rebateRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.estimateTimeConsumption != null">
+        estimate_time_consumption = #{record.estimateTimeConsumption,jdbcType=INTEGER},
+      </if>
+      <if test="record.truckRequireRemark != null">
+        truck_require_remark = #{record.truckRequireRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.additionalFunctionIds != null">
+        additional_function_ids = #{record.additionalFunctionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fixedNo != null">
+        fixed_no = #{record.fixedNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaCode != null">
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logisticsLabel != null">
+        logistics_label = #{record.logisticsLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.customerId != null">
+        customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerName != null">
+        customer_name = #{record.customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.truckCustomerId != null">
+        truck_customer_id = #{record.truckCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.managerId != null">
+        manager_id = #{record.managerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsType != null">
+        goods_type = #{record.goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taxRateValue != null">
+        tax_rate_value = #{record.taxRateValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isReceivableFirst != null">
+        is_receivable_first = #{record.isReceivableFirst,jdbcType=TINYINT},
+      </if>
+      <if test="record.isEnable != null">
+        is_enable = #{record.isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="record.onlyLoadCargo != null">
+        only_load_cargo = #{record.onlyLoadCargo,jdbcType=TINYINT},
+      </if>
+      <if test="record.needDeliveryPointNote != null">
+        need_delivery_point_note = #{record.needDeliveryPointNote,jdbcType=TINYINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isReceiveDailySms != null">
+        is_receive_daily_sms = #{record.isReceiveDailySms,jdbcType=TINYINT},
+      </if>
+      <if test="record.profitRate != null">
+        profit_rate = #{record.profitRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billPeriod != null">
+        bill_period = #{record.billPeriod,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update project
+    set project_id = #{record.projectId,jdbcType=INTEGER},
+      project_no = #{record.projectNo,jdbcType=VARCHAR},
+      project_type = #{record.projectType,jdbcType=INTEGER},
+      project_status = #{record.projectStatus,jdbcType=INTEGER},
+      pay_to_company = #{record.payToCompany,jdbcType=INTEGER},
+      pay_to_company_credit_code = #{record.payToCompanyCreditCode,jdbcType=VARCHAR},
+      contract_no = #{record.contractNo,jdbcType=VARCHAR},
+      contract_to_company = #{record.contractToCompany,jdbcType=INTEGER},
+      contract_to_company_credit_code = #{record.contractToCompanyCreditCode,jdbcType=VARCHAR},
+      project_manager_user_id = #{record.projectManagerUserId,jdbcType=INTEGER},
+      try_work_pass_attachment = #{record.tryWorkPassAttachment,jdbcType=VARCHAR},
+      try_work_protocol = #{record.tryWorkProtocol,jdbcType=VARCHAR},
+      project_start_date = #{record.projectStartDate,jdbcType=DATE},
+      project_end_date = #{record.projectEndDate,jdbcType=DATE},
+      is_running = #{record.isRunning,jdbcType=TINYINT},
+      running_time = #{record.runningTime,jdbcType=DATE},
+      business_linkman = #{record.businessLinkman,jdbcType=VARCHAR},
+      business_linktel = #{record.businessLinktel,jdbcType=VARCHAR},
+      business_linkemail = #{record.businessLinkemail,jdbcType=VARCHAR},
+      finance_linkman = #{record.financeLinkman,jdbcType=VARCHAR},
+      finance_linktel = #{record.financeLinktel,jdbcType=VARCHAR},
+      finance_linkemail = #{record.financeLinkemail,jdbcType=VARCHAR},
+      delivery_address_type = #{record.deliveryAddressType,jdbcType=VARCHAR},
+      old_id = #{record.oldId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      rebate_rate = #{record.rebateRate,jdbcType=DECIMAL},
+      estimate_time_consumption = #{record.estimateTimeConsumption,jdbcType=INTEGER},
+      truck_require_remark = #{record.truckRequireRemark,jdbcType=VARCHAR},
+      additional_function_ids = #{record.additionalFunctionIds,jdbcType=VARCHAR},
+      fixed_no = #{record.fixedNo,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      logistics_label = #{record.logisticsLabel,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=TINYINT},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      customer_name = #{record.customerName,jdbcType=VARCHAR},
+      truck_customer_id = #{record.truckCustomerId,jdbcType=INTEGER},
+      manager_id = #{record.managerId,jdbcType=INTEGER},
+      goods_type = #{record.goodsType,jdbcType=VARCHAR},
+      tax_rate_value = #{record.taxRateValue,jdbcType=DECIMAL},
+      is_receivable_first = #{record.isReceivableFirst,jdbcType=TINYINT},
+      is_enable = #{record.isEnable,jdbcType=TINYINT},
+      only_load_cargo = #{record.onlyLoadCargo,jdbcType=TINYINT},
+      need_delivery_point_note = #{record.needDeliveryPointNote,jdbcType=TINYINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      is_receive_daily_sms = #{record.isReceiveDailySms,jdbcType=TINYINT},
+      profit_rate = #{record.profitRate,jdbcType=DECIMAL},
+      bill_period = #{record.billPeriod,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.project.domain.v2.Project">
+    update project
+    <set>
+      <if test="projectNo != null">
+        project_no = #{projectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectType != null">
+        project_type = #{projectType,jdbcType=INTEGER},
+      </if>
+      <if test="projectStatus != null">
+        project_status = #{projectStatus,jdbcType=INTEGER},
+      </if>
+      <if test="payToCompany != null">
+        pay_to_company = #{payToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="payToCompanyCreditCode != null">
+        pay_to_company_credit_code = #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null">
+        contract_no = #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractToCompany != null">
+        contract_to_company = #{contractToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="contractToCompanyCreditCode != null">
+        contract_to_company_credit_code = #{contractToCompanyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectManagerUserId != null">
+        project_manager_user_id = #{projectManagerUserId,jdbcType=INTEGER},
+      </if>
+      <if test="tryWorkPassAttachment != null">
+        try_work_pass_attachment = #{tryWorkPassAttachment,jdbcType=VARCHAR},
+      </if>
+      <if test="tryWorkProtocol != null">
+        try_work_protocol = #{tryWorkProtocol,jdbcType=VARCHAR},
+      </if>
+      <if test="projectStartDate != null">
+        project_start_date = #{projectStartDate,jdbcType=DATE},
+      </if>
+      <if test="projectEndDate != null">
+        project_end_date = #{projectEndDate,jdbcType=DATE},
+      </if>
+      <if test="isRunning != null">
+        is_running = #{isRunning,jdbcType=TINYINT},
+      </if>
+      <if test="runningTime != null">
+        running_time = #{runningTime,jdbcType=DATE},
+      </if>
+      <if test="businessLinkman != null">
+        business_linkman = #{businessLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLinktel != null">
+        business_linktel = #{businessLinktel,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLinkemail != null">
+        business_linkemail = #{businessLinkemail,jdbcType=VARCHAR},
+      </if>
+      <if test="financeLinkman != null">
+        finance_linkman = #{financeLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="financeLinktel != null">
+        finance_linktel = #{financeLinktel,jdbcType=VARCHAR},
+      </if>
+      <if test="financeLinkemail != null">
+        finance_linkemail = #{financeLinkemail,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryAddressType != null">
+        delivery_address_type = #{deliveryAddressType,jdbcType=VARCHAR},
+      </if>
+      <if test="oldId != null">
+        old_id = #{oldId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="rebateRate != null">
+        rebate_rate = #{rebateRate,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateTimeConsumption != null">
+        estimate_time_consumption = #{estimateTimeConsumption,jdbcType=INTEGER},
+      </if>
+      <if test="truckRequireRemark != null">
+        truck_require_remark = #{truckRequireRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="additionalFunctionIds != null">
+        additional_function_ids = #{additionalFunctionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="fixedNo != null">
+        fixed_no = #{fixedNo,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsLabel != null">
+        logistics_label = #{logisticsLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="truckCustomerId != null">
+        truck_customer_id = #{truckCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="managerId != null">
+        manager_id = #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsType != null">
+        goods_type = #{goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRateValue != null">
+        tax_rate_value = #{taxRateValue,jdbcType=DECIMAL},
+      </if>
+      <if test="isReceivableFirst != null">
+        is_receivable_first = #{isReceivableFirst,jdbcType=TINYINT},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="onlyLoadCargo != null">
+        only_load_cargo = #{onlyLoadCargo,jdbcType=TINYINT},
+      </if>
+      <if test="needDeliveryPointNote != null">
+        need_delivery_point_note = #{needDeliveryPointNote,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="isReceiveDailySms != null">
+        is_receive_daily_sms = #{isReceiveDailySms,jdbcType=TINYINT},
+      </if>
+      <if test="profitRate != null">
+        profit_rate = #{profitRate,jdbcType=DECIMAL},
+      </if>
+      <if test="billPeriod != null">
+        bill_period = #{billPeriod,jdbcType=INTEGER},
+      </if>
+    </set>
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.project.domain.v2.Project">
+    update project
+    set project_no = #{projectNo,jdbcType=VARCHAR},
+      project_type = #{projectType,jdbcType=INTEGER},
+      project_status = #{projectStatus,jdbcType=INTEGER},
+      pay_to_company = #{payToCompany,jdbcType=INTEGER},
+      pay_to_company_credit_code = #{payToCompanyCreditCode,jdbcType=VARCHAR},
+      contract_no = #{contractNo,jdbcType=VARCHAR},
+      contract_to_company = #{contractToCompany,jdbcType=INTEGER},
+      contract_to_company_credit_code = #{contractToCompanyCreditCode,jdbcType=VARCHAR},
+      project_manager_user_id = #{projectManagerUserId,jdbcType=INTEGER},
+      try_work_pass_attachment = #{tryWorkPassAttachment,jdbcType=VARCHAR},
+      try_work_protocol = #{tryWorkProtocol,jdbcType=VARCHAR},
+      project_start_date = #{projectStartDate,jdbcType=DATE},
+      project_end_date = #{projectEndDate,jdbcType=DATE},
+      is_running = #{isRunning,jdbcType=TINYINT},
+      running_time = #{runningTime,jdbcType=DATE},
+      business_linkman = #{businessLinkman,jdbcType=VARCHAR},
+      business_linktel = #{businessLinktel,jdbcType=VARCHAR},
+      business_linkemail = #{businessLinkemail,jdbcType=VARCHAR},
+      finance_linkman = #{financeLinkman,jdbcType=VARCHAR},
+      finance_linktel = #{financeLinktel,jdbcType=VARCHAR},
+      finance_linkemail = #{financeLinkemail,jdbcType=VARCHAR},
+      delivery_address_type = #{deliveryAddressType,jdbcType=VARCHAR},
+      old_id = #{oldId,jdbcType=INTEGER},
+      tenant_id = #{tenantId,jdbcType=INTEGER},
+      rebate_rate = #{rebateRate,jdbcType=DECIMAL},
+      estimate_time_consumption = #{estimateTimeConsumption,jdbcType=INTEGER},
+      truck_require_remark = #{truckRequireRemark,jdbcType=VARCHAR},
+      additional_function_ids = #{additionalFunctionIds,jdbcType=VARCHAR},
+      fixed_no = #{fixedNo,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      logistics_label = #{logisticsLabel,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      truck_customer_id = #{truckCustomerId,jdbcType=INTEGER},
+      manager_id = #{managerId,jdbcType=INTEGER},
+      goods_type = #{goodsType,jdbcType=VARCHAR},
+      tax_rate_value = #{taxRateValue,jdbcType=DECIMAL},
+      is_receivable_first = #{isReceivableFirst,jdbcType=TINYINT},
+      is_enable = #{isEnable,jdbcType=TINYINT},
+      only_load_cargo = #{onlyLoadCargo,jdbcType=TINYINT},
+      need_delivery_point_note = #{needDeliveryPointNote,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      is_receive_daily_sms = #{isReceiveDailySms,jdbcType=TINYINT},
+      profit_rate = #{profitRate,jdbcType=DECIMAL},
+      bill_period = #{billPeriod,jdbcType=INTEGER}
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="projectId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into project
+    (project_no,project_type,project_status,pay_to_company,pay_to_company_credit_code,contract_no,contract_to_company,contract_to_company_credit_code,project_manager_user_id,try_work_pass_attachment,try_work_protocol,project_start_date,project_end_date,is_running,running_time,business_linkman,business_linktel,business_linkemail,finance_linkman,finance_linktel,finance_linkemail,delivery_address_type,old_id,tenant_id,rebate_rate,estimate_time_consumption,truck_require_remark,additional_function_ids,fixed_no,tenant_code,area_code,name,logistics_label,type,customer_id,customer_name,truck_customer_id,manager_id,goods_type,tax_rate_value,is_receivable_first,is_enable,only_load_cargo,need_delivery_point_note,create_time,create_user_id,is_receive_daily_sms,profit_rate,bill_period) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.projectNo},#{item.projectType},#{item.projectStatus},#{item.payToCompany},#{item.payToCompanyCreditCode},#{item.contractNo},#{item.contractToCompany},#{item.contractToCompanyCreditCode},#{item.projectManagerUserId},#{item.tryWorkPassAttachment},#{item.tryWorkProtocol},#{item.projectStartDate},#{item.projectEndDate},#{item.isRunning},#{item.runningTime},#{item.businessLinkman},#{item.businessLinktel},#{item.businessLinkemail},#{item.financeLinkman},#{item.financeLinktel},#{item.financeLinkemail},#{item.deliveryAddressType},#{item.oldId},#{item.tenantId},#{item.rebateRate},#{item.estimateTimeConsumption},#{item.truckRequireRemark},#{item.additionalFunctionIds},#{item.fixedNo},#{item.tenantCode},#{item.areaCode},#{item.name},#{item.logisticsLabel},#{item.type},#{item.customerId},#{item.customerName},#{item.truckCustomerId},#{item.managerId},#{item.goodsType},#{item.taxRateValue},#{item.isReceivableFirst},#{item.isEnable},#{item.onlyLoadCargo},#{item.needDeliveryPointNote},#{item.createTime},#{item.createUserId},#{item.isReceiveDailySms},#{item.profitRate},#{item.billPeriod})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update project
+      <set>
+        project_id = #{item.projectId},
+        project_no = #{item.projectNo},
+        project_type = #{item.projectType},
+        project_status = #{item.projectStatus},
+        pay_to_company = #{item.payToCompany},
+        pay_to_company_credit_code = #{item.payToCompanyCreditCode},
+        contract_no = #{item.contractNo},
+        contract_to_company = #{item.contractToCompany},
+        contract_to_company_credit_code = #{item.contractToCompanyCreditCode},
+        project_manager_user_id = #{item.projectManagerUserId},
+        try_work_pass_attachment = #{item.tryWorkPassAttachment},
+        try_work_protocol = #{item.tryWorkProtocol},
+        project_start_date = #{item.projectStartDate},
+        project_end_date = #{item.projectEndDate},
+        is_running = #{item.isRunning},
+        running_time = #{item.runningTime},
+        business_linkman = #{item.businessLinkman},
+        business_linktel = #{item.businessLinktel},
+        business_linkemail = #{item.businessLinkemail},
+        finance_linkman = #{item.financeLinkman},
+        finance_linktel = #{item.financeLinktel},
+        finance_linkemail = #{item.financeLinkemail},
+        delivery_address_type = #{item.deliveryAddressType},
+        old_id = #{item.oldId},
+        tenant_id = #{item.tenantId},
+        rebate_rate = #{item.rebateRate},
+        estimate_time_consumption = #{item.estimateTimeConsumption},
+        truck_require_remark = #{item.truckRequireRemark},
+        additional_function_ids = #{item.additionalFunctionIds},
+        fixed_no = #{item.fixedNo},
+        tenant_code = #{item.tenantCode},
+        area_code = #{item.areaCode},
+        name = #{item.name},
+        logistics_label = #{item.logisticsLabel},
+        type = #{item.type},
+        customer_id = #{item.customerId},
+        customer_name = #{item.customerName},
+        truck_customer_id = #{item.truckCustomerId},
+        manager_id = #{item.managerId},
+        goods_type = #{item.goodsType},
+        tax_rate_value = #{item.taxRateValue},
+        is_receivable_first = #{item.isReceivableFirst},
+        is_enable = #{item.isEnable},
+        only_load_cargo = #{item.onlyLoadCargo},
+        need_delivery_point_note = #{item.needDeliveryPointNote},
+        create_time = #{item.createTime},
+        create_user_id = #{item.createUserId},
+        is_receive_daily_sms = #{item.isReceiveDailySms},
+        profit_rate = #{item.profitRate},
+        bill_period = #{item.billPeriod},
+        try_work_pass_attachment = #{item.tryWorkPassAttachment},
+      </set>
+      where project_id = #{item.projectId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update project
+      <set>
+        <if test="item.projectNo != null">
+          project_no = #{item.projectNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.projectType != null">
+          project_type = #{item.projectType,jdbcType=INTEGER},
+        </if>
+        <if test="item.projectStatus != null">
+          project_status = #{item.projectStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.payToCompany != null">
+          pay_to_company = #{item.payToCompany,jdbcType=INTEGER},
+        </if>
+        <if test="item.payToCompanyCreditCode != null">
+          pay_to_company_credit_code = #{item.payToCompanyCreditCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.contractNo != null">
+          contract_no = #{item.contractNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.contractToCompany != null">
+          contract_to_company = #{item.contractToCompany,jdbcType=INTEGER},
+        </if>
+        <if test="item.contractToCompanyCreditCode != null">
+          contract_to_company_credit_code = #{item.contractToCompanyCreditCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.projectManagerUserId != null">
+          project_manager_user_id = #{item.projectManagerUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tryWorkPassAttachment != null">
+          try_work_pass_attachment = #{item.tryWorkPassAttachment,jdbcType=VARCHAR},
+        </if>
+        <if test="item.tryWorkProtocol != null">
+          try_work_protocol = #{item.tryWorkProtocol,jdbcType=VARCHAR},
+        </if>
+        <if test="item.projectStartDate != null">
+          project_start_date = #{item.projectStartDate,jdbcType=DATE},
+        </if>
+        <if test="item.projectEndDate != null">
+          project_end_date = #{item.projectEndDate,jdbcType=DATE},
+        </if>
+        <if test="item.isRunning != null">
+          is_running = #{item.isRunning,jdbcType=TINYINT},
+        </if>
+        <if test="item.runningTime != null">
+          running_time = #{item.runningTime,jdbcType=DATE},
+        </if>
+        <if test="item.businessLinkman != null">
+          business_linkman = #{item.businessLinkman,jdbcType=VARCHAR},
+        </if>
+        <if test="item.businessLinktel != null">
+          business_linktel = #{item.businessLinktel,jdbcType=VARCHAR},
+        </if>
+        <if test="item.businessLinkemail != null">
+          business_linkemail = #{item.businessLinkemail,jdbcType=VARCHAR},
+        </if>
+        <if test="item.financeLinkman != null">
+          finance_linkman = #{item.financeLinkman,jdbcType=VARCHAR},
+        </if>
+        <if test="item.financeLinktel != null">
+          finance_linktel = #{item.financeLinktel,jdbcType=VARCHAR},
+        </if>
+        <if test="item.financeLinkemail != null">
+          finance_linkemail = #{item.financeLinkemail,jdbcType=VARCHAR},
+        </if>
+        <if test="item.deliveryAddressType != null">
+          delivery_address_type = #{item.deliveryAddressType,jdbcType=VARCHAR},
+        </if>
+        <if test="item.oldId != null">
+          old_id = #{item.oldId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.rebateRate != null">
+          rebate_rate = #{item.rebateRate,jdbcType=DECIMAL},
+        </if>
+        <if test="item.estimateTimeConsumption != null">
+          estimate_time_consumption = #{item.estimateTimeConsumption,jdbcType=INTEGER},
+        </if>
+        <if test="item.truckRequireRemark != null">
+          truck_require_remark = #{item.truckRequireRemark,jdbcType=VARCHAR},
+        </if>
+        <if test="item.additionalFunctionIds != null">
+          additional_function_ids = #{item.additionalFunctionIds,jdbcType=VARCHAR},
+        </if>
+        <if test="item.fixedNo != null">
+          fixed_no = #{item.fixedNo,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantCode != null">
+          tenant_code = #{item.tenantCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.areaCode != null">
+          area_code = #{item.areaCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.name != null">
+          name = #{item.name,jdbcType=VARCHAR},
+        </if>
+        <if test="item.logisticsLabel != null">
+          logistics_label = #{item.logisticsLabel,jdbcType=VARCHAR},
+        </if>
+        <if test="item.type != null">
+          type = #{item.type,jdbcType=TINYINT},
+        </if>
+        <if test="item.customerId != null">
+          customer_id = #{item.customerId,jdbcType=INTEGER},
+        </if>
+        <if test="item.customerName != null">
+          customer_name = #{item.customerName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.truckCustomerId != null">
+          truck_customer_id = #{item.truckCustomerId,jdbcType=INTEGER},
+        </if>
+        <if test="item.managerId != null">
+          manager_id = #{item.managerId,jdbcType=INTEGER},
+        </if>
+        <if test="item.goodsType != null">
+          goods_type = #{item.goodsType,jdbcType=VARCHAR},
+        </if>
+        <if test="item.taxRateValue != null">
+          tax_rate_value = #{item.taxRateValue,jdbcType=DECIMAL},
+        </if>
+        <if test="item.isReceivableFirst != null">
+          is_receivable_first = #{item.isReceivableFirst,jdbcType=TINYINT},
+        </if>
+        <if test="item.isEnable != null">
+          is_enable = #{item.isEnable,jdbcType=TINYINT},
+        </if>
+        <if test="item.onlyLoadCargo != null">
+          only_load_cargo = #{item.onlyLoadCargo,jdbcType=TINYINT},
+        </if>
+        <if test="item.needDeliveryPointNote != null">
+          need_delivery_point_note = #{item.needDeliveryPointNote,jdbcType=TINYINT},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.isReceiveDailySms != null">
+          is_receive_daily_sms = #{item.isReceiveDailySms,jdbcType=TINYINT},
+        </if>
+        <if test="item.profitRate != null">
+          profit_rate = #{item.profitRate,jdbcType=DECIMAL},
+        </if>
+        <if test="item.billPeriod != null">
+          bill_period = #{item.billPeriod,jdbcType=INTEGER},
+        </if>
+      </set>
+      where project_id = #{item.projectId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

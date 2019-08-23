@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.task.dao.TaskCalendarMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.task.domain.TaskCalendar">
+    <id column="calendar_id" jdbcType="INTEGER" property="calendarId" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="timeline_id" jdbcType="INTEGER" property="timelineId" />
+    <result column="waybill_id" jdbcType="INTEGER" property="waybillId" />
+    <result column="vendor_id" jdbcType="INTEGER" property="vendorId" />
+    <result column="work_start_time" jdbcType="TIMESTAMP" property="workStartTime" />
+    <result column="work_end_time" jdbcType="TIMESTAMP" property="workEndTime" />
+    <result column="truck_id" jdbcType="INTEGER" property="truckId" />
+    <result column="driver_id" jdbcType="INTEGER" property="driverId" />
+    <result column="work_status" jdbcType="INTEGER" property="workStatus" />
+    <result column="delivery_status" jdbcType="INTEGER" property="deliveryStatus" />
+    <result column="failure_reason" jdbcType="VARCHAR" property="failureReason" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    calendar_id, task_id, timeline_id, waybill_id, vendor_id, work_start_time, work_end_time, 
+    truck_id, driver_id, work_status, delivery_status, failure_reason
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.task.domain.TaskCalendarExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from task_calendar
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from task_calendar
+    where calendar_id = #{calendarId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from task_calendar
+    where calendar_id = #{calendarId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="calendar_id" keyProperty="calendarId" parameterType="com.juma.tgm.task.domain.TaskCalendar" useGeneratedKeys="true">
+    insert into task_calendar (task_id, timeline_id, waybill_id, 
+      vendor_id, work_start_time, work_end_time, 
+      truck_id, driver_id, work_status, 
+      delivery_status, failure_reason)
+    values (#{taskId,jdbcType=INTEGER}, #{timelineId,jdbcType=INTEGER}, #{waybillId,jdbcType=INTEGER}, 
+      #{vendorId,jdbcType=INTEGER}, #{workStartTime,jdbcType=TIMESTAMP}, #{workEndTime,jdbcType=TIMESTAMP}, 
+      #{truckId,jdbcType=INTEGER}, #{driverId,jdbcType=INTEGER}, #{workStatus,jdbcType=INTEGER}, 
+      #{deliveryStatus,jdbcType=INTEGER}, #{failureReason,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="calendar_id" keyProperty="calendarId" parameterType="com.juma.tgm.task.domain.TaskCalendar" useGeneratedKeys="true">
+    insert into task_calendar
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="timelineId != null">
+        timeline_id,
+      </if>
+      <if test="waybillId != null">
+        waybill_id,
+      </if>
+      <if test="vendorId != null">
+        vendor_id,
+      </if>
+      <if test="workStartTime != null">
+        work_start_time,
+      </if>
+      <if test="workEndTime != null">
+        work_end_time,
+      </if>
+      <if test="truckId != null">
+        truck_id,
+      </if>
+      <if test="driverId != null">
+        driver_id,
+      </if>
+      <if test="workStatus != null">
+        work_status,
+      </if>
+      <if test="deliveryStatus != null">
+        delivery_status,
+      </if>
+      <if test="failureReason != null">
+        failure_reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="timelineId != null">
+        #{timelineId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillId != null">
+        #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="workStartTime != null">
+        #{workStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workEndTime != null">
+        #{workEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="truckId != null">
+        #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null">
+        #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="workStatus != null">
+        #{workStatus,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryStatus != null">
+        #{deliveryStatus,jdbcType=INTEGER},
+      </if>
+      <if test="failureReason != null">
+        #{failureReason,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.task.domain.TaskCalendarExample" resultType="java.lang.Long">
+    select count(*) from task_calendar
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.task.domain.TaskCalendar">
+    update task_calendar
+    <set>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="timelineId != null">
+        timeline_id = #{timelineId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillId != null">
+        waybill_id = #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null">
+        vendor_id = #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="workStartTime != null">
+        work_start_time = #{workStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workEndTime != null">
+        work_end_time = #{workEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="truckId != null">
+        truck_id = #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="driverId != null">
+        driver_id = #{driverId,jdbcType=INTEGER},
+      </if>
+      <if test="workStatus != null">
+        work_status = #{workStatus,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryStatus != null">
+        delivery_status = #{deliveryStatus,jdbcType=INTEGER},
+      </if>
+      <if test="failureReason != null">
+        failure_reason = #{failureReason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where calendar_id = #{calendarId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.task.domain.TaskCalendar">
+    update task_calendar
+    set task_id = #{taskId,jdbcType=INTEGER},
+      timeline_id = #{timelineId,jdbcType=INTEGER},
+      waybill_id = #{waybillId,jdbcType=INTEGER},
+      vendor_id = #{vendorId,jdbcType=INTEGER},
+      work_start_time = #{workStartTime,jdbcType=TIMESTAMP},
+      work_end_time = #{workEndTime,jdbcType=TIMESTAMP},
+      truck_id = #{truckId,jdbcType=INTEGER},
+      driver_id = #{driverId,jdbcType=INTEGER},
+      work_status = #{workStatus,jdbcType=INTEGER},
+      delivery_status = #{deliveryStatus,jdbcType=INTEGER},
+      failure_reason = #{failureReason,jdbcType=VARCHAR}
+    where calendar_id = #{calendarId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="calendarId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into task_calendar
+    (task_id,timeline_id,waybill_id,vendor_id,work_start_time,work_end_time,truck_id,driver_id,work_status,delivery_status,failure_reason) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.taskId},#{item.timelineId},#{item.waybillId},#{item.vendorId},#{item.workStartTime},#{item.workEndTime},#{item.truckId},#{item.driverId},#{item.workStatus},#{item.deliveryStatus},#{item.failureReason})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_calendar
+      <set>
+        calendar_id = #{item.calendarId},
+        task_id = #{item.taskId},
+        timeline_id = #{item.timelineId},
+        waybill_id = #{item.waybillId},
+        vendor_id = #{item.vendorId},
+        work_start_time = #{item.workStartTime},
+        work_end_time = #{item.workEndTime},
+        truck_id = #{item.truckId},
+        driver_id = #{item.driverId},
+        work_status = #{item.workStatus},
+        delivery_status = #{item.deliveryStatus},
+        failure_reason = #{item.failureReason},
+      </set>
+      where calendar_id = #{item.calendarId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update task_calendar
+      <set>
+        <if test="item.taskId != null">
+          task_id = #{item.taskId,jdbcType=INTEGER},
+        </if>
+        <if test="item.timelineId != null">
+          timeline_id = #{item.timelineId,jdbcType=INTEGER},
+        </if>
+        <if test="item.waybillId != null">
+          waybill_id = #{item.waybillId,jdbcType=INTEGER},
+        </if>
+        <if test="item.vendorId != null">
+          vendor_id = #{item.vendorId,jdbcType=INTEGER},
+        </if>
+        <if test="item.workStartTime != null">
+          work_start_time = #{item.workStartTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.workEndTime != null">
+          work_end_time = #{item.workEndTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.truckId != null">
+          truck_id = #{item.truckId,jdbcType=INTEGER},
+        </if>
+        <if test="item.driverId != null">
+          driver_id = #{item.driverId,jdbcType=INTEGER},
+        </if>
+        <if test="item.workStatus != null">
+          work_status = #{item.workStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.deliveryStatus != null">
+          delivery_status = #{item.deliveryStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.failureReason != null">
+          failure_reason = #{item.failureReason,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where calendar_id = #{item.calendarId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

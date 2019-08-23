@@ -1,0 +1,1079 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillDao">
+	<sql id="QUERY_COLUMN_LIST">
+		waybill_id AS waybillId,
+		truck_customer_id AS truckCustomerId,
+		truck_customer_name AS truckCustomerName,
+		truck_id AS truckId,
+		plate_number AS plateNumber,
+		driver_id AS driverId,
+		driver_name AS driverName,
+		driver_type AS driverType,
+		business_branch AS businessBranch,
+		project_id AS projectId,
+		project_name AS projectName,
+		customer_id as customerId,
+		customer_name as customerName,
+		waybill_no AS waybillNo,
+		status AS status,
+		region_code AS regionCode,
+		status_view AS statusView,
+		receive_way AS receiveWay,
+		estimate_distance AS estimateDistance,
+		estimate_time_consumption AS estimateTimeConsumption,
+		estimate_freight AS estimateFreight,
+		calculated_freight AS calculatedFreight,
+		after_tax_freight AS afterTaxFreight,
+		show4_driver_freight AS show4DriverFreight,
+		plan_delivery_time AS planDeliveryTime,
+		delivery_time AS deliveryTime,
+		waybill_remark AS waybillRemark,
+		receipt_type AS receiptType,
+		receiving_time AS receivingTime,
+		order_no AS orderNo,
+		finish_time AS finishTime,
+		arrive_depot_time AS arriveDepotTime,
+		create_time AS createTime,
+		is_delete AS isDelete,
+		create_user_id AS createUserId,
+		is_late AS isLate,
+		is_test AS test,
+		compare_result as compareResult,
+		update_freight_remark as updateFreightRemark,
+		assign_waybill_remark as
+		assignWaybillRemark,
+		waybill_source as waybillSource,
+		rebate_rate as rebateRate,
+		actual_mileage as actualMileage,
+		need_receipt as needReceipt,
+		waybill_cancel_remark as waybillCancelRemark,
+		waybill_unbundling_reason as waybillUnbundlingReason,
+		is_submit_match as isSubmitMatch,
+		customer_manager_id as customerManagerId,
+		customer_manager_name as customerManagerName,
+		assign_car_feedback as assignCarFeedback,
+		cancel_channel as cancelChannel,
+		tolls as tolls,
+		entry_license as entryLicense,
+		goods_weight as goodsWeight,
+		goods_volume as goodsVolume,
+		vehicle_box_type as vehicleBoxType,
+		is_change_delivery_point as isChangeDeliveryPoint,
+		area_code as areaCode,
+		flight_usage_id as flightUsageId,
+		tenant_id as tenantId,
+		tenant_code as tenantCode,
+		cm_estimate_finish_time as cmEstimateFinishTime,
+		only_load_cargo as onlyLoadCargo,
+		need_delivery_point_note as needDeliveryPointNote,
+		update_freight_audit_status as updateFreightAuditStatus,
+		freight_to_be_audited as freightToBeAudited,
+		update_freight_audit_remark as updateFreightAuditRemark,
+		reconciliation_status as reconciliationStatus,
+		reconciliation_no as reconciliationNo,
+		settlement_status as settlementStatus,
+		receipt_status as receiptStatus,
+		vendor_id as vendorId,
+		road_map_id AS roadMapId,
+		receivable_reconcilication_status as receivableReconcilicationStatus,
+		receivable_reconcilication_no as receivableReconcilicationNo,
+		vehicle_type as vehicleType,
+		vehicle_to_vendor as vehicleToVendor,
+		department_id as departmentId,
+		contract_to_company_credit_code as contractToCompanyCreditCode,
+		pay_to_company as payToCompany,
+		pay_to_company_credit_code as payToCompanyCreditCode,
+		project_manager_user_id as projectManagerUserId,
+		logistics_label as logisticsLabel,
+		project_manager_user_name as projectManagerUserName,
+		create_user_name as createUserName
+		
+	</sql>
+
+	<sql id="QUERY_FROM_TABLE"><![CDATA[
+
+
+        FROM waybill 
+
+
+        ]]></sql>
+
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+		    <![CDATA[AND is_delete = false ]]>
+			<if test="tenantId != null"><![CDATA[ AND tenant_id = #{tenantId}]]></if>
+			<if test="waybillId != null"><![CDATA[ AND waybill_id = #{waybillId}]]></if>
+			<if test="businessBranch != null"><![CDATA[AND business_branch=#{businessBranch}]]></if>
+			<if test="driverId != null"><![CDATA[AND driver_id = #{driverId}]]></if>
+			<if test="truckId != null"><![CDATA[AND truck_id = #{truckId}]]></if>
+			<if test="customerId != null"><![CDATA[AND customer_id = #{customerId}]]></if>
+			<if test="projectId != null"><![CDATA[AND project_id = #{projectId}]]></if>
+			<if test="vendorId != null"><![CDATA[AND vendor_id = #{vendorId}]]></if>
+			<if test="customerManagerId != null"><![CDATA[AND customer_manager_id = #{customerManagerId}]]></if>
+			<if test="driverName != null"><![CDATA[AND driver_name = #{driverName}]]></if>
+			<if test="truckCustomerName != null"><![CDATA[AND truck_customer_name = #{truckCustomerName}]]></if>
+			<if test="plateNumber != null"><![CDATA[AND plate_number = #{plateNumber}]]></if>
+			<if test="customerManagerName != null"><![CDATA[AND customer_manager_name = #{customerManagerName}]]></if>
+			<if test="driverType != null"><![CDATA[AND driver_type = #{driverType}]]></if>
+			<if test="receiptType != null"><![CDATA[AND receipt_type = #{receiptType}]]></if>
+			<if test="status != null"><![CDATA[AND status = #{status}]]></if>
+			<if test="statusView != null"><![CDATA[AND status_view = #{statusView}]]></if>
+			<if test="receiveWay != null"><![CDATA[AND receive_way = #{receiveWay}]]></if>
+			<if test="needReceipt != null"><![CDATA[AND need_receipt = #{needReceipt}]]></if>
+			<if test="cancelChannel != null"><![CDATA[AND cancel_channel = #{cancelChannel}]]></if>
+			<if test="freightToBeAudited != null"><![CDATA[AND freight_to_be_audited = #{freightToBeAudited}]]></if>
+			<if test="reconciliationStatus != null"><![CDATA[AND reconciliation_status = #{reconciliationStatus}]]></if>
+			<if test="customerName != null"><![CDATA[AND customer_name = #{customerName}]]></if>
+			<if test="projectName != null"><![CDATA[AND project_name = #{projectName}]]></if>
+			<choose>
+				<when test="truckCustomerId != null">
+                    <![CDATA[AND truck_customer_id = #{truckCustomerId}]]>
+				</when>
+				<otherwise>
+					<if test="waybillSource == 2">
+                        <![CDATA[AND finish_time >= #{finishTime}]]>
+					</if>
+				</otherwise>
+			</choose>
+			<if test="waybillNo != null and waybillNo != ''"><![CDATA[AND waybill_no = #{waybillNo}]]></if>
+			<if test="estimateDistance != null"><![CDATA[AND estimate_distance = #{estimateDistance}]]></if>
+			<if test="estimateTimeConsumption != null">
+                <![CDATA[AND estimate_time_consumption = #{estimateTimeConsumption}]]></if>
+			<if test="estimateFreight != null"><![CDATA[AND estimate_freight = #{estimateFreight}]]></if>
+			<if test="planDeliveryTime != null"><![CDATA[AND plan_delivery_time = #{planDeliveryTime}]]></if>
+			<if test="deliveryTime != null"><![CDATA[AND delivery_time = #{deliveryTime}]]></if>
+			<if test="isChangeDeliveryPoint != null">
+                <![CDATA[AND is_change_delivery_point = #{isChangeDeliveryPoint}]]></if>
+			<if test="needDeliveryPointNote != null">
+                <![CDATA[AND need_delivery_point_note = #{needDeliveryPointNote}]]></if>
+			<if test="waybillRemark != null and waybillRemark != ''">
+                <![CDATA[AND waybill_remark = #{waybillRemark}]]></if>
+
+			<if test="receivingTime != null"><![CDATA[AND receiving_time = #{receivingTime}]]></if>
+
+			<if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+			<if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+			<if test="regionCode != null"><![CDATA[AND region_code = #{regionCode}]]></if>
+
+			<if test="finishTime != null"><![CDATA[AND finish_time < #{finishTime}]]></if>
+
+			<if test="areaCode != null"><![CDATA[AND area_code = #{areacode}]]></if>
+			<if test="goodsWeight != null"><![CDATA[AND goods_weight <= #{goodsWeight}]]></if>
+			<if test="goodsVolume != null"><![CDATA[AND (goods_volume <= #{goodsVolume} or goods_volume is null)]]></if>
+			<if test="reconciliationNo != null"><![CDATA[AND reconciliation_no = #{reconciliationNo}]]></if>
+			<if test="receivableReconcilicationStatus != null"><![CDATA[AND receivable_reconcilication_status = #{receivableReconcilicationStatus}]]></if>
+			<if test="receivableReconcilicationNo != null"><![CDATA[AND receivable_reconcilication_no = #{receivableReconcilicationNo}]]></if>
+			<if test="vehicleType != null"><![CDATA[AND vehicle_type = #{vehicleType}]]></if>
+			<if test="vehicleToVendor != null"><![CDATA[AND vehicle_to_vendor = #{vehicleToVendor}]]></if>
+			<if test="logisticsLabel != null"><![CDATA[AND logistics_label = #{logisticsLabel}]]></if>
+			<if test="departmentId != null"><![CDATA[AND department_id = #{departmentId}]]></if>
+		</where>
+	</sql>
+
+
+	<sql id="PAGE_SEARCH_WHERE_CLAUSE">
+		<where>
+		    <![CDATA[AND is_delete = false ]]>
+			<if test="filters.tenantId != null"><![CDATA[ AND tenant_id = #{filters.tenantId}]]></if>
+			<if test="filters.filterTimeout != null"><![CDATA[AND plan_delivery_time > now()]]></if>
+			<if test="filters.truckCustomerName != null"><![CDATA[AND truck_customer_name=#{filters.truckCustomerName}]]></if>
+			<if test="filters.plateNumber!= null"><![CDATA[AND plate_number = #{filters.plateNumber}]]></if>
+			<if test="filters.customerManagerName!= null"><![CDATA[AND customer_manager_name = #{filters.customerManagerName}]]></if>
+			<if
+				test="filters.projectManagerUserName!= null"><![CDATA[AND project_manager_user_name = #{filters.projectManagerUserName}]]></if>
+			<if
+				test="filters.projectManagerUserId!= null"><![CDATA[AND project_manager_user_id = #{filters.projectManagerUserId}]]></if>
+			<if test="filters.customerName != null"><![CDATA[AND customer_name = #{filters.customerName}]]></if>
+			<if test="filters.projectName != null"><![CDATA[AND project_name = #{filters.projectName}]]></if>
+			<if test='filters.vendorId != null'><![CDATA[AND vendor_id = #{filters.vendorId}]]></if>
+			<if
+				test='filters.projectId != null and filters.projectId.toString() == "ISNULL"'><![CDATA[AND project_id IS NULL]]></if>
+			<if
+				test="filters.projectId != null and filters.projectId.toString() != 'ISNULL'"><![CDATA[AND project_id = #{filters.projectId}]]></if>
+			<!--- 对账单号 -->
+			<if
+				test="filters.reconciliationNo != null and filters.reconciliationNo.toString() == 'ISNULL' "><![CDATA[AND (reconciliation_no IS NULL OR reconciliation_no ='') ]]></if>
+			<if
+				test="filters.reconciliationNo != null and filters.reconciliationNo.toString() != 'ISNULL'"><![CDATA[ AND reconciliation_no = #{filters.reconciliationNo}]]></if>
+			<!-- 用车人列表 -->
+			<if test="filters.truckCustomerIdList != null">
+                <![CDATA[ AND truck_customer_id in]]>
+				<foreach item="item" index="index" collection="filters.truckCustomerIdList"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="filters.driverId != null"><![CDATA[AND driver_id=#{filters.driverId}]]></if>
+			<if test="filters.truckId != null"><![CDATA[AND truck_id=#{filters.truckId}]]></if>
+			<if test="filters.truckCustomerId != null"><![CDATA[AND truck_customer_id=#{filters.truckCustomerId}]]></if>
+			<if test="filters.customerManagerId != null"><![CDATA[AND customer_manager_id = #{filters.customerManagerId}]]></if>
+			<if test="filters.driverName != null"><![CDATA[AND driver_name=#{filters.driverName}]]></if>
+			<if test="filters.vehicleToVendorOrVendorId != null"><![CDATA[AND (vendor_id = #{filters.vehicleToVendorOrVendorId} or vehicle_to_vendor = #{filters.vehicleToVendorOrVendorId})]]></if>
+
+			<if test="filters.regionCode != null">
+                <![CDATA[AND region_code like concat(#{filters.regionCode},'%')]]></if>
+
+			<if test="filters.customerId != null">
+				<choose>
+					<when test="filters.customerId != 0">
+						AND customer_id = #{filters.customerId}
+					</when>
+					<otherwise>
+						AND customer_id is null
+					</otherwise>
+				</choose>
+			</if>
+			<if test="filters.driverIdList != null">
+                <![CDATA[AND driver_id in]]>
+				<foreach item="item" index="index" collection="filters.driverIdList"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<!-- 只可见本业务区域的非分享运单和其他业务区域的分享运单，不可见本业务区域的分享运单 -->
+			<if test="filters.appListFilter != null">
+                <![CDATA[ AND ]]>
+				<foreach item="item" index="index" collection="filters.appListFilter"
+					open="(" separator=" or " close=")">
+					( tenant_id = #{item.tenantId} and area_code like
+					concat(#{item.areaCode},'%'))
+
+				</foreach>
+			</if>
+
+			<if test="filters.tenantIdList != null">
+                <![CDATA[AND tenant_id in]]>
+				<foreach item="item" index="index" collection="filters.tenantIdList"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<!-- 待支付start -->
+			<if test="filters.watingPayFlag != null and filters.watingPayFlag">
+              <![CDATA[AND (status = 5 or (status = 7 and reconciliation_status = 2))]]>
+			</if>
+			<!-- 待支付end -->
+			<!-- 运单来源 -->
+			<if test="filters.listWaybillSource != null">
+                <![CDATA[AND waybill_source in]]>
+				<foreach item="item" index="index" collection="filters.listWaybillSource"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.waybillIds != null and filters.waybillIds.size > 0">
+                <![CDATA[AND waybill_id in]]>
+				<foreach item="item" index="index" collection="filters.waybillIds"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.customerIdList != null">
+				and truck_customer_id IN
+				<foreach collection="filters.customerIdList" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.createUserIdList != null">
+				and create_user_id IN
+				<foreach collection="filters.createUserIdList" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<!-- 企业客户的客户经理 -->
+			<if test="filters.customerManagerIdList != null">
+				and customer_manager_id IN
+				<foreach collection="filters.customerManagerIdList" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<!-- 企业客户 -->
+			<if test="filters.customerInfoIdList != null">
+				and customer_id IN
+				<foreach collection="filters.customerInfoIdList" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.waybillNo != null and filters.waybillNo != '' "><![CDATA[AND waybill_no = #{filters.waybillNo}]]></if>
+			<if test="filters.driverName!= null">
+                <![CDATA[AND driver_id in (select driver_id from driver where nickname=#{filters.driverName})]]></if>
+			<if test="filters.entryLicense != null"><![CDATA[AND entry_license = #{filters.entryLicense}]]></if>
+			<if test="filters.goodsWeight != null"><![CDATA[AND goods_weight <= #{filters.goodsWeight}]]></if>
+			<if test="filters.goodsVolume != null">
+                <![CDATA[AND (goods_volume <= #{filters.goodsVolume} or goods_volume is null)]]></if>
+			<if test="filters.isChangeDeliveryPoint != null">
+                <![CDATA[AND is_change_delivery_point = #{filters.isChangeDeliveryPoint}]]></if>
+			<if test="filters.needDeliveryPointNote != null">
+                <![CDATA[AND need_delivery_point_note = #{filters.needDeliveryPointNote}]]></if>
+			<if test="filters.updateFreightAuditStatus != null">
+                <![CDATA[AND update_freight_audit_status = #{filters.updateFreightAuditStatus}]]></if>
+			<if test="filters.createTime != null"><![CDATA[AND create_time < #{filters.createTime}]]></if>
+			<if test="filters.startFinishTime != null"><![CDATA[AND finish_time >= #{filters.startFinishTime}]]></if>
+			<if test="filters.endFinishTime != null"><![CDATA[AND finish_time <= #{filters.endFinishTime}]]></if>
+			<if test="filters.repotStartTime != null"><![CDATA[AND finish_time >= #{filters.repotStartTime}]]></if>
+			<if test="filters.repotEndTime != null"><![CDATA[AND finish_time <= #{filters.repotEndTime}]]></if>
+			<if test="filters.yearMonth != null"><![CDATA[ AND DATE_FORMAT(finish_time, '%Y-%m') = DATE_FORMAT(#{filters.yearMonth}, 'Y%-m%')]]></if>
+			<if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+			<if test="filters.isQueryProjectWaybill != null">
+				<choose>
+					<when test="filters.isQueryProjectWaybill == 1">
+                        <![CDATA[AND project_id is null]]>
+					</when>
+					<when test="filters.isQueryProjectWaybill == 2">
+                        <![CDATA[AND project_id is not null]]>
+					</when>
+				</choose>
+			</if>
+
+			<!-- 查询实际里程异常的运单：实际里程数据库单位：米，预估里程数据库单位：公里 -->
+			<if
+				test="filters.actualMileageWayill != null and filters.actualMileageWayill">
+                <![CDATA[AND `actual_mileage` > `estimate_distance`*1.3*1000]]>
+			</if>
+            
+            
+            <!-- 针对后台多条件的索引优化 -->
+			<if test="filters.startTime != null"><![CDATA[AND plan_delivery_time >= #{filters.startTime}]]></if>
+			<if test="filters.endTime != null"><![CDATA[AND plan_delivery_time <= #{filters.endTime}]]></if>
+			<if test="filters.planDeliverydate != null">
+                <![CDATA[AND DATE_FORMAT(plan_delivery_time, '%Y-%m') = DATE_FORMAT(#{filters.planDeliverydate}, '%Y-%m')]]></if>
+			<if test="filters.deliveryEndTime != null">
+                <![CDATA[AND plan_delivery_time < #{filters.deliveryEndTime}]]></if>
+
+			<if test="filters.areaCodeList != null">
+                <![CDATA[ AND ]]>
+				<foreach collection="filters.areaCodeList" item="code" open="("
+					separator=" or" close=")">
+					area_code like concat(#{code},'%')
+				</foreach>
+			</if>
+
+			<if test="filters.statusView!= null"><![CDATA[AND status_view = #{filters.statusView}]]></if>
+			<if test="filters.statusViewList != null">
+                <![CDATA[AND status_view in]]>
+				<foreach item="item" index="index" collection="filters.statusViewList"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.status != null"><![CDATA[AND status = #{filters.status}]]></if>
+			<if test="filters.statusList != null">
+                <![CDATA[AND status in]]>
+				<foreach item="item" index="index" collection="filters.statusList"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.backstage == null or !filters.backstage">
+                <![CDATA[AND status <> 0 and order_no != 1]]>
+			</if>
+			<if test="filters.settlementStatus != null"><![CDATA[AND settlement_status = #{filters.settlementStatus}]]></if>
+			<if test="filters.settlementStatusList != null">
+                <![CDATA[ AND settlement_status in]]>
+				<foreach item="item" index="index" collection="filters.settlementStatusList"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.receiptStatus != null"><![CDATA[AND receipt_status = #{filters.receiptStatus}]]></if>
+			<if test="filters.receiptStatusList != null">
+                <![CDATA[ AND receipt_status in]]>
+				<foreach item="item" index="index" collection="filters.receiptStatusList"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.reconciliationStatus != null"><![CDATA[AND reconciliation_status = #{filters.reconciliationStatus}]]></if>
+			<!-- 费用结算模块使用start -->
+			<if test="filters.reconciliationStatusList != null">
+                <![CDATA[ AND reconciliation_status in]]>
+				<foreach item="item" index="index"
+					collection="filters.reconciliationStatusList" open="(" separator=","
+					close=")">
+					#{item}
+				</foreach>
+			</if>
+			<!-- 费用结算模块使用end -->
+			<!-- 改价待审状态 -->
+			<if test="filters.updateFreightAuditStatusList != null">
+				and update_freight_audit_status IN
+				<foreach collection="filters.updateFreightAuditStatusList"
+					item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.receivableReconcilicationStatus != null"><![CDATA[AND receivable_reconcilication_status=#{filters.receivableReconcilicationStatus}]]></if>
+			<if test="filters.receivableReconcilicationNo != null and filters.receivableReconcilicationNo.toString() == 'ISNULL' ">
+				<![CDATA[AND (receivable_reconcilication_no IS NULL OR receivable_reconcilication_no ='') ]]></if>
+			<if test="filters.receivableReconcilicationNo != null and filters.receivableReconcilicationNo.toString() != 'ISNULL'">
+				<![CDATA[ AND receivable_reconcilication_no = #{filters.receivableReconcilicationNo}]]></if>
+			<if test="filters.receivableReconcilicationStatusList != null">
+                <![CDATA[ AND receivable_reconcilication_status in]]>
+				<foreach item="item" index="index"
+					collection="filters.receivableReconcilicationStatusList" open="(" separator=","
+					close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="filters.vehicleType != null"><![CDATA[AND vehicle_type=#{filters.vehicleType}]]></if>
+			<if test="filters.vehicleToVendor != null"><![CDATA[AND vehicle_to_vendor=#{filters.vehicleToVendor}]]></if>
+			<if test="filters.driverType != null"><![CDATA[AND driver_type=#{filters.driverType}]]></if>
+			<if test="filters.receiveWay != null"><![CDATA[AND receive_way = #{filters.receiveWay}]]></if>
+			<if test="filters.receiveWayNotEqual != null"><![CDATA[AND receive_way != #{filters.receiveWayNotEqual}]]></if>
+			<if test="filters.receiptType!= null"><![CDATA[AND receipt_type = #{filters.receiptType}]]></if>
+			<if test="filters.waybillSource != null"><![CDATA[AND waybill_source = #{filters.waybillSource}]]></if>
+			<if test="filters.needReceipt != null"><![CDATA[AND need_receipt = #{filters.needReceipt}]]></if>
+			<if test="filters.isTest != null"><![CDATA[AND is_test = #{filters.isTest}]]></if>
+			<if test="filters.vehicleBoxType != null"><![CDATA[AND vehicle_box_type = #{filters.vehicleBoxType}]]></if>
+			<if test="filters.businessBranch != null"><![CDATA[AND business_branch=#{filters.businessBranch}]]></if>
+			<if test="filters.logisticsLabel != null"><![CDATA[AND logistics_label = #{filters.logisticsLabel}]]></if>
+			<if test="filters.departmentId != null"><![CDATA[AND department_id = #{filters.departmentId}]]></if>
+			<if test="filters.payToCompany != null"><![CDATA[AND pay_to_company = #{filters.payToCompany}]]></if>
+			<if
+				test="filters.contractToCompanyCreditCode != null"><![CDATA[AND contract_to_company_credit_code = #{filters.contractToCompanyCreditCode}]]></if>
+			<if
+				test="filters.payToCompanyCreditCode != null"><![CDATA[AND pay_to_company_credit_code = #{filters.payToCompanyCreditCode}]]></if>
+			<if test="filters.departmentIdIsNull != null"><![CDATA[ AND vehicle_to_vendor is null AND driver_type != 1 AND waybill_source != 8 ]]></if>
+			<if
+				test="filters.priceExceptionFlag != null and filters.priceExceptionFlag">
+				<![CDATA[and (calculated_freight > estimate_freight OR calculated_freight < estimate_freight/1.44)]]></if>
+			<!-- 是否修改路线 -->
+			<if
+				test="filters.isChangeDeliveryPointSign != null and filters.isChangeDeliveryPointSign == 1">
+				<![CDATA[AND is_change_delivery_point = 1]]></if>
+			<if
+				test="filters.isChangeDeliveryPointSign != null and filters.isChangeDeliveryPointSign == 2">
+				<![CDATA[AND is_change_delivery_point != 1]]></if>
+			<if
+					test="filters.queryNotReconciliation != null"><![CDATA[ AND (reconciliation_status = 1 or receivable_reconcilication_status = 1)]]></if>
+		</where>
+	</sql>
+
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<choose>
+			<when test="orderBy == null">
+				order by create_time desc
+			</when>
+			<otherwise>
+				order by ${orderBy} ${orderSort}
+			</otherwise>
+		</choose>
+		limit #{startOffSet}, #{endOffSet}
+	</sql>
+
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="truckCustomerId != null"><![CDATA[truck_customer_id = #{truckCustomerId},]]></if>
+			<if test="truckCustomerName != null"><![CDATA[truck_customer_name = #{truckCustomerName},]]></if>
+			<if test="driverId != null"><![CDATA[driver_id = #{driverId},]]></if>
+			<if test="driverName != null"><![CDATA[driver_name = #{driverName},]]></if>
+			<if test="driverType != null"><![CDATA[driver_type = #{driverType},]]></if>
+			<if test="waybillNo != null and waybillNo != ''"><![CDATA[waybill_no = #{waybillNo},]]></if>
+			<if test="estimateDistance != null"><![CDATA[estimate_distance = #{estimateDistance},]]></if>
+			<if test="estimateTimeConsumption != null">
+                <![CDATA[estimate_time_consumption = #{estimateTimeConsumption},]]></if>
+			<if test="estimateFreight != null"><![CDATA[estimate_freight = #{estimateFreight},]]></if>
+			<if test="calculatedFreight != null"><![CDATA[calculated_freight = #{calculatedFreight},]]></if>
+			<if test="show4DriverFreight != null"><![CDATA[show4_driver_freight = #{show4DriverFreight},]]></if>
+			<if test="afterTaxFreight != null"><![CDATA[after_tax_freight = #{afterTaxFreight},]]></if>
+			<if test="planDeliveryTime != null"><![CDATA[plan_delivery_time = #{planDeliveryTime},]]></if>
+			<if test="deliveryTime != null"><![CDATA[delivery_time = #{deliveryTime},]]></if>
+			<if test="waybillRemark != null and waybillRemark != ''"><![CDATA[waybill_remark = #{waybillRemark},]]></if>
+
+			<if test="receiptType != null"><![CDATA[receipt_type = #{receiptType},]]></if>
+			<if test="receivingTime != null"><![CDATA[receiving_time = #{receivingTime},]]></if>
+			<if test="finishTime != null"><![CDATA[finish_time = #{finishTime},]]></if>
+			<if test="arriveDepotTime != null"><![CDATA[arrive_depot_time = #{arriveDepotTime},]]></if>
+            <![CDATA[last_update_time = now(),]]>
+			<if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+			<if test="status != null"><![CDATA[status = #{status},]]></if>
+			<if test="receiveWay != null"><![CDATA[receive_way = #{receiveWay},]]></if>
+			<if test="statusView != null"><![CDATA[status_view = #{statusView},]]></if>
+			<if test="truckId != null"><![CDATA[truck_id = #{truckId},]]></if>
+			<if test="plateNumber != null"><![CDATA[plate_number = #{plateNumber},]]></if>
+			<if test="orderNo != null"><![CDATA[order_no = #{orderNo},]]></if>
+			<if test="compareResult != null"><![CDATA[compare_result = #{compareResult},]]></if>
+			<if test="updateFreightRemark != null"><![CDATA[update_freight_remark = #{updateFreightRemark},]]></if>
+			<if test="assignWaybillRemark != null"><![CDATA[assign_waybill_remark = #{assignWaybillRemark},]]></if>
+			<if test="waybillSource != null"><![CDATA[waybill_source = #{waybillSource},]]></if>
+			<if test="regionCode != null"><![CDATA[region_code = #{regionCode},]]></if>
+			<if test="customerId != null"><![CDATA[customer_id = #{customerId},]]></if>
+			<if test="customerName != null"><![CDATA[customer_name = #{customerName},]]></if>
+			<if test="projectId != null"><![CDATA[project_id = #{projectId},]]></if>
+			<if test="projectName != null"><![CDATA[project_name = #{projectName},]]></if>
+			<if test="rebateRate != null"><![CDATA[rebate_rate = #{rebateRate},]]></if>
+			<if test="actualMileage != null"><![CDATA[actual_mileage = #{actualMileage},]]></if>
+			<if test="tolls != null"><![CDATA[tolls = #{tolls},]]></if>
+			<if test="needReceipt != null"><![CDATA[need_receipt = #{needReceipt},]]></if>
+			<if test="waybillCancelRemark != null"><![CDATA[waybill_cancel_remark = #{waybillCancelRemark},]]></if>
+			<if test="waybillUnbundlingReason != null">
+                <![CDATA[waybill_unbundling_reason = #{waybillUnbundlingReason},]]></if>
+			<if test="isSubmitMatch != null"><![CDATA[is_submit_match = #{isSubmitMatch},]]></if>
+			<if test="customerManagerId != null"><![CDATA[customer_manager_id = #{customerManagerId},]]></if>
+			<if test="customerManagerName != null"><![CDATA[customer_manager_name = #{customerManagerName},]]></if>
+			<if test="assignCarFeedback != null"><![CDATA[assign_car_feedback = #{assignCarFeedback},]]></if>
+			<if test="cancelChannel != null"><![CDATA[cancel_channel = #{cancelChannel},]]></if>
+			<if test="entryLicense != null"><![CDATA[entry_license = #{entryLicense},]]></if>
+			<if test="goodsWeight != null"><![CDATA[ goods_weight = #{goodsWeight},]]></if>
+			<if test="goodsVolume != null"><![CDATA[ goods_volume = #{goodsVolume},]]></if>
+			<if test="isChangeDeliveryPoint != null">
+                <![CDATA[is_change_delivery_point = #{isChangeDeliveryPoint},]]></if>
+			<if test="flightUsageId != null"><![CDATA[flight_usage_id = #{flightUsageId},]]></if>
+			<if test="isLate != null"><![CDATA[is_late = #{isLate},]]></if>
+			<if test="vehicleBoxType != null"><![CDATA[vehicle_box_type = #{vehicleBoxType},]]></if>
+
+			<if test="cmEstimateFinishTime != null"><![CDATA[cm_estimate_finish_time = #{cmEstimateFinishTime},]]></if>
+			<if test="onlyLoadCargo != null"><![CDATA[only_load_cargo = #{onlyLoadCargo},]]></if>
+			<if test="needDeliveryPointNote != null">
+                <![CDATA[need_delivery_point_note = #{needDeliveryPointNote},]]></if>
+			<if test="updateFreightAuditStatus != null">
+                <![CDATA[update_freight_audit_status = #{updateFreightAuditStatus},]]></if>
+			<if test="freightToBeAudited != null"><![CDATA[freight_to_be_audited = #{freightToBeAudited},]]></if>
+			<if test="updateFreightAuditRemark != null">
+                <![CDATA[update_freight_audit_remark = #{updateFreightAuditRemark},]]></if>
+			<if test="areaCode != null"><![CDATA[area_code = #{areaCode},]]></if>
+			<if test="tenantId != null"><![CDATA[tenant_id = #{tenantId},]]></if>
+			<if test="reconciliationStatus != null"><![CDATA[reconciliation_status = #{reconciliationStatus},]]></if>
+			<if test="reconciliationNo != null"><![CDATA[reconciliation_no = #{reconciliationNo},]]></if>
+			<if test="settlementStatus != null"><![CDATA[settlement_status = #{settlementStatus},]]></if>
+			<if test="receiptStatus != null"><![CDATA[receipt_status = #{receiptStatus},]]></if>
+			<if test="vendorId != null"><![CDATA[vendor_id = #{vendorId},]]></if>
+			<if test="receivableReconcilicationStatus != null"><![CDATA[receivable_reconcilication_status = #{receivableReconcilicationStatus},]]></if>
+			<if test="receivableReconcilicationNo != null"><![CDATA[receivable_reconcilication_no = #{receivableReconcilicationNo},]]></if>
+			<if test="vehicleType != null"><![CDATA[vehicle_type = #{vehicleType},]]></if>
+			<if test="vehicleToVendor != null"><![CDATA[vehicle_to_vendor = #{vehicleToVendor},]]></if>
+			<if test="departmentId != null"><![CDATA[department_id = #{departmentId},]]></if>
+			<if test="logisticsLabel != null"><![CDATA[logistics_label = #{logisticsLabel},]]></if>
+			<if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if><![CDATA[last_update_time = now(),]]>
+		</set>
+	</sql>
+
+	<!--用于客户经理业绩计算 -->
+	<sql id="QUERY_WAYBILL_FEE_COLUMN">
+		waybill_id AS waybillId,
+		waybill_no AS waybillNo,
+		estimate_freight AS estimateFreight,
+		plan_delivery_time AS planDeliveryTime,
+		finish_time AS finishTime,
+		customer_id as customerId,
+		customer_manager_id as customerManagerId,
+		status AS status,
+		status_view AS statusView
+	</sql>
+
+	<insert id="insert" parameterType="waybill" useGeneratedKeys="true"
+		keyProperty="waybillId">
+    <![CDATA[
+
+      insert into waybill
+		(finish_time,business_branch,flight_usage_id,truck_customer_id, truck_customer_name, driver_id, driver_name,
+		driver_type, truck_id, plate_number,is_test, waybill_no, status,status_view,region_code,receive_way, estimate_distance, estimate_time_consumption, estimate_freight, calculated_freight,show4_driver_freight, after_tax_freight, plan_delivery_time,delivery_time, waybill_remark, receipt_type, receiving_time, order_no, create_time, create_user_id, is_delete,waybill_source,customer_id,customer_name,project_id,project_name,rebate_rate,actual_mileage,tolls,need_receipt,waybill_cancel_remark,compare_result,waybill_unbundling_reason,is_submit_match,customer_manager_id, customer_manager_name,assign_car_feedback,entry_license,goods_weight,goods_volume,vehicle_box_type,is_change_delivery_point,area_code, tenant_code, tenant_id,cm_estimate_finish_time,only_load_cargo,need_delivery_point_note, update_freight_audit_status, freight_to_be_audited, update_freight_audit_remark, reconciliation_status, settlement_status, receipt_status,vendor_id,road_map_id, receivable_reconcilication_status,receivable_reconcilication_no, vehicle_type, vehicle_to_vendor, department_id, pay_to_company,project_manager_user_id,project_manager_user_name,create_user_name,logistics_label, pay_to_company_credit_code, contract_to_company_credit_code)
+	values
+		(#{finishTime},#{businessBranch},#{flightUsageId},#{truckCustomerId}, #{truckCustomerName},#{driverId}, #{driverName}, #{driverType}, #{truckId}, #{plateNumber},#{test}, #{waybillNo}, #{status},#{statusView},#{regionCode},#{receiveWay}, #{estimateDistance}, #{estimateTimeConsumption}, #{estimateFreight}, #{calculatedFreight},#{show4DriverFreight}, #{afterTaxFreight}, #{planDeliveryTime}, #{deliveryTime}, #{waybillRemark}, #{receiptType}, #{receivingTime}, 0, now(),#{createUserId}, false,#{waybillSource},#{customerId},#{customerName},#{projectId},#{projectName},#{rebateRate},#{actualMileage},#{tolls},#{needReceipt},#{waybillCancelRemark},#{compareResult},#{waybillUnbundlingReason},0,#{customerManagerId}, #{customerManagerName},#{assignCarFeedback},#{entryLicense},#{goodsWeight},#{goodsVolume},#{vehicleBoxType},#{isChangeDeliveryPoint},#{areaCode},#{tenantCode}, #{tenantId},#{cmEstimateFinishTime},#{onlyLoadCargo},#{needDeliveryPointNote}, #{updateFreightAuditStatus}, #{freightToBeAudited}, #{updateFreightAuditRemark}, #{reconciliationStatus}, #{settlementStatus}, #{receiptStatus},#{vendorId},#{roadMapId},#{receivableReconcilicationStatus},#{receivableReconcilicationNo},#{vehicleType},#{vehicleToVendor},#{departmentId},#{payToCompany},#{projectManagerUserId},#{projectManagerUserName},#{createUserName},#{logisticsLabel}, #{payToCompanyCreditCode}, #{contractToCompanyCreditCode})
+        ]]>
+	</insert>
+	<select id="lastSequence" resultType="long"><![CDATA[
+        SELECT LAST_INSERT_ID() AS id
+        ]]></select>
+
+	<update id="removeCustomerId" parameterType="java.lang.Integer">
+  	<![CDATA[
+        update waybill set customer_id = null, customer_name = null where waybill_id = #{waybillId}
+        ]]>
+	</update>
+
+	<update id="update" parameterType="waybill">
+        <![CDATA[UPDATE waybill ]]>
+		<include refid="UPDATE_COLUMN_SET" />
+		<where>
+			<if test="waybillId != null"><![CDATA[AND waybill_id=#{waybillId}]]></if>
+			<if test="waybillIds != null and waybillIds.size!=0">
+                <![CDATA[ AND waybill_id in]]>
+				<foreach collection="waybillIds" item="waybill_id" open="("
+					separator="," close=")">
+                    <![CDATA[#{waybill_id}]]>
+				</foreach>
+			</if>
+		</where>
+	</update>
+
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array"
+		resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+        <![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="waybill_id" open="("
+			separator="," close=")">
+            <![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<select id="get" parameterType="java.lang.Integer" resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+        <![CDATA[where waybill_id=#{waybillId} ]]>
+	</select>
+
+	<select id="getForUpdate" parameterType="java.lang.Integer"
+		resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+        <![CDATA[where waybill_id=#{waybillId} for update]]>
+	</select>
+
+	<select id="loadAll" resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+	</select>
+	<select id="findByExample" parameterType="waybill" resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="QUERY_WHERE_CLAUSE" />
+		order by finish_time desc
+	</select>
+	<select id="selectEntryList" resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="QUERY_WHERE_CLAUSE" />
+		<if test="waybillIds != null">
+			<foreach collection="waybillIds" item="waybill_id" open="("
+				separator="," close=")">
+                <![CDATA[#{waybill_id}]]>
+			</foreach>
+		</if>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION" />
+	</select>
+
+	<select id="getNextSequence" resultType="int" parameterType="java.lang.String">
+    <![CDATA[
+
+
+        SELECT  Auto_increment ]]>
+    <![CDATA[ FROM information_schema.TABLES]]>
+    <![CDATA[ WHERE TABLE_SCHEMA = '${value}' and table_name = 'waybill'
+
+
+        ]]>
+	</select>
+
+	<select id="selectPageWaybill" resultType="waybill"
+		parameterType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="QUERY_WHERE_CLAUSE" />
+		<include refid="QUERY_ORDER_LIMIT_CONDTION" />
+	</select>
+
+	<!-- 获取运单总数 -->
+	<select id="searchCount" parameterType="com.giants.common.tools.PageCondition"
+		resultType="java.lang.Integer">
+		select count(1)
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+	</select>
+
+	<select id="search" resultType="waybill"
+		parameterType="com.giants.common.tools.PageCondition">
+		select
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+		<include refid="QUERY_ORDER_LIMIT_CONDTION" />
+	</select>
+
+	<!-- 获取超时运单 -->
+	<select id="getOvertimeWaybill" resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<where>
+            <![CDATA[
+        and status in (-2, 1)
+        and plan_delivery_time <= now()
+        AND `plan_delivery_time` > DATE_ADD(now(),INTERVAL -1 DAY)
+      ]]>
+		</where>
+	</select>
+
+	<!-- 根据条件获取运单id -->
+	<select id="getWaybillIds" parameterType="com.giants.common.tools.PageCondition"
+			resultType="waybill">
+		SELECT
+		waybill_id waybillId
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+	</select>
+
+	<!-- 根据条件获取运费(税前，税后) -->
+	<select id="getFreight" parameterType="com.giants.common.tools.PageCondition"
+		resultType="waybill">
+		SELECT
+		`estimate_freight` as estimateFreight,
+		after_tax_freight as afterTaxfreight,
+		show4_driver_freight as show4DriverFreight
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+	</select>
+
+	<!-- 根据条件获取运费(税前，税后，司机结算价) -->
+	<select id="getFreightList" parameterType="com.giants.common.tools.PageCondition"
+		resultType="waybill">
+		SELECT SUM(`estimate_freight`) as estimateFreight,
+		SUM(`after_tax_freight`) as afterTaxfreight,
+		SUM(`show4_driver_freight`) as show4DriverFreight,
+		driver_id as driverId
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+		group by driver_id
+	</select>
+
+	<!-- 根据条件获取运费(税前，税后, 司机搬运费) -->
+	<select id="getIncomeInfo" parameterType="com.giants.common.tools.PageCondition"
+		resultType="com.juma.tgm.base.domain.BaseIncomeInfo">
+		SELECT SUM(estimate_freight) preTaxIncome, SUM(after_tax_freight)
+		afterTaxIncome ,SUM(wp.`driver_handling_cost`) driverHandlingCost
+		from
+		waybill w LEFT JOIN waybill_param wp ON w.`waybill_id` =
+		wp.`waybill_id`
+		<where>
+			AND w.status in (5, 7) and w.is_delete = false
+			<if test="filters != null">
+				<if test="filters.driverId != null"><![CDATA[AND w.driver_id=#{filters.driverId}]]></if>
+				<if test="filters.truckCustomerId != null">
+                    <![CDATA[AND w.truck_customer_id=#{filters.truckCustomerId}]]></if>
+				<if test="filters.planDeliverydate != null">
+                    <![CDATA[AND DATE_FORMAT(w.plan_delivery_time, '%Y-%m') = DATE_FORMAT(#{filters.planDeliverydate}, '%Y-%m')]]></if>
+			</if>
+		</where>
+	</select>
+
+	<!-- 还有30分钟就需要配送的运单 -->
+	<select id="getWillUseCarWaybill" resultType="waybill"
+		parameterType="waybill">
+		select
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<where>
+			<if test="planDeliveryTime != null">
+                <![CDATA[ and plan_delivery_time >= #{planDeliveryTime} and plan_delivery_time < DATE_ADD(#{planDeliveryTime},INTERVAL 2 MINUTE)]]>
+			</if>
+			and status in (2, 3)
+		</where>
+	</select>
+
+	<!-- 还有30分钟就需要结束配送的运单 -->
+	<select id="getWaybillShouldFinish" resultType="waybill"
+		parameterType="waybill">
+		select
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+		<where>
+			<if test="cmEstimateFinishTime != null">
+                <![CDATA[ and cm_estimate_finish_time <= DATE_ADD(#{cmEstimateFinishTime},INTERVAL 2 MINUTE) and cm_estimate_finish_time > #{cmEstimateFinishTime}]]>
+			</if>
+			and status = 4
+		</where>
+	</select>
+
+	<select id="getWaybillIdsCount" parameterType="java.util.List"
+		resultType="int">
+        <![CDATA[SELECT count(1)]]>
+		<include refid="QUERY_FROM_TABLE" />
+		<if test="list != null">
+            <![CDATA[ where waybill_id in]]>
+			<foreach item="item" index="index" collection="list" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		group by customer_id
+	</select>
+	<!-- 根据条件获取费用 -->
+	<select id="findCountCostByParam" resultType="WaybillParam"
+		parameterType="com.giants.common.tools.PageCondition">
+		select
+		SUM(wp.driver_handling_cost) as driverHandlingCost,
+		SUM(wp.laborer_handling_cost) as laborerHandlingCost
+		from waybill w
+		left join waybill_param wp on wp.waybill_id = w.waybill_id
+		<where>
+			and is_delete = false
+			<if test="filters != null">
+				<if test="filters.customerId != null and filters.customerId != 0">
+					<choose>
+						<when test="filters.customerId != 0">
+							AND w.customer_id = #{filters.customerId}
+						</when>
+						<otherwise>
+							AND w.customer_id is null
+						</otherwise>
+					</choose>
+				</if>
+				<if test="filters.truckCustomerId != null">AND w.truck_customer_id = #{filters.truckCustomerId}
+				</if>
+				<if test="filters.startTime != null"><![CDATA[AND w.plan_delivery_time >= #{filters.startTime}]]></if>
+				<if test="filters.endTime != null">
+                    <![CDATA[AND date_format(w.plan_delivery_time,'%Y-%m-%d') <= #{filters.endTime}]]></if>
+				<if test="filters.planDeliverydate != null">
+                    <![CDATA[AND DATE_FORMAT(w.plan_delivery_time, '%Y-%m') = DATE_FORMAT(#{filters.planDeliverydate}, '%Y-%m')]]></if>
+				<if test="filters.status != null">AND w.status = #{filters.status}</if>
+			</if>
+		</where>
+	</select>
+	<select id="findWaybillPlan" resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+        <![CDATA[
+	    where plan_delivery_time BETWEEN DATE_FORMAT(date_add(current_date(),interval 1 day),'%Y-%m-%d 00:00:00') 
+			and DATE_FORMAT(date_add(current_date(),interval 1 day),'%Y-%m-%d 12:00:00') 
+			and customer_id is not NULL and `status` = 1 
+			and is_submit_match = 0 and (area_code like '000000%' or area_code like '00010000%');
+		]]>
+	</select>
+
+	<update id="batchUpdate" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			update waybill
+			<set>
+				driver_id=null,
+				driver_type=null,
+				driver_name=null,
+				truck_id=null,
+				plate_number=null,
+				vehicle_type=null,
+				vehicle_to_vendor=null,
+				status=#{item.status},
+				status_view=#{item.statusView},
+				last_update_time =now()
+			</set>
+			where waybill_id = ${item.waybillId}
+		</foreach>
+	</update>
+
+	<update id="batchUpdateHasReconciliation" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			update waybill
+			<set>
+				<if test="item.reconciliationStatus != null"><![CDATA[ reconciliation_status =#{item.reconciliationStatus}, ]]></if>
+				<if test="item.settlementStatus != null"><![CDATA[ settlement_status =#{item.settlementStatus}, ]]></if>
+				last_update_time =now()
+			</set>
+			where waybill_id = #{item.waybillId}
+		</foreach>
+	</update>
+
+	<update id="batchFinishWaybill" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			update waybill
+			<set>
+			    reconciliation_status=#{item.reconciliationStatus},
+				receivable_reconcilication_status=#{item.receivableReconcilicationStatus},
+				status = #{item.status},
+				status_view = #{item.statusView},
+				last_update_time = now()
+			</set>
+			where waybill_id in ${item.waybillId}
+		</foreach>
+	</update>
+
+	<!-- 根据车辆查最新配送中订单 -->
+	<select id="findLastRunningWaybillByTruckId" parameterType="int"
+		resultType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+        <![CDATA[
+	    where truck_id = #{truckId} and status_view = 3  order by plan_delivery_time desc limit 0,1;
+		]]>
+	</select>
+
+	<!-- 根据TMS系统的车辆ID获取待配送和配送中的运单 -->
+	<select id="findRunningWaybillByTruckId" resultType="waybill"
+		parameterType="int">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+        <![CDATA[ where  truck_id = #{truckId} and status_view in (2,3) order by status_view desc]]>
+	</select>
+
+	<!-- 已经配送完成的运单导入ERP -->
+	<select id="findWaybillByIds" resultType="waybill"
+		parameterType="waybill">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST" />
+		<include refid="QUERY_FROM_TABLE" />
+        <![CDATA[ where waybill_id in]]>
+		<if test="waybillIds != null">
+			<foreach collection="waybillIds" item="waybill_id" open="("
+				separator="," close=")">
+                <![CDATA[#{waybill_id}]]>
+			</foreach>
+		</if>
+	</select>
+
+	<!--客户经理各种条件下的税前费用统计 -->
+	<select id="countAmount" resultType="java.math.BigDecimal">
+		SELECT sum(estimate_freight)
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+
+	</select>
+
+	<!--客户欠款运单列表 -->
+	<select id="findDebtWaybill" resultType="waybill"
+		parameterType="com.giants.common.tools.PageCondition">
+		SELECT
+		<include refid="QUERY_WAYBILL_FEE_COLUMN" />
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+		<include refid="QUERY_ORDER_LIMIT_CONDTION" />
+	</select>
+
+	<!--客户欠款运单列表 计数 -->
+	<select id="countDebtWaybill" resultType="int">
+		SELECT COUNT (1)
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+
+	</select>
+
+	<!-- 按客户分组获取一个时间段内的运单数量，税前费用总和 -->
+	<select id="findCustomerDebtBill"
+		resultType="com.juma.tgm.waybill.domain.vo.CustomerManagerDebtDetailVo"
+		parameterType="com.giants.common.tools.PageCondition">
+		SELECT
+		customer_id AS customerId,
+		COUNT(waybill_id) AS billCount,
+		SUM(estimate_freight) AS fee
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+		GROUP BY customer_id
+		<include refid="QUERY_ORDER_LIMIT_CONDTION" />
+	</select>
+
+	<select id="countCustomerDebtBill" resultType="int">
+		SELECT COUNT(1) FROM (
+		SELECT
+		customer_id
+		<include refid="QUERY_FROM_TABLE" />
+		<include refid="PAGE_SEARCH_WHERE_CLAUSE" />
+		GROUP BY customer_id
+		) temp
+	</select>
+	<!-- 根据条件批量更新数据 -->
+	<update id="updateByExample">
+        <![CDATA[UPDATE waybill ]]>
+		<set>
+			<if test="newValue.projectName != null"><![CDATA[project_name = #{newValue.projectName},]]></if>
+			<if test="newValue.customerName != null"><![CDATA[customer_name = #{newValue.customerName},]]></if>
+			<if test="newValue.truckCustomerName != null"><![CDATA[truck_customer_name = #{newValue.truckCustomerName},]]></if>
+			<if test="newValue.driverName != null"><![CDATA[driver_name = #{newValue.driverName},]]></if>
+			<if test="newValue.plateNumber != null"><![CDATA[plate_number = #{newValue.plateNumber},]]></if>
+            <![CDATA[last_update_time = now(),]]>
+			<if test="newValue.lastUpdateUserId != null"><![CDATA[last_update_user_id = #{newValue.lastUpdateUserId},]]></if>
+		</set>
+		<where>
+			<if test="example.projectId != null"><![CDATA[AND project_id = #{example.projectId}]]></if>
+			<if test="example.customerId != null"><![CDATA[AND customer_id = #{example.customerId}]]></if>
+			<if test="example.truckCustomerId != null"><![CDATA[AND truck_customer_id = #{example.truckCustomerId}]]></if>
+			<if test="example.driverId != null"><![CDATA[AND driver_id = #{example.driverId}]]></if>
+			<if test="example.truckId != null"><![CDATA[AND truck_id = #{example.truckId}]]></if>
+		</where>
+	</update>
+	
+	<select id="findUnReconciliationByPlateNumber" parameterType="java.lang.String"
+		resultType="com.juma.tgm.waybill.domain.view.SumForWaybill">
+      <![CDATA[
+      	select 
+      	 	sum(estimate_freight)  sumFreightWithTax
+      	 	,plate_number plateNumber from waybill  
+      ]]>
+		<where>
+        <![CDATA[ plate_number = #{plateNumber} and status_view = 5 and reconciliation_status = 1 ]]>
+		</where>
+	</select>
+
+	<select id="findUnReconciliationByVendorId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+      <![CDATA[
+      	select
+      	 	sum(show4_driver_freight)  sumFreightWithTax from waybill
+      ]]>
+		<where>
+        <![CDATA[ vehicle_to_vendor = #{vendorId} and status_view = 5 and reconciliation_status = 1 ]]>
+		</where>
+	</select>
+
+	<select id="findByReconciliationId" parameterType="java.lang.Integer"
+		resultType="waybill">
+      <![CDATA[select w.waybill_id waybillId, w.`reconciliation_status`  ]]>
+      <![CDATA[FROM `waybill` w LEFT JOIN `reconciliation_item` r  ]]>
+      <![CDATA[ ON r.`waybill_id` = w.waybill_id  ]]>
+		<where>
+        <![CDATA[ r.`reconciliation_id` = #{reconciliationId} ]]>
+		</where>
+	</select>
+
+	<update id="batchUpdateReceivableWaybill" parameterType="java.util.List">
+		<foreach collection="items" separator=";" item="item">
+            <![CDATA[UPDATE waybill ]]>
+			<set>
+				<if test="item.receivableReconcilicationNo != null"><![CDATA[ receivable_reconcilication_no =#{item.receivableReconcilicationNo}, ]]></if>
+				<if test="item.receivableReconcilicationStatus != null"><![CDATA[ receivable_reconcilication_status =#{item.receivableReconcilicationStatus}, ]]></if>
+				<if test="item.receiptStatus != null"><![CDATA[ receipt_status =#{item.receiptStatus}, ]]></if>
+                <![CDATA[last_update_time = now()]]>
+			</set>
+			<where>
+				<![CDATA[ and waybill_id = #{item.waybillId}]]>
+			</where>
+		</foreach>
+	</update>
+	
+	<update id="updateWaybillByReceivableReconcilicationNo" parameterType="waybill">
+		<![CDATA[UPDATE waybill ]]>
+		<set>
+			<if test="receiptStatus != null"><![CDATA[ receipt_status =#{receiptStatus}, ]]></if>
+			<if test="lastUpdateUserId != null"><![CDATA[ last_update_user_id =#{lastUpdateUserId}, ]]></if>
+			<![CDATA[last_update_time = now()]]>
+		</set>
+		<where>
+			<![CDATA[ and receivable_reconcilication_no = #{receivableReconcilicationNo}]]>
+		</where>
+	</update>
+
+	<update id="batchUpdateVendor">
+		<![CDATA[UPDATE waybill ]]>
+		<set>
+			<if test="vendorId != null"><![CDATA[ vehicle_to_vendor = #{vendorId}, ]]></if>
+		</set>
+		<where>
+			<if test="waybillNos != null and waybillNos.size!=0">
+				<![CDATA[ AND waybill_no in]]>
+				<foreach collection="waybillNos" item="waybillNo" open="("
+						 separator="," close=")">
+					<![CDATA[#{waybillNo}]]>
+				</foreach>
+			</if>
+		</where>
+	</update>
+
+</mapper>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.customerManager.dao.FixedDemandDao">
+  <sql id="QUERY_COLUMN_LIST">
+    fixed_demand_id AS fixedDemandId, 
+    customer_manager_id AS customerManagerId, 
+    customer_id AS customerId, 
+    truck_customer_id AS truckCustomerId, 
+    remark AS remark, 
+    estimate_freight AS estimateFreight,
+    show4_driver_freight AS show4DriverFreight,
+    delivery_time_point AS deliveryTimePoint,
+    finish_time_point AS finishTimePoint,
+    receipt_type AS receiptType,
+    receive_way as receiveWay,
+    project_freight_rule_json as projectFreightRuleJson,
+    required_min_temperature as requiredMinTemperature,
+    required_max_temperature as requiredMaxTemperature,
+    require_json AS requireJson, 
+    vehicle_count AS vehicleCount,
+    need_delivery_point_note as needDeliveryPointNote,
+    only_load_cargo AS onlyLoadCargo,
+    project_id AS projectId,
+    is_auto_create_bill AS isAutoCreateBill,
+    auto_create_bill_strategy AS autoCreateBillStrategy,
+    agency_take_freight as agencyTakeFreight,
+    business_branch AS businessBranch,
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_time AS lastUpdateTime, 
+    last_update_user_id AS lastUpdateUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM fixed_demand]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="fixedDemandId != null"><![CDATA[AND fixed_demand_id = #{fixedDemandId}]]></if>
+      <if test="customerManagerId != null"><![CDATA[AND customer_manager_id = #{customerManagerId}]]></if>
+      <if test="customerId != null"><![CDATA[AND customer_id = #{customerId}]]></if>
+      <if test="truckCustomerId != null"><![CDATA[AND truck_customer_id = #{truckCustomerId}]]></if>
+      <if test="remark != null and remark != ''"><![CDATA[AND remark = #{remark}]]></if>
+      <if test="estimateFreight != null"><![CDATA[AND estimate_freight = #{estimateFreight}]]></if>
+      <if test="show4DriverFreight != null"><![CDATA[AND show4_driver_freight = #{show4DriverFreight}]]></if>
+      <if test="deliveryTimePoint != null"><![CDATA[AND delivery_time_point = #{deliveryTimePoint}]]></if>
+      <if test="receiptType != null"><![CDATA[AND receipt_type = #{receiptType}]]></if>
+      <if test="receiveWay != null"><![CDATA[AND receive_way = #{receiveWay}]]></if>
+      <if test="requireJson != null and requireJson != ''"><![CDATA[AND require_json = #{requireJson}]]></if>
+      <if test="projectFreightRuleJson != null and projectFreightRuleJson != ''"><![CDATA[AND project_freight_rule_json = #{projectFreightRuleJson}]]></if>
+      <if test="vehicleCount != null"><![CDATA[AND vehicle_count = #{vehicleCount}]]></if>
+      <if test="needDeliveryPointNote != null"><![CDATA[AND need_delivery_point_note = #{needDeliveryPointNote}]]></if>
+      <if test="onlyLoadCargo != null"><![CDATA[AND only_load_cargo = #{onlyLoadCargo}]]></if>
+      <if test="projectId != null"><![CDATA[AND project_id = #{projectId}]]></if>
+      <if test="isAutoCreateBill != null"><![CDATA[AND is_auto_create_bill = #{isAutoCreateBill}]]></if>
+      <if test="businessBranch != null"><![CDATA[AND business_branch = #{businessBranch}]]></if>
+      <if test="agencyTakeFreight != null"><![CDATA[AND agency_take_freight = #{agencyTakeFreight}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[AND last_update_time = #{lastUpdateTime}]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.fixedDemandId != null"><![CDATA[AND fixed_demand_id = #{filters.fixedDemandId}]]></if>
+      <if test="filters.customerManagerId != null"><![CDATA[AND customer_manager_id = #{filters.customerManagerId}]]></if>
+      <if test="filters.customerId != null"><![CDATA[AND customer_id = #{filters.customerId}]]></if>
+      <if test="filters.truckCustomerId != null"><![CDATA[AND truck_customer_id = #{filters.truckCustomerId}]]></if>
+      <if test="filters.remark != null and remark != ''"><![CDATA[AND remark = #{filters.remark}]]></if>
+      <if test="filters.estimateFreight != null"><![CDATA[AND estimate_freight = #{filters.estimateFreight}]]></if>
+      <if test="filters.show4DriverFreight != null"><![CDATA[AND show4_driver_freight = #{filters.show4DriverFreight}]]></if>
+      <if test="filters.deliveryTimePoint != null"><![CDATA[AND delivery_time_point = #{filters.deliveryTimePoint}]]></if>
+      <if test="filters.receiptType != null"><![CDATA[AND receipt_type = #{filters.receiptType}]]></if>
+      <if test="filters.receiveWay != null"><![CDATA[AND receive_way = #{filters.receiveWay}]]></if>
+      <if test="filters.requireJson != null and requireJson != ''"><![CDATA[AND require_json = #{filters.requireJson}]]></if>
+      <if test="filters.vehicleCount != null"><![CDATA[AND vehicle_count = #{filters.vehicleCount}]]></if>
+      <if test="filters.needDeliveryPointNote != null"><![CDATA[AND need_delivery_point_note = #{filters.needDeliveryPointNote}]]></if>
+      <if test="filters.onlyLoadCargo != null"><![CDATA[AND only_load_cargo = #{filters.onlyLoadCargo}]]></if>
+      <if test="filters.projectId != null"><![CDATA[AND project_id = #{filters.projectId}]]></if>
+      <if test="filters.isAutoCreateBill != null"><![CDATA[AND is_auto_create_bill = #{filters.isAutoCreateBill}]]></if>
+      <if test="filters.businessBranch != null"><![CDATA[AND business_branch = #{filters.businessBranch}]]></if>
+      <if test="filters.agencyTakeFreight != null"><![CDATA[AND agency_take_freight = #{filters.agencyTakeFreight}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="customerManagerId != null"><![CDATA[customer_manager_id = #{customerManagerId},]]></if>
+      <if test="customerId != null"><![CDATA[customer_id = #{customerId},]]></if>
+      <if test="truckCustomerId != null"><![CDATA[truck_customer_id = #{truckCustomerId},]]></if>
+      <if test="remark != null and remark != ''"><![CDATA[remark = #{remark},]]></if>
+      <if test="estimateFreight != null"><![CDATA[estimate_freight = #{estimateFreight},]]></if>
+      <if test="show4DriverFreight != null"><![CDATA[show4_driver_freight = #{show4DriverFreight},]]></if>
+      <if test="deliveryTimePoint != null"><![CDATA[delivery_time_point = #{deliveryTimePoint},]]></if>
+      <if test="finishTimePoint != null"><![CDATA[finish_time_point = #{finishTimePoint},]]></if>
+      <if test="receiptType != null"><![CDATA[receipt_type = #{receiptType},]]></if>
+      <if test="requireJson != null and requireJson != ''"><![CDATA[require_json = #{requireJson},]]></if>
+      <if test="projectFreightRuleJson != null and projectFreightRuleJson != ''"><![CDATA[project_freight_rule_json = #{projectFreightRuleJson},]]></if>
+      <if test="requiredMinTemperature != null"><![CDATA[required_min_temperature = #{requiredMinTemperature},]]></if>
+      <if test="requiredMaxTemperature != null"><![CDATA[required_max_temperature = #{requiredMaxTemperature},]]></if>
+      <if test="receiveWay != null"><![CDATA[receive_way = #{receiveWay},]]></if>
+      <if test="vehicleCount != null"><![CDATA[vehicle_count = #{vehicleCount},]]></if>
+      <if test="needDeliveryPointNote != null"><![CDATA[need_delivery_point_note = #{needDeliveryPointNote},]]></if>
+      <if test="onlyLoadCargo != null"><![CDATA[only_load_cargo = #{onlyLoadCargo},]]></if>
+      <if test="projectId != null"><![CDATA[ project_id = #{projectId},]]></if>
+      <if test="isAutoCreateBill != null"><![CDATA[ is_auto_create_bill = #{isAutoCreateBill},]]></if>
+      <if test="autoCreateBillStrategy != null"><![CDATA[auto_create_bill_strategy = #{autoCreateBillStrategy},]]></if>
+      <if test="businessBranch != null"><![CDATA[ business_branch = #{businessBranch},]]></if>
+      <if test="agencyTakeFreight != null"><![CDATA[agency_take_freight = #{agencyTakeFreight},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[last_update_time = #{lastUpdateTime},]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="fixedDemand" useGeneratedKeys = "true" keyProperty ="fixed_demand_id">
+    <selectKey keyColumn="fixed_demand_id" keyProperty="fixedDemandId" resultType="int">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    <![CDATA[
+      insert into fixed_demand
+		(customer_manager_id, customer_id, truck_customer_id, remark, estimate_freight, show4_driver_freight, delivery_time_point, finish_time_point, receipt_type, require_json,project_freight_rule_json,required_min_temperature, required_max_temperature,vehicle_count, need_delivery_point_note, create_time, create_user_id, last_update_time, last_update_user_id,project_id,is_auto_create_bill,auto_create_bill_strategy,business_branch,receive_way,only_load_cargo, agency_take_freight)
+	values
+		(#{customerManagerId}, #{customerId}, #{truckCustomerId}, #{remark}, #{estimateFreight}, #{show4DriverFreight}, #{deliveryTimePoint}, #{finishTimePoint}, #{receiptType}, #{requireJson}, #{projectFreightRuleJson},#{requiredMinTemperature},#{requiredMaxTemperature},#{vehicleCount}, #{needDeliveryPointNote}, now(),#{createUserId}, #{lastUpdateTime}, #{lastUpdateUserId}, #{projectId},#{isAutoCreateBill},#{autoCreateBillStrategy},#{businessBranch},#{receiveWay},#{onlyLoadCargo}, #{agencyTakeFreight})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="fixedDemand" >
+    <![CDATA[UPDATE fixed_demand]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE fixed_demand_id = #{fixedDemandId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="fixedDemand">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE fixed_demand_id = #{fixedDemandId}]]>
+  </select>
+  <select id="loadAll" resultType="fixedDemand">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="fixedDemand" resultType="fixedDemand">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="fixedDemand">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+
+  <delete id="delete" parameterType="fixedDemand">
+    DELETE
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/>
+  </delete>
+</mapper>

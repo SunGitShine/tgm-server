@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.customerManager.dao.ManagerScheduleDao">
+  <sql id="QUERY_COLUMN_LIST">
+    manager_schedule_id AS managerScheduleId, 
+    content AS content, 
+    type AS type, 
+    handled AS handled, 
+    waybill_id AS waybillId, 
+    customer_manager_id AS customerManagerId, 
+    is_delete AS isDelete, 
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_user_id AS lastUpdateUserId, 
+    last_update_time AS lastUpdateTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM manager_schedule]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="managerScheduleId != null"><![CDATA[AND manager_schedule_id = #{managerScheduleId}]]></if>
+      <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
+      <if test="type != null"><![CDATA[AND type = #{type}]]></if>
+      <if test="handled != null"><![CDATA[AND handled = #{handled}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="customerManagerId != null"><![CDATA[AND customer_manager_id = #{customerManagerId}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[AND last_update_time = #{lastUpdateTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.managerScheduleId != null"><![CDATA[AND manager_schedule_id = #{filters.managerScheduleId}]]></if>
+      <if test="filters.content != null and content != ''"><![CDATA[AND content = #{filters.content}]]></if>
+      <if test="filters.type != null"><![CDATA[AND type = #{filters.type}]]></if>
+      <if test="filters.handled != null"><![CDATA[AND handled = #{filters.handled}]]></if>
+      <if test="filters.waybillId != null"><![CDATA[AND waybill_id = #{filters.waybillId}]]></if>
+      <if test="filters.customerManagerId != null"><![CDATA[AND customer_manager_id = #{filters.customerManagerId}]]></if>
+      <if test="filters.isDelete != null"><![CDATA[AND is_delete = #{filters.isDelete}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="content != null and content != ''"><![CDATA[content = #{content},]]></if>
+      <if test="type != null"><![CDATA[type = #{type},]]></if>
+      <if test="handled != null"><![CDATA[handled = #{handled},]]></if>
+      <if test="waybillId != null"><![CDATA[waybill_id = #{waybillId},]]></if>
+      <if test="customerManagerId != null"><![CDATA[customer_manager_id = #{customerManagerId},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="managerSchedule" useGeneratedKeys = "true" keyProperty ="manager_schedule_id">
+
+    <selectKey keyColumn="manager_schedule_id" keyProperty="managerScheduleId" resultType="int">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+
+    <![CDATA[
+      insert into manager_schedule
+		(content, type, handled, waybill_id, customer_manager_id, is_delete, create_time, create_user_id, last_update_user_id, last_update_time)
+	values
+		(#{content}, #{type}, #{handled}, #{waybillId}, #{customerManagerId}, #{isDelete}, now(),#{createUserId}, #{lastUpdateUserId}, #{lastUpdateTime})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="managerSchedule" >
+    <![CDATA[UPDATE manager_schedule]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE manager_schedule_id = #{managerScheduleId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="managerSchedule">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE manager_schedule_id = #{managerScheduleId}]]>
+  </select>
+  <select id="loadAll" resultType="managerSchedule">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="managerSchedule" resultType="managerSchedule">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="managerSchedule">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+
+  <select id="countByParam" resultType="int" parameterType="managerSchedule" >
+    SELECT COUNT(1) FROM manager_schedule
+
+    <include refid="QUERY_WHERE_CLAUSE"></include>
+
+  </select>
+
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.fms.dao.v3.ext.ReconcilicationForReceivableExtraMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.ReconcilicationForReceivable" >
+    <id column="reconcilication_id" property="reconcilicationId" jdbcType="INTEGER" />
+    <result column="tenant_id" property="tenantId" jdbcType="INTEGER" />
+    <result column="tenant_code" property="tenantCode" jdbcType="VARCHAR" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="reconcilication_no" property="reconcilicationNo" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="process_instance_id" property="processInstanceId" jdbcType="VARCHAR" />
+    <result column="receivable_with_tax" property="receivableWithTax" jdbcType="DECIMAL" />
+    <result column="receivable_without_tax" property="receivableWithoutTax" jdbcType="DECIMAL" />
+    <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="submit_user_id" property="submitUserId" jdbcType="INTEGER" />
+    <result column="approval_status" property="approvalStatus" jdbcType="INTEGER" />
+    <result column="receive_status" property="receiveStatus" jdbcType="INTEGER" />
+    <result column="invoice_status" property="invoiceStatus" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    reconcilication_id, tenant_id, tenant_code, area_code, reconcilication_no, customer_id, 
+    customer_name, project_id,process_instance_id, project_name, receivable_with_tax, receivable_without_tax,
+    submit_time, submit_user_id, approval_status, receive_status, invoice_status, create_time, create_user_id
+  </sql>
+
+  <sql id="PAGE_SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.customerName != null and filters.customerName.toString() != ''"><![CDATA[AND customer_name = #{filters.customerName}]]></if>
+      <if test="filters.projectName != null and filters.projectName.toString() != ''"><![CDATA[AND project_name = #{filters.projectName}]]></if>
+      <if test="filters.reconciliationNo != null and filters.reconciliationNo.toString() != ''"><![CDATA[ AND reconcilication_no = #{filters.reconciliationNo}]]></if>
+      <if test="filters.tenantId != null"><![CDATA[AND tenant_id = #{filters.tenantId}]]></if>
+      <if test="filters.startTime != null"><![CDATA[AND submit_time >= #{filters.startTime}]]></if>
+      <if test="filters.endTime != null"><![CDATA[AND submit_time <= #{filters.endTime}]]></if>
+      <if test="filters.areaCodeList != null">
+        <![CDATA[ AND ]]>
+        <foreach collection="filters.areaCodeList" item="code" open="("
+                 separator=" or" close=")">
+          area_code like concat(#{code},'%')
+        </foreach>
+      </if>
+      <if test="filters.approvalStatus!= null"><![CDATA[AND approval_status = #{filters.approvalStatus}]]></if>
+      <if test="filters.invoiceStatus!= null"><![CDATA[AND invoice_status = #{filters.invoiceStatus}]]></if>
+      <if test="filters.receiveStatus!= null"><![CDATA[AND receive_status = #{filters.receiveStatus}]]></if>
+      <if test="filters.processInstanceId!= null and filters.processInstanceId.toString() != ''"><![CDATA[AND process_instance_id = #{filters.processInstanceId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="QUERY_ORDER_LIMIT_CONDTION">
+    <choose>
+      <when test="orderBy == null">
+        order by create_time desc
+      </when>
+      <otherwise>
+        order by ${orderBy} ${orderSort}
+      </otherwise>
+    </choose>
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <insert id="insertSelective" parameterType="com.juma.tgm.fms.domain.v3.ReconcilicationForReceivable" >
+    <selectKey resultType="java.lang.Integer" keyProperty="reconcilicationId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into reconcilication_for_receivable
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tenantId != null" >
+        tenant_id,
+      </if>
+      <if test="tenantCode != null" >
+        tenant_code,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="reconcilicationNo != null" >
+        reconcilication_no,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="receivableWithTax != null" >
+        receivable_with_tax,
+      </if>
+      <if test="receivableWithoutTax != null" >
+        receivable_without_tax,
+      </if>
+      <if test="submitTime != null" >
+        submit_time,
+      </if>
+      <if test="submitUserId != null" >
+        submit_user_id,
+      </if>
+      <if test="approvalStatus != null" >
+        approval_status,
+      </if>
+      <if test="receiveStatus != null" >
+        receive_status,
+      </if>
+      <if test="invoiceStatus != null" >
+        invoice_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null" >
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcilicationNo != null" >
+        #{reconcilicationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="receivableWithTax != null" >
+        #{receivableWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="receivableWithoutTax != null" >
+        #{receivableWithoutTax,jdbcType=DECIMAL},
+      </if>
+      <if test="submitTime != null" >
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="submitUserId != null" >
+        #{submitUserId,jdbcType=INTEGER},
+      </if>
+      <if test="approvalStatus != null" >
+        #{approvalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="receiveStatus != null" >
+        #{receiveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceStatus != null" >
+        #{invoiceStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="findReceivableCount" parameterType="com.giants.common.tools.PageCondition" resultType="java.lang.Integer" >
+    select count(1) from reconcilication_for_receivable
+    <include refid="PAGE_SEARCH_WHERE_CLAUSE"/>
+  </select>
+
+  <select id="findReceivablePage" parameterType="com.giants.common.tools.PageCondition" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM reconcilication_for_receivable
+    <include refid="PAGE_SEARCH_WHERE_CLAUSE"/>
+    <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+  </select>
+</mapper>

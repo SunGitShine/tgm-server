@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/rabbit
+    http://www.springframework.org/schema/rabbit/spring-rabbit-1.6.xsd">
+
+    <!-- 发送给数据平台状态通知 -->
+	<rabbit:queue name="${ai.fanout.waybill.status.queue}" />
+	<rabbit:fanout-exchange id="${ai.fanout.waybill.status.exchange}"
+		name="${ai.fanout.waybill.status.exchange}" durable="true"
+		auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${ai.fanout.waybill.status.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<!-- 接收数据平台处理结果 -->
+	<bean id="messageUpdateDeliveryOrderListener" class="com.juma.tgm.mq.rabbit.receive.MessageUpdateDeliveryOrderListener" />
+	<rabbit:queue name="${ai.fanout.waybill.delivery.order.queue}" />
+
+
+</beans>

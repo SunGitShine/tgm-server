@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+ 
+    <dubbo:application name="tgm-server"  />
+ 
+    <dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+    
+    <dubbo:protocol name="dubbo" port="${dubbo.service.port}" />
+    
+    <dubbo:provider timeout="10000" retries="0" version="${dubbo.provider.tgm.version}"/>
+    
+    <!-- cron任务 -->
+    <dubbo:service interface="com.juma.tgm.cron.service.CronjobService" ref="cronjobServiceImpl"/>
+    
+ 	<dubbo:service interface="com.juma.tgm.driver.service.DriverService" ref="driverServiceImpl" />
+ 	
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillService" ref="waybillServiceImpl" timeout="100000"/>
+    <!-- 货车接口 -->
+    <dubbo:service interface="com.juma.tgm.truck.service.TruckService" ref="truckServiceImpl"/>
+    <!-- 车队接口 -->
+    <dubbo:service interface="com.juma.tgm.truck.service.TruckFleetService" ref="truckFleetServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.truck.service.TruckFleetTruckService" ref="truckFleetTruckServiceImpl"/>
+    <!-- 价格配置接口 -->
+    <dubbo:service interface="com.juma.tgm.truck.service.TruckTypeFreightService" ref="truckTypeFreightServiceImpl"/>
+    <!-- 货车类型接口 -->
+    <dubbo:service interface="com.juma.tgm.truck.service.TruckTypeService" ref="truckTypeServiceImpl"/>
+    <!-- 异常监控接口 -->
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillExceptionService" ref="waybillExceptionServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.truck.service.TruckTypeService" ref="truckTypeServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.configure.service.TruckTypeCityService" ref="truckTypeCityServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.truck.service.AdditionalFunctionService" ref="additionalFunctionServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.GaoDeMapService" ref="gaoDeMapServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.tgm.basicTruckType.service.BasicTruckTypeService" ref="basicTruckTypeServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.version.service.VersionService" ref="versionServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.tgm.waybill.service.AddressHistoryService" ref="addressHistoryServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.ContactHistoryService" ref="contactHistoryServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.tgm.crm.service.CustomerInfoService" ref="customerInfoServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.crm.service.PrivateCustomerService" ref="privateCustomerServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.tgm.cityManage.service.CityManageService" ref="cityManageServiceImpl"/>
+ 	<dubbo:service interface="com.juma.tgm.importantNotice.service.ImportantNoticeService" ref="importantNoticeServiceImpl" />
+
+ 	<dubbo:service interface="com.juma.tgm.tools.service.CommonService" ref="commonServiceImpl" />
+ 	<dubbo:service interface="com.juma.tgm.tools.service.AmsCommonService" ref="amsCommonServiceImpl" />
+ 	<dubbo:service interface="com.juma.tgm.region.service.RegionTgmService" ref="regionTgmServiceImpl" />
+ 	
+ 	<dubbo:service interface="com.juma.tgm.waybill.service.WaybillOperateTrackService" ref="waybillOperateTrackServiceImpl" />
+ 	<dubbo:service interface="com.juma.tgm.basicTruckType.service.LocationService" ref="locationServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillParamService" ref="waybillParamServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.basicTruckType.service.ConfParamInfoService" ref="confParamInfoServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.crm.service.IncomeStatisticsService" ref="incomeStatisticsServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.configure.service.ConfigParamService" ref="configParamServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.configure.service.ConfigParamOptionService" ref="configParamOptionServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.weixin.service.WeixinService" ref="weixinServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.TaxRateService" ref="taxRateServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillDeliveryAddressService" ref="waybillDeliveryAddressServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillReceiveAddressService" ref="waybillReceiveAddressServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybillReport.service.WaybillReportService" ref="waybillReportServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybillReport.service.OfflineWaybillService" ref="offlineWaybillServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.TruckRequireService" ref="truckRequireServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.DeliveryPointSupplementService" ref="deliveryPointSupplementServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillNoticeService" ref="waybillNoticeServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillAutoFenceServicve" ref="waybillAutoFenceServicveImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillCommonService" ref="waybillCommonServiceImpl"/>
+
+    
+    
+    <!-- 组织构架 -->
+    <dubbo:service interface="com.juma.tgm.reportInfo.service.ReportInfoService" ref="reportInfoServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.reportInfo.service.ReportInfoDetailService" ref="reportInfoDetailServiceImpl"/>
+    <!-- 自动派车 -->
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillAutoMatchService" ref="waybillAutoMatchServiceImpl"/>
+    <!-- 查询服务 -->
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillQueryService" ref="waybillQueryServiceImpl"/>
+    <!--创建用户和业务数据-->
+    <dubbo:service interface="com.juma.tgm.authority.service.TgmUserCenterService" ref="tgmUserCenterServiceImpl"/>
+    <!--客户经理-->
+    <dubbo:service interface="com.juma.tgm.customer.service.CustomerManagerService" ref="customerManagerServiceImpl" timeout="120000"/>
+    
+    <dubbo:service interface="com.juma.tgm.cms.service.ExportTaskService" ref="exportTaskServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.tgm.flightUsage.service.TmsFlightUsageService" ref="tmsFlightUsageServiceImpl"/>
+
+    <!--客户经理代办事项-->
+    <dubbo:service interface="com.juma.tgm.customerManager.service.ManagerScheduleService" ref="managerScheduleServiceImpl"/>
+
+    <dubbo:service interface="com.juma.tgm.waybillLbsSource.service.WaybillLbsSourceService" ref="waybillLbsSourceServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybillLbsSource.service.ActualMileageService" ref="actualMileageServiceImpl"/>
+
+    <!-- 图片上传接口 -->
+    <dubbo:service interface="com.juma.tgm.imageUploadManage.service.ImageUploadManageService" ref="imageUploadManageServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.receiptManage.service.ReceiptManageService" ref="receiptManageServiceImpl"/>
+
+    <dubbo:service interface="com.juma.tgm.user.service.UserRouteService" ref="userRouteServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.costReimbursed.service.CostReimbursedService" ref="costReimbursedServiceImpl"/>
+
+    <dubbo:service interface="com.juma.tgm.truck.service.AdditionalFunctionFreightService" ref="additionalFunctionFreightServiceImpl"/>
+
+    <!-- 固定需求 -->
+    <dubbo:service interface="com.juma.tgm.customerManager.service.FixedDemandService" ref="fixedDemandServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.tgm.waybillReconciliation.service.WaybillReconciliationService" ref="waybillReconciliationServiceImpl"/>
+    
+    <!-- Excel模板导入 -->
+    <dubbo:service interface="com.juma.tgm.xlsx.service.XlsxTemplateService" ref="xlsxTemplateServiceImpl"/>
+
+    <!-- 价格异常接口 -->
+    <dubbo:service interface="com.juma.tgm.waybillLbsSource.service.WaybillPriceExceptionService" ref="waybillPriceExceptionServiceImpl"/>
+
+    <!--运单分享树-->
+    <dubbo:service interface="com.juma.tgm.businessArea.service.TgmBusinessAreaService" ref="tgmBusinessAreaServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.tgm.tools.service.BusinessAreaCommonService" ref="businessAreaCommonServiceImpl"/>
+
+    <!-- 项目管理 -->
+    <dubbo:service interface="com.juma.tgm.project.service.ProjectService" ref="projectServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.project.service.RoadMapService" ref="roadMapServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.project.service.RoadMapPriceRuleService" ref="roadMapPriceRuleServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.project.service.RoadMapSrcAdressService" ref="roadMapSrcAdressServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.project.service.RoadMapDestAdressService" ref="roadMapDestAdressServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.project.service.ProjectProcessService" ref="projectProcessServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.project.service.ProjectMemberService" ref="projectMemberServiceImpl"/>
+
+    <!-- 项目下单接口 -->
+    <dubbo:service interface="com.juma.tgm.filiale.service.FilialeBillService" ref="filialeBillServiceImpl" />
+    
+    <!-- 对帐 -->
+    <dubbo:service interface="com.juma.tgm.fms.service.ReconciliationService" ref="reconciliationServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v2.ReconciliationBootstrapService" ref="reconciliationBootstrapServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillCronService" ref="waybillCronServiceImpl"/>
+
+
+    <!--温度监控-->
+    <dubbo:service interface="com.juma.tgm.redis.service.TemperatureAlertService" ref="temperatureAlertServiceImpl"/>
+    <!-- 落地配业务 -->
+    <dubbo:service interface="com.juma.tgm.scatteredWaybill.service.ScatteredWaybillService" ref="scatteredWaybillServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.landingWaybill.service.LandingWaybillService" ref="landingWaybillServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.configure.service.FreightRuleService" ref="freightRuleServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.configure.service.PackFreightRuleService" ref="packFreightRuleServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.landing.waybill.service.DispatchingTruckService" ref="dispatchingTruckServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.configure.service.ServiceConfService" ref="serviceConfServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.configure.service.ServiceConfItemService" ref="serviceConfItemServiceImpl"/>
+    
+    <!-- 价格配置 -->
+    <dubbo:service interface="com.juma.tgm.configure.service.FreightFactorService" ref="freightFactorServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.configure.service.PrivateFreightFactorService" ref="privateFreightFactorServiceImpl"/>
+
+    <!-- **************************租户定制业务 -->
+    <dubbo:service interface="com.juma.tgm.waybill.service.customize.xidi.XidiWaybillService" ref="xidiWaybillServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.customize.xidi.XidiWaybillQueryService" ref="xidiWaybillQueryServiceImpl" />
+    <dubbo:service interface="com.juma.tgm.waybill.service.customize.jumaPs.JumaPsWaybillService" ref="jumaPsWaybillServiceImpl" />
+    <!-- 租户定制业务************************** -->
+
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillReceiveAddressCargoService" ref="waybillReceiveAddressCargoServiceImpl" />
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillViewService" ref="waybillViewServiceImpl" />
+    <dubbo:service interface="com.juma.tgm.waybillLbsSource.service.TemperatureExceptionService" ref="temperatureExceptionServiceImpl" />
+
+    <dubbo:service interface="com.juma.tgm.sop.service.SopService" ref="sopServiceImpl" />
+    <!--新版对账-->
+    <dubbo:service interface="com.juma.tgm.fms.service.v2.ReconciliationService" ref="reconciliationServiceImplV2"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v2.ReconciliationChangeLogService" ref="reconciliationChangeLogServiceImpl"/>
+
+    <!-- fms 收款单 -->
+    <dubbo:service interface="com.juma.tgm.fms.service.v2.ReceiptFreightFeeService" ref="receiptFreightFeeServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v2.ReconciliationSyncService" ref="reconciliationSyncServiceImpl"/>
+
+    <dubbo:service interface="com.juma.tgm.external.service.WaybillExternalService" ref="waybillExternalServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.external.service.ProjectExternalService" ref="projectExternalServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.transportReport.service.TransportReportService" ref="transportReportServiceImpl"/>
+
+    <dubbo:service interface="com.juma.tgm.vendor.service.VendorMappingService" ref="vendorMappingServiceImpl"/>
+
+    <!--定时下单任务-->
+    <dubbo:service interface="com.juma.tgm.customerManager.service.Task4WaybillService" ref="task4WaybillServiceImpl"/>
+    <!--任务模板-->
+    <dubbo:service interface="com.juma.tgm.customerManager.service.TaskWaybillTemplateService" ref="taskWaybillTemplateServiceImpl"/>
+    <!--任务执行报告-->
+    <dubbo:service interface="com.juma.tgm.customerManager.service.Task4WaybillReportService" ref="task4WaybillReportServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.operateLog.service.OperateLogService" ref="operateLogServiceImpl"/>
+
+    <!-- V3对账 -->
+    <dubbo:service interface="com.juma.tgm.fms.service.v3.AdjustForPayableService" ref="adjustForPayableServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v3.ReconcilicationForPayableService" ref="reconcilicationForPayableServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v3.ReconcilicationForPayApplyService" ref="reconcilicationForPayApplyServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v3.ReconcilicationForReceivableService" ref="reconcilicationForReceivableServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v3.AdjustForMasterService" ref="adjustForMasterServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v3.AdjustForMasterAddService" ref="adjustForMasterAddServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.fms.service.v3.AdjustForWaybillService" ref="adjustForWaybillServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillAmountService" ref="waybillAmountServiceImpl"/>
+
+    <!-- 同步失败补救接口-->
+    <dubbo:service interface="com.juma.tgm.crm.service.RemedySyncService" ref="remedySyncServiceImpl"/>
+
+    <dubbo:service interface="com.juma.tgm.tools.service.CrmCommonService" ref="crmCommonServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.tools.service.AuthCommonService" ref="authCommonServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.capacity.service.CapacityService" ref="capacityServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.tools.service.VmsCommonService" ref="vmsCommonServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.external.service.TmsService" ref="tmsServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.mq.service.MqService" ref="mqServiceImpl"/>
+
+    <dubbo:service interface="com.juma.tgm.waybill.service.WaybillTrackService" ref="waybillTrackServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.task.service.TaskFacadeService" ref="taskFacadeServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.select.service.SelectService" ref="selectServiceImpl"/>
+    <dubbo:service interface="com.juma.tgm.task.service.TaskScheduledService" ref="taskScheduledServiceImpl"/>
+
+    <!-- 项目日报 -->
+    <dubbo:service interface="com.juma.tgm.daily.service.ProjectDailyService" ref="projectDailyServiceImpl" timeout="120000"/>
+
+</beans>

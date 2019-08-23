@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+      
+    <dubbo:consumer check="false"  timeout="10000" retries="0" />
+    <!--用户中心-->
+    <dubbo:reference id="userService"  interface="com.juma.auth.user.service.UserService" version="${dubbo.reference.auth.version}" />
+    <dubbo:reference id="tenantService" interface="com.juma.auth.tenant.service.TenantService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="userServiceAsync"  interface="com.juma.auth.user.service.UserService" version="${dubbo.reference.auth.version}" >
+        <dubbo:method name="loadUser" async="true"/>
+    </dubbo:reference>
+    <dubbo:reference id="employeeService"  interface="com.juma.auth.employee.service.EmployeeService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="authorityService"  interface="com.juma.auth.authority.service.AuthorityService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="regionService"  interface="com.juma.conf.service.RegionService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="confParamService" interface="com.juma.conf.service.ConfParamService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="encryptionService" interface="com.juma.auth.conf.service.EncryptionService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="ecoUserService" interface="com.juma.auth.user.service.EcoUserService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="businessAreaService" interface="com.juma.auth.conf.service.BusinessAreaService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="distributedFileStorageService" interface="com.juma.common.storage.service.DistributedFileStorageService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="positionService" interface="com.juma.auth.conf.service.PositionService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="departmentService" interface="com.juma.auth.employee.service.DepartmentService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="permissionService" interface="com.juma.auth.conf.service.PermissionService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="eCompanyService"  interface="com.juma.auth.employee.service.ECompanyService" version="${dubbo.reference.auth.version}"/>
+
+    
+    <!--消息中心-->
+    <dubbo:reference id="messageServiceProvider" interface="com.juma.message.gateway.service.MessageServiceProvider" version="${dubbo.reference.message.version}"/>
+    <dubbo:reference id="msgSmsRecordService" interface="com.juma.message.record.service.MsgSmsRecordService"  version="${dubbo.reference.message.version}"/>
+    <dubbo:reference id="msgAppRecordService" interface="com.juma.message.record.service.MsgAppRecordService"  version="${dubbo.reference.message.version}">
+        <dubbo:method name="updateDeleteStatusByExtMsgId" async="true" return="false"></dubbo:method>
+    </dubbo:reference>
+    <dubbo:reference id="msgConfService" interface="com.juma.message.basic.service.MsgConfService"  version="${dubbo.reference.message.version}"/>
+
+    <dubbo:reference id="cloudMessageService" interface="com.juma.message.cloud.service.CloudMessageService"  version="${dubbo.reference.message.version}"/>
+
+
+    <!--钱包-->
+    <dubbo:reference id="channelPaymentService"  interface="com.juma.wallet.payment.service.ChannelPaymentService" version="${dubbo.reference.wallet.version}"/>
+    <dubbo:reference id="paymentService"  interface="com.juma.wallet.payment.service.PaymentService" version="${dubbo.reference.wallet.version}"/>
+    <dubbo:reference id="accountVoucherService"  interface="com.juma.wallet.account.service.AccountVoucherService" version="${dubbo.reference.wallet.version}"/>
+    <!--cms-->
+    <dubbo:reference id="openApiService"  interface="com.juma.cms.wx.service.OpenApiService"  version="${dubbo.reference.cms.version}"/>
+    <dubbo:reference id="chanelService" interface="com.juma.cms.wx.service.ChanelService"  version="${dubbo.reference.cms.version}"/>
+    <!--在途监控-->
+    <dubbo:reference id="fenceService" interface="com.juma.monitor.service.FenceService" version="${dubbo.reference.monitor.version}"/>
+    <dubbo:reference id="deviceFilterService" interface="com.juma.monitor.service.DeviceFilterService" version="${dubbo.reference.monitor.version}"/>
+    <dubbo:reference id="realTimePositionService" interface="com.juma.monitor.service.RealTimePositionService" version="${dubbo.reference.monitor.version}"/>
+    <dubbo:reference id="vehicleService" interface="com.juma.monitor.service.VehicleService" version="${dubbo.reference.monitor.version}"/>
+    <dubbo:reference id="monitorSupportService" interface="com.juma.monitor.support.service.MonitorSupportService" version="${dubbo.reference.monitor.version}"/>
+    <dubbo:reference id="temperatureServer" interface="com.juma.monitor.support.service.TemperatureServer" version="${dubbo.reference.monitor.version}"/>
+    <!--ams-->
+    <dubbo:reference id="amsServiceV2" interface="com.juma.server.vm.service.vehicle.AmsServiceV2" version="${dubbo.reference.vm.version}"/>
+    <dubbo:reference id="renterService" interface="com.juma.server.vm.service.vehicle.RenterService" version="${dubbo.reference.vm.version}"/>
+    <!-- 异步班次接口 -->
+    <dubbo:reference connections="1" id="amsServiceAsync" interface="com.juma.server.vm.service.vehicle.AmsServiceV2" version="${dubbo.reference.vm.version}">
+        <dubbo:method name="getAvailableFlightByPage" async="true"/>
+    </dubbo:reference>
+
+    <!--crm-->
+    <dubbo:reference id="consignorService" interface="com.juma.crm.customer.service.ConsignorService"  version="${dubbo.reference.crm.version}"/>
+    <dubbo:reference id="cmsCustomerInfoService" interface="com.juma.crm.customer.service.CustomerInfoService"  version="${dubbo.reference.crm.version}"/>
+    <dubbo:reference id="consignorContactsInfoService" interface="com.juma.crm.customer.service.ConsignorContactsInfoService"  version="${dubbo.reference.crm.version}"/>
+    <dubbo:reference id="consignorCustomerInfoService" interface="com.juma.crm.customer.service.ConsignorCustomerInfoService"  version="${dubbo.reference.crm.version}"/>
+    <dubbo:reference id="appConsignorSearchService" interface="com.juma.crm.customer.service.AppConsignorSearchService"  version="${dubbo.reference.crm.version}"/>
+    <dubbo:reference id="consignorCustomerEliminationService" interface="com.juma.crm.customer.service.ConsignorCustomerEliminationService"  version="${dubbo.reference.crm.version}"/>
+    <dubbo:reference id="crmService" interface="com.juma.crm.support.service.CrmService"  version="${dubbo.reference.crm.version}"/>
+    <dubbo:reference id="crm4TmsService"  interface="com.juma.crm.support.service.Crm4TmsService" version="${dubbo.reference.crm.version}"/>
+
+    <!-- 工作流 -->
+    <dubbo:reference id="taskService" interface="com.juma.workflow.core.service.TaskService"  version="${dubbo.reference.workflow.version}"/>
+    <dubbo:reference id="workflowSupportServer" interface="com.juma.workflow.core.service.WorkflowSupportServer"  version="${dubbo.reference.workflow.version}"/>
+    <dubbo:reference id="processService" interface="com.juma.workflow.core.service.ProcessService"  version="${dubbo.reference.workflow.version}">
+        <dubbo:method name="startProcessInstance" retries="0" timeout="60000"/>
+    </dubbo:reference>
+    
+    <!-- SCM -->
+    <dubbo:reference id="propertyService" interface="com.juma.scm.product.service.PropertyService" version="${dubbo.scm.reference.version}"/>
+    <dubbo:reference id="goodsService" interface="com.juma.scm.storage.service.GoodsService" version="${dubbo.scm.reference.version}"/>
+
+    <!-- fms -->
+    <dubbo:reference id="billService" interface="com.juma.fms.core.service.BillService" version="${dubbo.reference.fms.version}"/>
+    <dubbo:reference id="receiptBillService" interface="com.juma.fms.core.service.ReceiptBillService" version="${dubbo.reference.fms.version}"/>
+    <dubbo:reference id="applicationFeeBillService" interface="com.juma.fms.costManage.service.ApplicationFeeBillService" version="${dubbo.reference.fms.version}"/>
+    <dubbo:reference id="reimbursementBillService" interface="com.juma.fms.costManage.service.ReimbursementBillService" version="${dubbo.reference.fms.version}"/>
+    <dubbo:reference id="fmsPayableForAdjust" interface="com.juma.fms.v2.core.payment.payable.service.FmsPayableForAdjust" version="${dubbo.reference.fms.version}"/>
+
+    <!-- VMS -->
+    <dubbo:reference id="vmsService" interface="com.juma.vms.external.service.VmsService" version="${dubbo.reference.vms.version}"/>
+    <dubbo:reference id="messageService" interface="com.juma.vms.tool.service.MessageService" version="${dubbo.reference.vms.version}"/>
+    <dubbo:reference id="operateLogService" interface="com.juma.vms.operateLog.service.OperateLogService" version="${dubbo.reference.vms.version}"/>
+
+
+</beans>

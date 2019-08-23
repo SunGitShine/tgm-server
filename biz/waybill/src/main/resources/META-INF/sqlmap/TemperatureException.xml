@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybillLbsSource.dao.TemperatureExceptionDao">
+  <sql id="QUERY_COLUMN_LIST">
+    w.waybill_id AS waybillId,
+    w.waybill_no AS waybillNo,
+    w.plan_delivery_time AS planDeliveryTime,
+    w.plate_number AS plateNumber,
+    w.driver_id AS driverId,
+    w.driver_name AS driverName,
+    w.customer_id AS customerId,
+    w.customer_name AS customerName,
+    w.project_id AS projectId,
+    w.project_name AS projectName,
+    wp.required_max_temperature AS requiredMaxTemperature,
+    wp.required_min_temperature AS requiredMinTemperature,
+    wp.history_max_temperature AS historyMaxTemperature,
+    wp.history_min_temperature AS historyMinTemperature
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <if test="filters != null">
+      <where>
+        <if test="filters.taxRateId != null"><![CDATA[AND tax_rate_id = #{filters.taxRateId}]]></if>
+        <if test="filters.taxRateName != null"><![CDATA[AND tax_rate_name = #{filters.taxRateName}]]></if>
+        <if test="filters.taxRateValue != null"><![CDATA[AND tax_rate_value=#{filters.taxRateValue}]]></if>
+        <if test="filters.discount != null"><![CDATA[AND discount = #{filters.discount}]]></if>
+      </where>
+    </if>
+  </sql>
+  
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="filters.plateNumber!= null"><![CDATA[ AND w.plate_number = #{filters.plateNumber}]]></if>
+            <if test="filters.driverId != null"><![CDATA[ AND w.driver_id=#{filters.driverId}]]></if>
+            <if test="filters.driverName != null"><![CDATA[ AND w.driver_name=#{filters.driverName}]]></if>
+            <if test="filters.waybillNo != null"><![CDATA[ AND w.waybill_no = #{filters.waybillNo}]]></if>
+            <if test="filters.customerId != null"><![CDATA[ AND w.customer_id = #{filters.customerId}]]></if>
+            <if test="filters.projectId != null"><![CDATA[ AND w.project_id = #{filters.projectId}]]></if>
+            <if test="filters.startTime != null"><![CDATA[ AND w.plan_delivery_time >= #{filters.startTime}]]></if>
+            <if test="filters.endTime != null"><![CDATA[ AND w.plan_delivery_time <= #{filters.endTime}]]></if>
+            <if test="filters.tenantId != null"><![CDATA[ AND w.tenant_id = #{filters.tenantId}]]></if>
+            <if test="filters.areaCodeList != null">
+               <![CDATA[ AND ( ]]>
+                 <foreach collection="filters.areaCodeList" item="code" separator=" or">
+                     w.area_code like concat(#{code},'%')
+                 </foreach>
+               <![CDATA[ ) ]]>
+            </if>
+            <![CDATA[AND w.is_delete = false and (wp.history_max_temperature is not null or wp.history_min_temperature is not null) ]]>
+        </where>
+    </sql>
+  
+  <sql id="SEARCH_ORDER_BY_AND_LIMIT">
+    <choose>
+        <when test="orderBy == null">
+            order by w.waybill_id desc
+        </when>
+        <otherwise>
+            order by ${orderBy}
+        </otherwise>
+    </choose>
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[ SELECT COUNT(1) ]]>
+    <![CDATA[ from waybill w left join waybill_param wp on w.waybill_id = wp.waybill_id ]]>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="com.juma.tgm.waybillLbsSource.domain.TemperatureException">
+    <![CDATA[ SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <![CDATA[ from waybill w left join waybill_param wp on w.waybill_id = wp.waybill_id ]]>
+    <include refid="QUERY_WHERE_CLAUSE"/>
+      <include refid="SEARCH_ORDER_BY_AND_LIMIT"/>
+  </select>
+</mapper>

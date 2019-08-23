@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.fms.dao.v3.AdjustForWaybillTempMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.AdjustForWaybillTemp">
+    <id column="adjust_temp_id" jdbcType="INTEGER" property="adjustTempId" />
+    <result column="adjust_id" jdbcType="INTEGER" property="adjustId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="waybill_id" jdbcType="INTEGER" property="waybillId" />
+    <result column="waybill_no" jdbcType="VARCHAR" property="waybillNo" />
+    <result column="vendor_id" jdbcType="INTEGER" property="vendorId" />
+    <result column="freight_with_tax" jdbcType="DECIMAL" property="freightWithTax" />
+    <result column="other_side_with_tax" jdbcType="DECIMAL" property="otherSideWithTax" />
+    <result column="adjust_for_freight" jdbcType="DECIMAL" property="adjustForFreight" />
+    <result column="adjust_for_carry" jdbcType="DECIMAL" property="adjustForCarry" />
+    <result column="adjust_for_workload" jdbcType="DECIMAL" property="adjustForWorkload" />
+    <result column="adjust_for_upstairs" jdbcType="DECIMAL" property="adjustForUpstairs" />
+    <result column="adjust_for_fine" jdbcType="DECIMAL" property="adjustForFine" />
+    <result column="adjust_for_cargo_loss" jdbcType="DECIMAL" property="adjustForCargoLoss" />
+    <result column="adjust_for_reason" jdbcType="VARCHAR" property="adjustForReason" />
+    <result column="valid_status" jdbcType="TINYINT" property="validStatus" />
+    <result column="valid_result" jdbcType="VARCHAR" property="validResult" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    adjust_temp_id, adjust_id, tenant_id, tenant_code, waybill_id, waybill_no, vendor_id, 
+    freight_with_tax, other_side_with_tax, adjust_for_freight, adjust_for_carry, adjust_for_workload, 
+    adjust_for_upstairs, adjust_for_fine, adjust_for_cargo_loss, adjust_for_reason, valid_status, 
+    valid_result, create_user_id, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.tgm.fms.domain.v3.AdjustForWaybillTempExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from adjust_for_waybill_temp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from adjust_for_waybill_temp
+    where adjust_temp_id = #{adjustTempId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from adjust_for_waybill_temp
+    where adjust_temp_id = #{adjustTempId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.fms.domain.v3.AdjustForWaybillTempExample">
+    delete from adjust_for_waybill_temp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="adjust_temp_id" keyProperty="adjustTempId" parameterType="com.juma.tgm.fms.domain.v3.AdjustForWaybillTemp" useGeneratedKeys="true">
+    insert into adjust_for_waybill_temp (adjust_id, tenant_id, tenant_code, 
+      waybill_id, waybill_no, vendor_id, 
+      freight_with_tax, other_side_with_tax, adjust_for_freight, 
+      adjust_for_carry, adjust_for_workload, adjust_for_upstairs, 
+      adjust_for_fine, adjust_for_cargo_loss, adjust_for_reason, 
+      valid_status, valid_result, create_user_id, 
+      create_time)
+    values (#{adjustId,jdbcType=INTEGER}, #{tenantId,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, 
+      #{waybillId,jdbcType=INTEGER}, #{waybillNo,jdbcType=VARCHAR}, #{vendorId,jdbcType=INTEGER}, 
+      #{freightWithTax,jdbcType=DECIMAL}, #{otherSideWithTax,jdbcType=DECIMAL}, #{adjustForFreight,jdbcType=DECIMAL}, 
+      #{adjustForCarry,jdbcType=DECIMAL}, #{adjustForWorkload,jdbcType=DECIMAL}, #{adjustForUpstairs,jdbcType=DECIMAL}, 
+      #{adjustForFine,jdbcType=DECIMAL}, #{adjustForCargoLoss,jdbcType=DECIMAL}, #{adjustForReason,jdbcType=VARCHAR}, 
+      #{validStatus,jdbcType=TINYINT}, #{validResult,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="adjust_temp_id" keyProperty="adjustTempId" parameterType="com.juma.tgm.fms.domain.v3.AdjustForWaybillTemp" useGeneratedKeys="true">
+    insert into adjust_for_waybill_temp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="adjustId != null">
+        adjust_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="waybillId != null">
+        waybill_id,
+      </if>
+      <if test="waybillNo != null">
+        waybill_no,
+      </if>
+      <if test="vendorId != null">
+        vendor_id,
+      </if>
+      <if test="freightWithTax != null">
+        freight_with_tax,
+      </if>
+      <if test="otherSideWithTax != null">
+        other_side_with_tax,
+      </if>
+      <if test="adjustForFreight != null">
+        adjust_for_freight,
+      </if>
+      <if test="adjustForCarry != null">
+        adjust_for_carry,
+      </if>
+      <if test="adjustForWorkload != null">
+        adjust_for_workload,
+      </if>
+      <if test="adjustForUpstairs != null">
+        adjust_for_upstairs,
+      </if>
+      <if test="adjustForFine != null">
+        adjust_for_fine,
+      </if>
+      <if test="adjustForCargoLoss != null">
+        adjust_for_cargo_loss,
+      </if>
+      <if test="adjustForReason != null">
+        adjust_for_reason,
+      </if>
+      <if test="validStatus != null">
+        valid_status,
+      </if>
+      <if test="validResult != null">
+        valid_result,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="adjustId != null">
+        #{adjustId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillId != null">
+        #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillNo != null">
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="freightWithTax != null">
+        #{freightWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="otherSideWithTax != null">
+        #{otherSideWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForFreight != null">
+        #{adjustForFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForCarry != null">
+        #{adjustForCarry,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForWorkload != null">
+        #{adjustForWorkload,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForUpstairs != null">
+        #{adjustForUpstairs,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForFine != null">
+        #{adjustForFine,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForCargoLoss != null">
+        #{adjustForCargoLoss,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForReason != null">
+        #{adjustForReason,jdbcType=VARCHAR},
+      </if>
+      <if test="validStatus != null">
+        #{validStatus,jdbcType=TINYINT},
+      </if>
+      <if test="validResult != null">
+        #{validResult,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.fms.domain.v3.AdjustForWaybillTempExample" resultType="java.lang.Long">
+    select count(*) from adjust_for_waybill_temp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update adjust_for_waybill_temp
+    <set>
+      <if test="record.adjustTempId != null">
+        adjust_temp_id = #{record.adjustTempId,jdbcType=INTEGER},
+      </if>
+      <if test="record.adjustId != null">
+        adjust_id = #{record.adjustId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.waybillId != null">
+        waybill_id = #{record.waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="record.waybillNo != null">
+        waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendorId != null">
+        vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.freightWithTax != null">
+        freight_with_tax = #{record.freightWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.otherSideWithTax != null">
+        other_side_with_tax = #{record.otherSideWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adjustForFreight != null">
+        adjust_for_freight = #{record.adjustForFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adjustForCarry != null">
+        adjust_for_carry = #{record.adjustForCarry,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adjustForWorkload != null">
+        adjust_for_workload = #{record.adjustForWorkload,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adjustForUpstairs != null">
+        adjust_for_upstairs = #{record.adjustForUpstairs,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adjustForFine != null">
+        adjust_for_fine = #{record.adjustForFine,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adjustForCargoLoss != null">
+        adjust_for_cargo_loss = #{record.adjustForCargoLoss,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adjustForReason != null">
+        adjust_for_reason = #{record.adjustForReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.validStatus != null">
+        valid_status = #{record.validStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.validResult != null">
+        valid_result = #{record.validResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update adjust_for_waybill_temp
+    set adjust_temp_id = #{record.adjustTempId,jdbcType=INTEGER},
+      adjust_id = #{record.adjustId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      waybill_id = #{record.waybillId,jdbcType=INTEGER},
+      waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      freight_with_tax = #{record.freightWithTax,jdbcType=DECIMAL},
+      other_side_with_tax = #{record.otherSideWithTax,jdbcType=DECIMAL},
+      adjust_for_freight = #{record.adjustForFreight,jdbcType=DECIMAL},
+      adjust_for_carry = #{record.adjustForCarry,jdbcType=DECIMAL},
+      adjust_for_workload = #{record.adjustForWorkload,jdbcType=DECIMAL},
+      adjust_for_upstairs = #{record.adjustForUpstairs,jdbcType=DECIMAL},
+      adjust_for_fine = #{record.adjustForFine,jdbcType=DECIMAL},
+      adjust_for_cargo_loss = #{record.adjustForCargoLoss,jdbcType=DECIMAL},
+      adjust_for_reason = #{record.adjustForReason,jdbcType=VARCHAR},
+      valid_status = #{record.validStatus,jdbcType=TINYINT},
+      valid_result = #{record.validResult,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.fms.domain.v3.AdjustForWaybillTemp">
+    update adjust_for_waybill_temp
+    <set>
+      <if test="adjustId != null">
+        adjust_id = #{adjustId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillId != null">
+        waybill_id = #{waybillId,jdbcType=INTEGER},
+      </if>
+      <if test="waybillNo != null">
+        waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null">
+        vendor_id = #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="freightWithTax != null">
+        freight_with_tax = #{freightWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="otherSideWithTax != null">
+        other_side_with_tax = #{otherSideWithTax,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForFreight != null">
+        adjust_for_freight = #{adjustForFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForCarry != null">
+        adjust_for_carry = #{adjustForCarry,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForWorkload != null">
+        adjust_for_workload = #{adjustForWorkload,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForUpstairs != null">
+        adjust_for_upstairs = #{adjustForUpstairs,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForFine != null">
+        adjust_for_fine = #{adjustForFine,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForCargoLoss != null">
+        adjust_for_cargo_loss = #{adjustForCargoLoss,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustForReason != null">
+        adjust_for_reason = #{adjustForReason,jdbcType=VARCHAR},
+      </if>
+      <if test="validStatus != null">
+        valid_status = #{validStatus,jdbcType=TINYINT},
+      </if>
+      <if test="validResult != null">
+        valid_result = #{validResult,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where adjust_temp_id = #{adjustTempId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.fms.domain.v3.AdjustForWaybillTemp">
+    update adjust_for_waybill_temp
+    set adjust_id = #{adjustId,jdbcType=INTEGER},
+      tenant_id = #{tenantId,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      waybill_id = #{waybillId,jdbcType=INTEGER},
+      waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      vendor_id = #{vendorId,jdbcType=INTEGER},
+      freight_with_tax = #{freightWithTax,jdbcType=DECIMAL},
+      other_side_with_tax = #{otherSideWithTax,jdbcType=DECIMAL},
+      adjust_for_freight = #{adjustForFreight,jdbcType=DECIMAL},
+      adjust_for_carry = #{adjustForCarry,jdbcType=DECIMAL},
+      adjust_for_workload = #{adjustForWorkload,jdbcType=DECIMAL},
+      adjust_for_upstairs = #{adjustForUpstairs,jdbcType=DECIMAL},
+      adjust_for_fine = #{adjustForFine,jdbcType=DECIMAL},
+      adjust_for_cargo_loss = #{adjustForCargoLoss,jdbcType=DECIMAL},
+      adjust_for_reason = #{adjustForReason,jdbcType=VARCHAR},
+      valid_status = #{validStatus,jdbcType=TINYINT},
+      valid_result = #{validResult,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where adjust_temp_id = #{adjustTempId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="adjustTempId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into adjust_for_waybill_temp
+    (adjust_id,tenant_id,tenant_code,waybill_id,waybill_no,vendor_id,freight_with_tax,other_side_with_tax,adjust_for_freight,adjust_for_carry,adjust_for_workload,adjust_for_upstairs,adjust_for_fine,adjust_for_cargo_loss,adjust_for_reason,valid_status,valid_result,create_user_id,create_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.adjustId},#{item.tenantId},#{item.tenantCode},#{item.waybillId},#{item.waybillNo},#{item.vendorId},#{item.freightWithTax},#{item.otherSideWithTax},#{item.adjustForFreight},#{item.adjustForCarry},#{item.adjustForWorkload},#{item.adjustForUpstairs},#{item.adjustForFine},#{item.adjustForCargoLoss},#{item.adjustForReason},#{item.validStatus},#{item.validResult},#{item.createUserId},#{item.createTime})
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKey" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update adjust_for_waybill_temp
+      <set>
+        adjust_temp_id = #{item.adjustTempId},
+        adjust_id = #{item.adjustId},
+        tenant_id = #{item.tenantId},
+        tenant_code = #{item.tenantCode},
+        waybill_id = #{item.waybillId},
+        waybill_no = #{item.waybillNo},
+        vendor_id = #{item.vendorId},
+        freight_with_tax = #{item.freightWithTax},
+        other_side_with_tax = #{item.otherSideWithTax},
+        adjust_for_freight = #{item.adjustForFreight},
+        adjust_for_carry = #{item.adjustForCarry},
+        adjust_for_workload = #{item.adjustForWorkload},
+        adjust_for_upstairs = #{item.adjustForUpstairs},
+        adjust_for_fine = #{item.adjustForFine},
+        adjust_for_cargo_loss = #{item.adjustForCargoLoss},
+        adjust_for_reason = #{item.adjustForReason},
+        valid_status = #{item.validStatus},
+        valid_result = #{item.validResult},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+      </set>
+      where adjust_temp_id = #{item.adjustTempId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update adjust_for_waybill_temp
+      <set>
+        <if test="item.adjustId != null">
+          adjust_id = #{item.adjustId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantCode != null">
+          tenant_code = #{item.tenantCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.waybillId != null">
+          waybill_id = #{item.waybillId,jdbcType=INTEGER},
+        </if>
+        <if test="item.waybillNo != null">
+          waybill_no = #{item.waybillNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.vendorId != null">
+          vendor_id = #{item.vendorId,jdbcType=INTEGER},
+        </if>
+        <if test="item.freightWithTax != null">
+          freight_with_tax = #{item.freightWithTax,jdbcType=DECIMAL},
+        </if>
+        <if test="item.otherSideWithTax != null">
+          other_side_with_tax = #{item.otherSideWithTax,jdbcType=DECIMAL},
+        </if>
+        <if test="item.adjustForFreight != null">
+          adjust_for_freight = #{item.adjustForFreight,jdbcType=DECIMAL},
+        </if>
+        <if test="item.adjustForCarry != null">
+          adjust_for_carry = #{item.adjustForCarry,jdbcType=DECIMAL},
+        </if>
+        <if test="item.adjustForWorkload != null">
+          adjust_for_workload = #{item.adjustForWorkload,jdbcType=DECIMAL},
+        </if>
+        <if test="item.adjustForUpstairs != null">
+          adjust_for_upstairs = #{item.adjustForUpstairs,jdbcType=DECIMAL},
+        </if>
+        <if test="item.adjustForFine != null">
+          adjust_for_fine = #{item.adjustForFine,jdbcType=DECIMAL},
+        </if>
+        <if test="item.adjustForCargoLoss != null">
+          adjust_for_cargo_loss = #{item.adjustForCargoLoss,jdbcType=DECIMAL},
+        </if>
+        <if test="item.adjustForReason != null">
+          adjust_for_reason = #{item.adjustForReason,jdbcType=VARCHAR},
+        </if>
+        <if test="item.validStatus != null">
+          valid_status = #{item.validStatus,jdbcType=TINYINT},
+        </if>
+        <if test="item.validResult != null">
+          valid_result = #{item.validResult,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where adjust_temp_id = #{item.adjustTempId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

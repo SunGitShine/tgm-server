@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.configure.dao.ConfigParamOptionDao" >
+  <sql id="Base_Column_List" >
+    option_id as optionId,
+    user_id as userId,
+    param_id as paramId,
+    option_name as optionName,
+    option_value as optionValue,
+    option_described as optionDescribed,
+    order_no as orderNo,
+    region_code as regionCode,
+    area_code as areaCode,
+    tenant_id as tenantId,
+    tenant_code as tenantCode,
+    employee_id as employeeId,
+    department_id as departmentId,
+    is_delete as isDelete,
+    create_user_id as createUserId,
+    create_time as createTime
+  </sql>
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <![CDATA[ AND tenant_id = #{tenantId} ]]>
+      <if test="optionId != null"><![CDATA[AND option_id = #{optionId}]]></if>
+      <if test="userId != null"><![CDATA[AND user_id = #{userId}]]></if>
+      <if test="employeeId != null"><![CDATA[AND employee_id = #{employeeId}]]></if>
+      <if test="regionCode != null"><![CDATA[AND region_code = #{regionCode}]]></if>
+      <if test="areaCode != null"><![CDATA[AND area_code like concat(#{areaCode}, '%')]]></if>
+      <if test="tenantCode != null"><![CDATA[AND tenant_code = #{tenantCode}]]></if>
+      <if test="paramId != null"><![CDATA[AND param_id = #{paramId}]]></if>
+      <if test="optionName != null and optionName != ''"><![CDATA[AND option_name like concat('%', #{optionName}, '%')]]></if>
+      <if test="optionValue != null and optionValue != ''"><![CDATA[AND option_value like concat('%', #{optionValue}, '%')]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+    </where>
+  </sql>
+  
+  <sql id="UPDATE_SET_SQL">
+    <set>
+      <if test="userId != null">user_id = #{userId},</if>
+      <if test="paramId != null">param_id = #{paramId},</if>
+      <if test="optionName != null">option_name = #{optionName},</if>
+      <if test="optionValue != null">option_value = #{optionValue},</if>
+      <if test="optionDescribed != null">option_described = #{optionDescribed},</if>
+      <if test="orderNo != null">order_no = #{orderNo},</if>
+      <if test="employeeId != null">employee_id = #{employeeId},</if>
+      <if test="regionCode != null">region_code = #{regionCode},</if>
+      <if test="areaCode != null">area_code = #{areaCode},</if>
+      <if test="tenantId != null">tenant_id = #{tenantId},</if>
+      <if test="tenantCode != null">tenant_code = #{tenantCode},</if>
+      <if test="departmentId != null">department_id = #{departmentId},</if>
+      <if test="isDelete != null">is_delete = #{isDelete},</if>
+      last_update_time = now(),
+      <if test="lastUpdateUserId != null">last_update_user_id = #{lastUpdateUserId},</if>
+    </set>
+  </sql>
+  <sql id="SearchWhereSql">
+    <where>
+        <![CDATA[ and tenant_id = #{filters.tenantId} ]]>
+        <if test="filters.optionId != null">and option_id = #{filters.optionId}</if>
+        <if test="filters.paramId != null">and param_id = #{filters.paramId}</if>
+        <if test="filters.userId != null">and user_id = #{filters.userId}</if>
+        <if test="filters.tenantCode != null">and tenant_code = #{filters.tenantCode}</if>
+        <if test="filters.optionName != null">and option_name like concat('%', #{filters.optionName}, '%')</if>
+        <if test="filters.optionValue != null">and option_value like concat('%', #{filters.optionValue}, '%')</if>
+        <if test="filters.areaCodeList != null">
+          and area_code IN
+          <foreach collection="filters.areaCodeList" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+    </where>
+  </sql>
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by order_no asc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+  <!-- 根据ID获取 -->
+  <select id="get" resultType="configParamOption" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from config_param_option
+    where option_id = #{optionId}
+  </select>
+  <!-- 删除 -->
+  <delete id="delete" parameterType="configParamOption" >
+    delete from config_param_option where option_id = #{optionId}
+  </delete>
+  <!-- 根据paramId删除 -->
+  <delete id="deleteByParamId" parameterType="java.lang.Integer" >
+    delete from config_param_option where param_id = #{paramId}
+  </delete>
+  <!-- 根据userId与paramId删除 -->
+  <delete id="deleteByUserIdAndParamId" parameterType="configParamOption" >
+    delete from config_param_option where user_id=#{userId} and param_id = #{paramId}
+  </delete>
+  <!-- 添加 -->
+  <insert id="insert" parameterType="configParamOption" useGeneratedKeys="true" keyProperty="optionId">
+    insert into config_param_option (param_id, user_id, option_name, option_value, option_described, order_no, region_code, area_code, tenant_id, tenant_code, employee_id, department_id, is_delete, create_time, create_user_id)
+    values (#{paramId}, #{userId}, #{optionName}, #{optionValue}, #{optionDescribed}, #{orderNo},#{regionCode}, #{areaCode}, #{tenantId}, #{tenantCode}, #{employeeId}, #{departmentId}, 0, now(), #{createUserId})
+  </insert>
+  <!-- 修改 -->
+  <update id="update" parameterType="configParamOption" >
+    update config_param_option
+    <include refid="UPDATE_SET_SQL"></include>
+    where option_id = #{optionId}
+  </update>
+  <!-- 根据userId修改 -->
+  <update id="updateByUserId" parameterType="configParamOption" >
+    update config_param_option
+    <include refid="UPDATE_SET_SQL"></include>
+    where user_id = #{userId}
+  </update>
+  <!-- 获取列表 -->
+  <select id="loadAll" resultType="configParamOption">
+  	select 
+    <include refid="Base_Column_List" />
+    from config_param_option
+    where is_delete = false
+    group by user_id
+    order by order_no asc
+  </select>
+  <!-- 根据paramId获取列表 -->
+  <select id="findByParamId" resultType="configParamOption" parameterType="configParamOption">
+  	select 
+    <include refid="Base_Column_List" />
+    from config_param_option
+    <where>
+      and param_id = #{paramId}
+      and tenant_id = #{tenantId}
+      and is_delete = false
+    </where>
+    group by user_id
+    order by order_no asc
+  </select>
+  <!-- 分页获取数据 -->
+  <select id="search" parameterType="com.giants.common.tools.PageQueryCondition" resultType="configParamOption">
+    select
+    <include refid="Base_Column_List"></include>
+    from config_param_option
+    <include refid="SearchWhereSql"></include>
+    group by user_id
+    <include refid="searchorderByAndLimitSql"></include>
+  </select>
+  <!-- 获取总数 -->
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.giants.common.tools.PageQueryCondition">
+    select count(1) from (
+      select
+      <include refid="Base_Column_List"></include>
+      from config_param_option
+      <include refid="SearchWhereSql"></include>
+      group by user_id
+    ) c
+  </select>
+  <!-- 根据条件查询对象 -->
+  <select id="findByExample" parameterType="configParamOption" resultType="configParamOption">
+    <![CDATA[SELECT]]>
+    <include refid="Base_Column_List"/>
+    from config_param_option
+    <include refid="QUERY_WHERE_CLAUSE"/>
+    group by user_id
+  </select>
+</mapper>

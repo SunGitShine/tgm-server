@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.waybill.dao.WaybillBindFenceDao" >
+  <sql id="QUERY_COLUMN_LIST" >
+    waybill_bind_fence_id as waybillBindFenceId,
+    address_id as addressId,
+    waybill_id as waybillId,
+    fence_id as fenceId,
+    status as status,
+    sign as sign,
+    create_user_id as createUserId,
+    create_time as createTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[ FROM waybill_bind_fence ]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="waybillBindFenceId != null"><![CDATA[ AND waybill_bind_fence_Id = #{waybillBindFenceId} ]]></if>
+      <if test="waybillId != null"><![CDATA[ AND waybill_id = #{waybillId} ]]></if>
+      <if test="addressId != null"><![CDATA[ AND address_id = #{addressId} ]]></if>
+      <if test="fenceId != null"><![CDATA[ AND fence_id = #{fenceId} ]]></if>
+      <if test="status != null"><![CDATA[ AND status = #{status} ]]></if>
+      <if test="sign != null"><![CDATA[ AND sign = #{sign} ]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters != null">
+        <if test="filters.waybillBindFenceId != null"><![CDATA[ and waybill_bind_fence_Id = #{filters.waybillBindFenceId} ]]></if>
+        <if test="filters.waybillId != null"><![CDATA[ and waybill_id = #{filters.waybillId} ]]></if>
+        <if test="filters.addressId != null"><![CDATA[ and address_id = #{filters.addressId} ]]></if>
+        <if test="filters.fenceId != null"><![CDATA[ and fence_id = #{filters.fenceId} ]]></if>
+        <if test="filters.status != null"><![CDATA[ and status = #{filters.status} ]]></if>
+        <if test="filters.sign != null"><![CDATA[ and sign = #{filters.sign} ]]></if>
+      </if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDER_BY_AND_LIMIT">
+    <choose>
+        <when test="orderBy == null">
+            order by create_time asc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="waybillId != null"><![CDATA[ waybill_id = #{waybillId}, ]]></if>
+      <if test="addressId != null"><![CDATA[ address_id = #{addressId}, ]]></if>
+      <if test="fenceId != null"><![CDATA[ fence_id = #{fenceId}, ]]></if>
+      <if test="status != null"><![CDATA[ status = #{status}, ]]></if>
+      <if test="sign != null"><![CDATA[ sign = #{sign}, ]]></if>
+      <![CDATA[ last_update_time = now(), ]]>
+      <if test="lastUpdateUserId != null"><![CDATA[ last_update_user_id = #{lastUpdateUserId}, ]]></if>
+    </set>
+  </sql>
+
+  <!-- 根据ID获取 -->
+  <select id="get" resultType="waybillBindFence" parameterType="java.lang.Integer" >
+    <![CDATA[ select ]]>
+    <include refid="QUERY_COLUMN_LIST" />
+    <include refid="QUERY_FROM_TABLE" />
+    <![CDATA[ where waybill_bind_fence_Id = #{waybillBindFenceId} ]]>
+  </select>
+
+  <!-- 根据ID获取 -->
+  <select id="getForUpdate" resultType="waybillBindFence" parameterType="java.lang.Integer" >
+    <![CDATA[ select ]]>
+    <include refid="QUERY_COLUMN_LIST" />
+    <include refid="QUERY_FROM_TABLE" />
+    <![CDATA[ where waybill_bind_fence_Id = #{waybillBindFenceId} for update]]>
+  </select>
+
+  <!-- 添加 -->
+  <insert id="insert" parameterType="waybillBindFence" useGeneratedKeys="true" keyProperty="waybillBindFenceId">
+    <![CDATA[ 
+    insert into waybill_bind_fence (waybill_id, address_id, fence_id, status, sign, create_time, create_user_id)
+    values (#{waybillId}, #{addressId}, #{fenceId}, #{status}, #{sign}, now(), #{createUserId})
+    ]]>
+  </insert>
+
+  <!-- 根据主键修改 -->
+  <update id="update" parameterType="waybillBindFence" >
+    <![CDATA[ update waybill_bind_fence ]]>
+      <include refid="UPDATE_COLUMN_SET"></include>
+    <![CDATA[ where waybill_bind_fence_id = #{waybillBindFenceId} ]]>
+  </update>
+
+  <!-- 根据运单ID修改 -->
+  <update id="updateByWaybillId" parameterType="waybillBindFence" >
+    <![CDATA[ update waybill_bind_fence ]]>
+      <include refid="UPDATE_COLUMN_SET"></include>
+    <![CDATA[ where waybill_id = #{waybillId} ]]>
+  </update>
+
+  <!-- 分页获取 -->
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="waybillBindFence">
+    <![CDATA[ SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"></include>
+    <include refid="QUERY_FROM_TABLE" />
+    <include refid="SEARCH_WHERE_CLAUSE"></include>
+    <include refid="SEARCH_ORDER_BY_AND_LIMIT"></include>
+  </select>
+
+  <!-- 获取总数 -->
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.giants.common.tools.PageCondition">
+    <![CDATA[ SELECT COUNT(1) ]]>
+    <include refid="QUERY_FROM_TABLE" />
+    <include refid="SEARCH_WHERE_CLAUSE" />
+  </select>
+
+  <!-- 根据条件查询对象 -->
+  <select id="findByExample" parameterType="waybillBindFence" resultType="waybillBindFence">
+    <![CDATA[ SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE" />
+    <include refid="QUERY_WHERE_CLAUSE"/>
+  </select>
+
+  <!-- 根据条件查询对象 -->
+  <select id="findByExampleForUpdate" parameterType="waybillBindFence" resultType="waybillBindFence">
+    <![CDATA[ SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE" />
+    <include refid="QUERY_WHERE_CLAUSE"/>
+    <![CDATA[ for update ]]>
+  </select>
+
+  <!-- 获取目的地已完成或未完成的配送点的数量 -->
+  <select id="findReceivePointNo" parameterType="waybillBindFence" resultType="int">
+    <![CDATA[SELECT count(1) from (SELECT waybill_bind_fence_id from waybill_bind_fence ]]>
+    <include refid="QUERY_WHERE_CLAUSE"/>
+    <![CDATA[ group by address_id) wbf]]>
+  </select>
+</mapper>

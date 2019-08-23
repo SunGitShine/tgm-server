@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.TruckRequireDao">
+  <sql id="QUERY_COLUMN_LIST">
+    truck_require_id AS truckRequireId, 
+    waybill_id AS waybillId, 
+    truck_type_id AS truckTypeId,
+    goods_type AS goodsType,
+    goods_weight AS goodsWeight,
+    goods_volume AS goodsVolume,
+    goods_amount AS goodsAmount,
+    additional_function_ids AS additionalFunctionIds, 
+    tax_rate_value AS taxRateValue,
+    is_tail_board AS isTailBoard, 
+    remark AS remark,
+    vehicle_box_type AS vehicleBoxType
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM truck_require]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="truckRequireId != null"><![CDATA[AND truck_require_id = #{truckRequireId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="truckTypeId != null"><![CDATA[AND truck_type_id = #{truckTypeId}]]></if>
+      <if test="additionalFunctionIds != null"><![CDATA[AND additional_function_ids = #{additionalFunctionIds}]]></if>
+      <if test="goodsType != null"><![CDATA[AND goods_type = #{goodsType}]]></if>
+      <if test="goodsWeight != null"><![CDATA[AND goods_weight = #{goodsWeight}]]></if>
+      <if test="goodsVolume != null"><![CDATA[AND goods_volume = #{goodsVolume}]]></if>
+      <if test="goodsAmount != null"><![CDATA[AND goods_amount = #{goodsAmount}]]></if>
+      <if test="taxRateValue != null"><![CDATA[AND tax_rate_value = #{taxRateValue}]]></if>
+      <if test="isTailBoard != null"><![CDATA[AND is_tail_board = #{isTailBoard}]]></if>
+      <if test="remark != null"><![CDATA[AND remark = #{remark}]]></if>
+      <if test="vehicleBoxType != null"><![CDATA[AND vehicle_box_type = #{vehicleBoxType}]]></if>
+    </where>
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="truckRequireId != null"><![CDATA[truck_require_id = #{truckRequireId},]]></if>
+      <if test="waybillId != null"><![CDATA[waybill_id = #{waybillId},]]></if>
+      <if test="truckTypeId != null"><![CDATA[truck_type_id = #{truckTypeId},]]></if>
+      <if test="additionalFunctionIds != null"><![CDATA[additional_function_ids = #{additionalFunctionIds},]]></if>
+      <if test="goodsType != null"><![CDATA[goods_type = #{goodsType},]]></if>
+      <if test="goodsWeight != null"><![CDATA[goods_weight = #{goodsWeight},]]></if>
+      <if test="goodsVolume != null"><![CDATA[goods_volume = #{goodsVolume},]]></if>
+      <if test="goodsAmount != null"><![CDATA[goods_amount = #{goodsAmount},]]></if>
+      <if test="taxRateValue != null"><![CDATA[tax_rate_value = #{taxRateValue},]]></if>
+      <if test="isTailBoard != null"><![CDATA[is_tail_board = #{isTailBoard},]]></if>
+      <if test="remark != null"><![CDATA[remark = #{remark},]]></if>
+      <if test="vehicleBoxType != null"><![CDATA[vehicle_box_type = #{vehicleBoxType},]]></if>
+    </set>
+  </sql>
+
+  <sql id="REMOVE_COLUMN_SET">
+    <set>
+      <if test="additionalFunctionIds == null"><![CDATA[additional_function_ids = null,]]></if>
+      <if test="goodsType == null"><![CDATA[goods_type = null,]]></if>
+      <if test="goodsWeight == null"><![CDATA[goods_weight = 0,]]></if>
+      <if test="goodsVolume == null"><![CDATA[goods_volume = 0,]]></if>
+      <if test="goodsAmount != null"><![CDATA[goods_amount = 0,]]></if>
+      <if test="taxRateValue == null"><![CDATA[tax_rate_value = null,]]></if>
+      <if test="remark == null"><![CDATA[remark = null,]]></if>
+      <if test="vehicleBoxType == null"><![CDATA[vehicle_box_type = null,]]></if>
+      truck_require_id = #{truckRequireId}
+    </set>
+  </sql>
+  <insert id="insert" parameterType="truckRequire" useGeneratedKeys = "true" keyProperty ="truckRequireId">
+     insert into truck_require
+		( waybill_id, truck_type_id,additional_function_ids,goods_type,goods_weight,goods_volume, goods_amount,tax_rate_value, is_tail_board, remark, vehicle_box_type)
+	values
+		( #{waybillId}, #{truckTypeId}, #{additionalFunctionIds},#{goodsType},#{goodsWeight},#{goodsVolume},#{goodsAmount},#{taxRateValue}, #{isTailBoard},#{remark}, #{vehicleBoxType})
+  </insert>
+  <update id="update" parameterType="truckRequire" >
+    <![CDATA[UPDATE truck_require]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE truck_require_id = #{truckRequireId}]]>
+  </update>
+  <update id="removeNullInfo" parameterType="truckRequire" >
+    <![CDATA[UPDATE truck_require]]>
+    <include refid="REMOVE_COLUMN_SET"/>
+    <![CDATA[WHERE truck_require_id = #{truckRequireId}]]>
+  </update>
+  <select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="truckRequire">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE truck_require_id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{id}]]>
+    </foreach>
+  </select>
+  <select id="get" parameterType="java.lang.Integer" resultType="truckRequire">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where waybill_id=#{waybillId}]]>
+  </select>
+  <select id="loadAll" resultType="truckRequire">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="truckRequire" resultType="truckRequire">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="getTruckRequireByWaybillId" parameterType="int" resultType="truckRequire">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where waybill_id=#{waybillId}]]>
+  </select>
+  <select id="selectEntryListCount" parameterType="truckRequire" resultType="int">
+    <![CDATA[SELECT COUNT(truck_require_id) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+
+  <delete id="delete" parameterType="truckRequire" >
+    DELETE
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/>
+  </delete>
+</mapper>

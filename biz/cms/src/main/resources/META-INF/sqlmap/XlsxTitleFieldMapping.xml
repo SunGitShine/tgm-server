@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.xlsx.dao.XlsxTitleFieldMappingDao">
+  <sql id="QUERY_COLUMN_LIST">
+    mapping_id AS mappingId, 
+    template_id AS templateId, 
+    title AS title, 
+    field AS field, 
+    create_time AS createTime, 
+    last_update_time AS lastUpdateTime, 
+    create_user_id AS createUserId, 
+    last_update_user_id AS lastUpdateUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM xlsx_title_field_mapping]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="mappingId != null"><![CDATA[AND mapping_id = #{mappingId}]]></if>
+      <if test="templateId != null"><![CDATA[AND template_id = #{templateId}]]></if>
+      <if test="title != null and title != ''"><![CDATA[AND title = #{title}]]></if>
+      <if test="field != null and field != ''"><![CDATA[AND field = #{field}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[AND last_update_time = #{lastUpdateTime}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.mappingId != null"><![CDATA[AND mapping_id = #{filters.mappingId}]]></if>
+      <if test="filters.templateId != null"><![CDATA[AND template_id = #{filters.templateId}]]></if>
+      <if test="filters.title != null and title != ''"><![CDATA[AND title = #{filters.title}]]></if>
+      <if test="filters.field != null and field != ''"><![CDATA[AND field = #{filters.field}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="templateId != null"><![CDATA[template_id = #{templateId},]]></if>
+      <if test="title != null and title != ''"><![CDATA[title = #{title},]]></if>
+      <if test="field != null and field != ''"><![CDATA[field = #{field},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[last_update_time = #{lastUpdateTime},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="xlsxTitleFieldMapping" useGeneratedKeys = "true" keyProperty ="mappingId">
+    <![CDATA[
+      insert into xlsx_title_field_mapping
+		(template_id, title, field, create_time, last_update_time, create_user_id, last_update_user_id)
+	values
+		(#{templateId}, #{title}, #{field}, now(),#{lastUpdateTime}, #{createUserId}, #{lastUpdateUserId})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="xlsxTitleFieldMapping" >
+    <![CDATA[UPDATE xlsx_title_field_mapping]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE mapping_id = #{mappingId}]]>
+  </update>
+  
+  <delete id="delete" parameterType="xlsxTitleFieldMapping" >
+    <![CDATA[delete from xlsx_title_field_mapping where template_id = #{templateId}]]>
+  </delete>
+  
+  <select id="get" parameterType="int" resultType="xlsxTitleFieldMapping">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE mapping_id = #{mappingId}]]>
+  </select>
+  <select id="loadAll" resultType="xlsxTitleFieldMapping">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="xlsxTitleFieldMapping" resultType="xlsxTitleFieldMapping">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchDetails" parameterType="com.giants.common.tools.PageCondition" resultType="xlsxTitleFieldMapping">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

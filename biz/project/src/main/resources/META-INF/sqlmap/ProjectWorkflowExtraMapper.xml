@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.project.dao.ProjectWorkflowExtraMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.project.domain.v2.ProjectWorkflow">
+    <id column="project_workflow_id" jdbcType="INTEGER" property="projectWorkflowId" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="project_workflow_type" jdbcType="INTEGER" property="projectWorkflowType" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="process_instance_id" jdbcType="VARCHAR" property="processInstanceId" />
+    <result column="submitter" jdbcType="INTEGER" property="submitter" />
+    <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+    <result column="excute_time" jdbcType="DATE" property="excuteTime" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="attachment" jdbcType="VARCHAR" property="attachment" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    project_workflow_id, project_id, project_workflow_type, audit_status, process_instance_id, 
+    submitter, submit_time, excute_time, reason, attachment
+  </sql>
+  <insert id="insert" keyColumn="project_workflow_id" keyProperty="projectWorkflowId" parameterType="com.juma.tgm.project.domain.v2.ProjectWorkflow" useGeneratedKeys="true">
+    <selectKey keyProperty="projectWorkflowId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into project_workflow (project_id, project_workflow_type, audit_status, 
+      process_instance_id, submitter, submit_time, 
+      excute_time, reason, attachment
+      )
+    values (#{projectId,jdbcType=INTEGER}, #{projectWorkflowType,jdbcType=INTEGER}, #{auditStatus,jdbcType=INTEGER}, 
+      #{processInstanceId,jdbcType=VARCHAR}, #{submitter,jdbcType=INTEGER}, #{submitTime,jdbcType=TIMESTAMP}, 
+      #{excuteTime,jdbcType=DATE}, #{reason,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}
+      )
+  </insert>
+  <select id="findNeedExecuteData" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM
+    (
+      SELECT <include refid="Base_Column_List" /> FROM project_workflow WHERE
+      (
+        (project_workflow_type = 1 AND excute_time = CURDATE())
+        OR
+        (project_workflow_type IN (2,4) AND excute_time = date_sub(curdate(),interval 1 day))
+      )
+      AND audit_status = 3 ORDER BY submit_time DESC
+    ) pw
+    GROUP BY pw.project_id
+  </select>
+
+  <select id="unCompleteCount" resultType="java.lang.Integer">
+    select count(*)
+      from project_workflow
+      where project_id = #{projectId}
+      and
+      (
+        (audit_status in (1, 2))
+        or
+        (audit_status = 3 and excute_time > #{excuteTime} and project_workflow_type = #{projectWorkflowType})
+	  )
+  </select>
+</mapper>

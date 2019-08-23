@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.fms.dao.v3.ReconciliationUpdateVendorMqMapper">
+  <resultMap id="BaseResultMap" type="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMq">
+    <id column="mq_id" jdbcType="INTEGER" property="mqId" />
+    <result column="old_vendor_id" jdbcType="INTEGER" property="oldVendorId" />
+    <result column="old_vendor_name" jdbcType="VARCHAR" property="oldVendorName" />
+    <result column="vendor_id" jdbcType="INTEGER" property="vendorId" />
+    <result column="vendor_name" jdbcType="VARCHAR" property="vendorName" />
+    <result column="excute_result" jdbcType="VARCHAR" property="excuteResult" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMq">
+    <result column="mq_data" jdbcType="LONGVARCHAR" property="mqData" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    mq_id, old_vendor_id, old_vendor_name, vendor_id, vendor_name, excute_result, create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    mq_data
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMqExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from reconciliation_update_vendor_mq
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMqExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from reconciliation_update_vendor_mq
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from reconciliation_update_vendor_mq
+    where mq_id = #{mqId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from reconciliation_update_vendor_mq
+    where mq_id = #{mqId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMqExample">
+    delete from reconciliation_update_vendor_mq
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="mq_id" keyProperty="mqId" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMq" useGeneratedKeys="true">
+    insert into reconciliation_update_vendor_mq (old_vendor_id, old_vendor_name, vendor_id, 
+      vendor_name, excute_result, create_time, 
+      mq_data)
+    values (#{oldVendorId,jdbcType=INTEGER}, #{oldVendorName,jdbcType=VARCHAR}, #{vendorId,jdbcType=INTEGER}, 
+      #{vendorName,jdbcType=VARCHAR}, #{excuteResult,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{mqData,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="mq_id" keyProperty="mqId" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMq" useGeneratedKeys="true">
+    insert into reconciliation_update_vendor_mq
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="oldVendorId != null">
+        old_vendor_id,
+      </if>
+      <if test="oldVendorName != null">
+        old_vendor_name,
+      </if>
+      <if test="vendorId != null">
+        vendor_id,
+      </if>
+      <if test="vendorName != null">
+        vendor_name,
+      </if>
+      <if test="excuteResult != null">
+        excute_result,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="mqData != null">
+        mq_data,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="oldVendorId != null">
+        #{oldVendorId,jdbcType=INTEGER},
+      </if>
+      <if test="oldVendorName != null">
+        #{oldVendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorName != null">
+        #{vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteResult != null">
+        #{excuteResult,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mqData != null">
+        #{mqData,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMqExample" resultType="java.lang.Long">
+    select count(*) from reconciliation_update_vendor_mq
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update reconciliation_update_vendor_mq
+    <set>
+      <if test="record.mqId != null">
+        mq_id = #{record.mqId,jdbcType=INTEGER},
+      </if>
+      <if test="record.oldVendorId != null">
+        old_vendor_id = #{record.oldVendorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.oldVendorName != null">
+        old_vendor_name = #{record.oldVendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendorId != null">
+        vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorName != null">
+        vendor_name = #{record.vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.excuteResult != null">
+        excute_result = #{record.excuteResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mqData != null">
+        mq_data = #{record.mqData,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update reconciliation_update_vendor_mq
+    set mq_id = #{record.mqId,jdbcType=INTEGER},
+      old_vendor_id = #{record.oldVendorId,jdbcType=INTEGER},
+      old_vendor_name = #{record.oldVendorName,jdbcType=VARCHAR},
+      vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      vendor_name = #{record.vendorName,jdbcType=VARCHAR},
+      excute_result = #{record.excuteResult,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      mq_data = #{record.mqData,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update reconciliation_update_vendor_mq
+    set mq_id = #{record.mqId,jdbcType=INTEGER},
+      old_vendor_id = #{record.oldVendorId,jdbcType=INTEGER},
+      old_vendor_name = #{record.oldVendorName,jdbcType=VARCHAR},
+      vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      vendor_name = #{record.vendorName,jdbcType=VARCHAR},
+      excute_result = #{record.excuteResult,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMq">
+    update reconciliation_update_vendor_mq
+    <set>
+      <if test="oldVendorId != null">
+        old_vendor_id = #{oldVendorId,jdbcType=INTEGER},
+      </if>
+      <if test="oldVendorName != null">
+        old_vendor_name = #{oldVendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null">
+        vendor_id = #{vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorName != null">
+        vendor_name = #{vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteResult != null">
+        excute_result = #{excuteResult,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mqData != null">
+        mq_data = #{mqData,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where mq_id = #{mqId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMq">
+    update reconciliation_update_vendor_mq
+    set old_vendor_id = #{oldVendorId,jdbcType=INTEGER},
+      old_vendor_name = #{oldVendorName,jdbcType=VARCHAR},
+      vendor_id = #{vendorId,jdbcType=INTEGER},
+      vendor_name = #{vendorName,jdbcType=VARCHAR},
+      excute_result = #{excuteResult,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      mq_data = #{mqData,jdbcType=LONGVARCHAR}
+    where mq_id = #{mqId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.tgm.fms.domain.v3.ReconciliationUpdateVendorMq">
+    update reconciliation_update_vendor_mq
+    set old_vendor_id = #{oldVendorId,jdbcType=INTEGER},
+      old_vendor_name = #{oldVendorName,jdbcType=VARCHAR},
+      vendor_id = #{vendorId,jdbcType=INTEGER},
+      vendor_name = #{vendorName,jdbcType=VARCHAR},
+      excute_result = #{excuteResult,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where mq_id = #{mqId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="mqId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into reconciliation_update_vendor_mq
+    (mq_id,old_vendor_id,old_vendor_name,vendor_id,vendor_name,excute_result,create_time,mq_data) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.mqId},#{item.oldVendorId},#{item.oldVendorName},#{item.vendorId},#{item.vendorName},#{item.excuteResult},#{item.createTime},#{item.mqData})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update reconciliation_update_vendor_mq
+      <set>
+        mq_id = #{item.mqId},
+        old_vendor_id = #{item.oldVendorId},
+        old_vendor_name = #{item.oldVendorName},
+        vendor_id = #{item.vendorId},
+        vendor_name = #{item.vendorName},
+        excute_result = #{item.excuteResult},
+        create_time = #{item.createTime},
+        mq_data = #{item.mqData},
+      </set>
+      where mq_id = #{item.mqId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update reconciliation_update_vendor_mq
+      <set>
+        <if test="item.mqId != null">
+          mq_id = #{item.mqId,jdbcType=INTEGER},
+        </if>
+        <if test="item.oldVendorId != null">
+          old_vendor_id = #{item.oldVendorId,jdbcType=INTEGER},
+        </if>
+        <if test="item.oldVendorName != null">
+          old_vendor_name = #{item.oldVendorName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.vendorId != null">
+          vendor_id = #{item.vendorId,jdbcType=INTEGER},
+        </if>
+        <if test="item.vendorName != null">
+          vendor_name = #{item.vendorName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.excuteResult != null">
+          excute_result = #{item.excuteResult,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.mqData != null">
+          mq_data = #{item.mqData,jdbcType=LONGVARCHAR},
+        </if>
+      </set>
+      where mq_id = #{item.mqId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.version.dao.VersionDao">
+  <sql id="QUERY_COLUMN_LIST">
+    version_id AS versionId, 
+    version_name AS versionName, 
+    version_code AS versionCode, 
+    platform AS platform, 
+    package_name AS packageName,
+    download_url AS downloadUrl, 
+    remark AS remark, 
+    create_time AS createTime, 
+    create_user_id AS createUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM version]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="versionName != null"><![CDATA[AND version_name = #{versionName}]]></if>
+      <if test="versionCode != null"><![CDATA[AND version_code = #{versionCode}]]></if>
+      <if test="platform != null"><![CDATA[AND platform = #{platform}]]></if>
+      <if test="packageName != null"><![CDATA[AND package_name = #{packageName}]]></if>
+      <if test="downloadUrl != null and downloadUrl != ''"><![CDATA[AND download_url = #{downloadUrl}]]></if>
+      <if test="remark != null"><![CDATA[AND remark = #{remark}]]></if>
+    </where>
+  </sql>
+  
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.versionName!= null and filters.versionName!='"><![CDATA[AND version_name=#{filters.versionName}]]></if>
+    </where>
+  </sql>
+
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by create_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy} #{orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <sql id="QUERY_ORDER_LIMIT_CONDTION">
+    <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+    <if test="orderField == null and orderFieldType == null"><![CDATA[ORDER BY id DESC]]></if>
+    <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="versionName != null"><![CDATA[version_name = #{versionName},]]></if>
+      <if test="versionCode != null"><![CDATA[version_code = #{versionCode},]]></if>
+      <if test="platform != null"><![CDATA[platform = #{platform},]]></if>
+      <if test="packageName != null"><![CDATA[package_name = #{packageName},]]></if>
+      <if test="downloadUrl != null and downloadUrl != ''"><![CDATA[download_url = #{downloadUrl},]]></if>
+      <if test="remark != null"><![CDATA[remark = #{remark},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="version" useGeneratedKeys = "true" keyProperty ="id">
+    <![CDATA[
+      insert into version
+		(version_name, version_code, platform,package_name, download_url, remark,create_time,create_user_id)
+	values
+		(#{versionName}, #{versionCode}, #{platform},#{packageName}, #{downloadUrl}, #{remark},now(),#{createUserId})
+
+	]]>
+  </insert>
+  <select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+  <update id="delete" parameterType="version" >
+  	<![CDATA[DELETE version WHERE version_id=#{versionId} ]]>
+  </update>
+  <!-- 修改 -->
+  <update id="update" parameterType="version" >
+    <![CDATA[UPDATE version ]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE version_id = #{versionId}]]>
+  </update>
+  <select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="version">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE version_id IN]]>
+    <foreach collection="array" item="id" open="(" separator="," close=")">
+      <![CDATA[#{versionId}]]>
+    </foreach>
+  </select>
+  <select id="get" parameterType="java.lang.Integer" resultType="version">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where version_id=#{versionId}]]>
+  </select>
+  <select id="loadAll" resultType="version">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="version" resultType="version">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="selectEntryListCount" parameterType="version" resultType="int">
+    <![CDATA[SELECT COUNT(version_id) AS dataCount]]>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <!-- 获取运单总数 -->
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="java.lang.Integer">
+    select count(1)
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+  </select>
+  
+  <select id="search" resultType="version" parameterType="com.giants.common.tools.PageCondition">
+  	select
+  	<include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+    <include refid="searchorderByAndLimitSql"/>
+  </select>
+</mapper>

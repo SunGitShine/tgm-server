@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/rabbit
+    http://www.springframework.org/schema/rabbit/spring-rabbit-1.6.xsd">
+
+	<rabbit:admin connection-factory="rabbitConnectionFactory" />
+
+	<rabbit:connection-factory id="rabbitConnectionFactory"
+							   host="${rabbit.host}" username="${rabbit.username}" password="${rabbit.password}"
+							   port="${rabbit.port}" />
+
+
+	<bean id="fastjsonMessageConverter" class="com.juma.tgm.mq.rabbit.base.FastJsonMessageConverter" />
+
+	<rabbit:template id="amqpTemplate" exchange="tgmMqExchange"
+					 connection-factory="rabbitConnectionFactory" message-converter="fastjsonMessageConverter" />
+
+	<bean id="mqSendService" class="com.juma.tgm.mq.rabbit.send.MqSendService">
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+	</bean>
+
+	<import resource="spring-rabbit-match.xml"/>
+
+	<!-- 电子围栏 -->
+	<bean id="messageFenceListener" class="com.juma.tgm.mq.rabbit.receive.MessageFenceListener" />
+	<!-- VMS -->
+	<bean id="messageVmsVendorListener" class="com.juma.tgm.mq.rabbit.receive.MessageVmsVendorListener" />
+	<!-- 用户中心 -->
+	<bean id="messageAuthUserListener" class="com.juma.tgm.mq.rabbit.receive.MessageAuthUserListener" />
+	<!-- 消息中心 -->
+	<bean id="messageVoiceListener" class="com.juma.tgm.mq.rabbit.receive.MessageVoiceListener" />
+	<!-- crm -->
+	<bean id="messageCrmCustomerInfoListener" class="com.juma.tgm.mq.rabbit.receive.MessageCrmCustomerInfoListener" />
+	<!-- crm 数据迁移 -->
+	<bean id="messageCrmCustomerInfoDataMoveListener" class="com.juma.tgm.mq.rabbit.receive.MessageCrmCustomerInfoDataMoveListener" />
+	<!-- fms 结算 -->
+	<bean id="settlementListener" class="com.juma.tgm.mq.rabbit.receive.reconciliation.v2.SettlementListener" />
+	<!-- fms 开票-->
+	<bean id="invoiceListener" class="com.juma.tgm.mq.rabbit.receive.reconciliation.v2.InvoiceListener"/>
+	<!-- fms 收款状态-->
+	<bean id="receiptListener" class="com.juma.tgm.mq.rabbit.receive.reconciliation.v2.ReceiptListener"/>
+	<!-- fms 结算v3 -->
+	<bean id="settlementListenerV3" class="com.juma.tgm.mq.rabbit.receive.reconciliation.v3.SettlementListener" />
+	<!-- fms 收款v3 -->
+	<bean id="receiptListenerV3" class="com.juma.tgm.mq.rabbit.receive.reconciliation.v3.ReceiptListener" />
+	<!-- tms消息推送 -->
+	<bean id="messageMsgEventCommonListener" class="com.juma.tgm.mq.rabbit.receive.MessageMsgEventCommonListener" />
+	<!-- tms定时建单推送 -->
+	<bean id="messageTask4WaybillListener" class="com.juma.tgm.mq.rabbit.receive.MessageTask4WaybillListener" />
+	<!-- 新版任务建单 -->
+	<bean id="messageTaskCreateWaybillListener" class="com.juma.tgm.mq.rabbit.receive.MessageTaskCreateWaybillListener" />
+	<!-- 修改应收对账单承运商 -->
+	<bean id="vendorUpdateListener" class="com.juma.tgm.mq.rabbit.receive.reconciliation.v3.VendorUpdateListener" />
+	<!-- 运单操作记录 -->
+	<bean id="messageWaybillOperateTrackListener" class="com.juma.tgm.mq.rabbit.receive.MessageWaybillOperateTrackListener" />
+	<!-- 运单操作节点 -->
+	<bean id="messageWaybillOperateChangeEventListener" class="com.juma.tgm.mq.rabbit.receive.MessageWaybillOperateChangeEventListener" />
+
+   <bean id="sendService" class="com.juma.tgm.fms.service.impl.SendService">
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+		<property name="exchange" value="${fms.fanout.waybill.audit.exchange}"></property>
+	</bean>
+
+	<bean id="sendServiceV2" class="com.juma.tgm.fms.service.impl.v2.SendServiceV2" >
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+		<property name="exchange" value="${fms.fanout.waybill.audit.v2.exchange}"></property>
+	</bean>
+
+	<bean id="sendReceivableService" class="com.juma.tgm.fms.service.impl.v3.SendReceivableService" >
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+		<property name="exchange" value="${fms.fanout.waybill.audit.receivable.v3.exchange}"></property>
+	</bean>
+
+	<bean id="sendPayableServiceV3" class="com.juma.tgm.fms.service.impl.v3.SendPayableServiceV3" >
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+		<property name="exchange" value="${fms.fanout.waybill.audit.payable.v3.exchange}"></property>
+	</bean>
+
+	<bean id="sendReceivableServiceV3" class="com.juma.tgm.fms.service.impl.v3.SendReceivableServiceV3" >
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+		<property name="exchange" value="${fms.fanout.waybill.audit.receivable.v3.exchange}"></property>
+	</bean>
+
+	<bean id="sendTaskService" class="com.juma.tgm.cron.service.impl.SendTaskService" >
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+		<property name="exchange" value="${tms.fanout.task.create.waybill.exchange}"></property>
+	</bean>
+
+	<bean id="sendTaskServiceV2" class="com.juma.tgm.task.service.impl.SendTaskServiceV2" >
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+		<property name="exchange" value="${tms.fanout.task.v2.create.waybill.exchange}"></property>
+	</bean>
+
+    <rabbit:queue name="${fms.fanout.waybill.audit.queue}" />
+
+	<rabbit:fanout-exchange id="${fms.fanout.waybill.audit.exchange}"
+		name="${fms.fanout.waybill.audit.exchange}" durable="true" auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${fms.fanout.waybill.audit.queue}" /> 
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:queue name="${fms.fanout.waybill.audit.v2.queue}" />
+
+	<rabbit:fanout-exchange id="${fms.fanout.waybill.audit.v2.exchange}" name="${fms.fanout.waybill.audit.v2.exchange}" durable="true" auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${fms.fanout.waybill.audit.v2.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:queue name="${fms.fanout.waybill.audit.payable.v3.queue}" />
+
+	<rabbit:fanout-exchange id="${fms.fanout.waybill.audit.payable.v3.exchange}"
+		name="${fms.fanout.waybill.audit.payable.v3.exchange}" durable="true" auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${fms.fanout.waybill.audit.payable.v3.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:queue name="${fms.fanout.waybill.audit.receivable.v3.queue}" />
+
+	<rabbit:fanout-exchange id="${fms.fanout.waybill.audit.receivable.v3.exchange}"
+        name="${fms.fanout.waybill.audit.receivable.v3.exchange}" durable="true" auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${fms.fanout.waybill.audit.receivable.v3.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:queue name="${tms.fanout.task.create.waybill.queue}" />
+	<rabbit:fanout-exchange id="${tms.fanout.task.create.waybill.exchange}"
+        name="${tms.fanout.task.create.waybill.exchange}" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${tms.fanout.task.create.waybill.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:queue name="${tms.fanout.task.v2.create.waybill.queue}" />
+	<rabbit:fanout-exchange id="${tms.fanout.task.v2.create.waybill.exchange}" name="${tms.fanout.task.v2.create.waybill.exchange}">
+		<rabbit:bindings>
+			<rabbit:binding queue="${tms.fanout.task.v2.create.waybill.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:queue name="${fence.event.name}" durable="${fence.event.durable}" auto-delete="false" exclusive="false"/>
+
+	<rabbit:queue name="${vendor.info.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+
+	<rabbit:queue name="${user.info.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+	
+	<rabbit:queue name="${message.fanout.voice.queue}" durable="true" auto-delete="false" exclusive="false"/>
+	
+	<rabbit:queue name="${customer.info.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+	
+	<rabbit:queue name="${customer.info.data.move.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+	
+	<rabbit:queue name="${fms.info.checked.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+
+	<rabbit:queue name="${fms.info.checked.v3.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+
+	<rabbit:queue name="${fms.info.receive.v3.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+
+	<rabbit:queue name="${fms.info.update.vendor.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+
+	<rabbit:queue name="${fms.fanout.invoice.update.queue}" durable="true" auto-delete="false" exclusive="false"/>
+
+	<rabbit:queue name="${fms.fanout.receipt.update.queue}" durable="true" auto-delete="false" exclusive="false"/>
+
+	<!-- 签约、运营主体不一样 start -->
+	<bean id="sendCompanyServiceV3" class="com.juma.tgm.fms.service.impl.v3.SendCompanyService" >
+		<property name="amqpTemplate" ref="amqpTemplate"></property>
+	</bean>
+
+	<rabbit:fanout-exchange name="FMS_RECEIVABLE_QUEUE_EXCHANGE" durable="true" auto-delete="false" />
+	
+	<rabbit:fanout-exchange name="FMS_PAYABLE_QUEUE_EXCHANGE" durable="true" auto-delete="false" />
+	
+	<!-- 签约、运营主体不一样 end -->
+	
+	<!-- 消息中心 语音通知失败-->
+	<rabbit:fanout-exchange name="${message.fanout.voice.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${message.fanout.voice.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<!-- VMS承租商 -->
+	<rabbit:fanout-exchange name="${vendor.info.change.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${vendor.info.queue.name}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+	
+	<!-- 用户中心用户 -->
+	<rabbit:fanout-exchange name="${user.info.change.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${user.info.queue.name}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+	
+	<!-- crm同步客户数据 -->
+	<rabbit:fanout-exchange name="${customer.info.change.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${customer.info.queue.name}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+	
+	<!-- crm同步客户数据 数据迁移 -->
+	<rabbit:fanout-exchange name="${customer.info.data.move.change.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${customer.info.data.move.queue.name}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+	
+	<!-- fms结算同步 -->
+	<rabbit:fanout-exchange name="${fms.info.checked.change.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${fms.info.checked.queue.name}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<!-- fms结算同步v3 -->
+	<rabbit:direct-exchange name="${fms.info.checked.v3.change.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${fms.info.checked.v3.queue.name}" />
+            <rabbit:binding queue="${fms.info.receive.v3.queue.name}" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<!-- tms消息推送 -->
+	<rabbit:queue name="${tms.msg.event.common.queue}" />
+	<rabbit:fanout-exchange id="${tms.msg.event.common.exchange}" name="${tms.msg.event.common.exchange}" durable="true" auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${tms.msg.event.common.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<!-- fms结算同步v3 -->
+	<rabbit:fanout-exchange name="${fms.info.update.vendor.change.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${fms.info.update.vendor.queue.name}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<!-- 运单操作记录 -->
+	<rabbit:queue name="${tms.waybill.operate.track.queue}" />
+	<rabbit:fanout-exchange id="${tms.waybill.operate.track.exchange}" name="${tms.waybill.operate.track.exchange}" durable="true" auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${tms.waybill.operate.track.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:queue name="${tms.msg.event.receive.invoice.queue}" />
+	<rabbit:direct-exchange id="${tms.msg.event.receive.invoice.exchange}" name="${tms.msg.event.receive.invoice.exchange}" durable="true" auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${tms.msg.event.receive.invoice.queue}" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<rabbit:queue name="${tms.msg.event.adjust.receive.invoice.queue}" />
+	<rabbit:direct-exchange id="${tms.msg.event.adjust.receive.invoice.exchange}" name="${tms.msg.event.adjust.receive.invoice.exchange}" durable="true" auto-delete="false" >
+		<rabbit:bindings>
+			<rabbit:binding queue="${tms.msg.event.adjust.receive.invoice.queue}" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<!-- 运单派车、到仓等事件通知 -->
+	<rabbit:queue name="${tms.waybill.operate.change.queue}"/>
+	<rabbit:fanout-exchange id="${tms.waybill.operate.change.exchange}" name="${tms.waybill.operate.change.exchange}" durable="true" auto-delete="false">
+		<rabbit:bindings>
+			<rabbit:binding queue="${tms.waybill.operate.change.queue}" />
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	<rabbit:listener-container channel-transacted="true"
+		connection-factory="rabbitConnectionFactory" acknowledge="auto">
+		<rabbit:listener queues="${message.fanout.voice.queue}" ref="messageVoiceListener" />
+		<rabbit:listener queues="${fence.event.name}" ref="messageFenceListener" />
+		<rabbit:listener queues="${vendor.info.queue.name}" ref="messageVmsVendorListener" />
+		<rabbit:listener queues="${user.info.queue.name}" ref="messageAuthUserListener" />
+		<rabbit:listener queues="${customer.info.queue.name}" ref="messageCrmCustomerInfoListener" />
+		<rabbit:listener queues="${customer.info.data.move.queue.name}" ref="messageCrmCustomerInfoDataMoveListener" />
+		<rabbit:listener queues="${fms.info.checked.queue.name}" ref="settlementListener" />
+		<rabbit:listener queues="${fms.fanout.invoice.update.queue}" ref="invoiceListener" />
+		<rabbit:listener queues="${fms.fanout.receipt.update.queue}" ref="receiptListener" />
+		<rabbit:listener queues="${fms.info.checked.v3.queue.name}" ref="settlementListenerV3" />
+		<rabbit:listener queues="${fms.info.receive.v3.queue.name}" ref="receiptListenerV3" />
+		<rabbit:listener queues="${fms.info.update.vendor.queue.name}" ref="vendorUpdateListener" />
+		<rabbit:listener queues="${ai.fanout.waybill.delivery.order.queue}" ref="messageUpdateDeliveryOrderListener" />
+		<rabbit:listener queues="${tms.waybill.operate.track.queue}" ref="messageWaybillOperateTrackListener" />
+		<rabbit:listener queues="${tms.msg.event.common.queue}" ref="messageMsgEventCommonListener" />
+		<rabbit:listener queues="${tms.fanout.task.create.waybill.queue}" ref="messageTask4WaybillListener" />
+		<rabbit:listener queues="${tms.fanout.task.v2.create.waybill.queue}" ref="messageTaskCreateWaybillListener" />
+		<rabbit:listener queues="${tms.waybill.operate.change.queue}" ref="messageWaybillOperateChangeEventListener" />
+	</rabbit:listener-container>
+</beans>

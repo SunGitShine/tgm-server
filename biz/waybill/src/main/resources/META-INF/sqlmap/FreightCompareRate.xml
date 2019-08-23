@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.waybill.dao.FreightCompareRateDao" >
+  <sql id="Base_Column_List" >
+    compare_id as compareId,
+    compare_rate as compareRate,
+    compare_name as compareName,
+    compare_key as compareKey,
+    descr as descr,
+    is_delete as isDelete,
+    create_time as createTime,
+    create_user_id as createUserId
+  </sql>
+  <sql id="Search_Query_Sql">
+    <where>
+      <if test="compareId != null">and compare_id = #{compareId}</if>
+      <if test="compareKey != null">and compare_key = #{compareKey}</if>
+    </where>
+  </sql>
+  <sql id="SearchWhereSql">
+    <where>
+      <if test="filters != null">
+        <if test="filters.compareName != '' and filters.compareName != null">
+          and compare_name like concat('%',#{filters.compareName},'%')
+        </if>
+        <if test="filters.compareKey != '' and filters.compareKey != null">
+          and compare_key like concat('%',#{filters.compareKey},'%')
+        </if>
+      </if>
+    </where>
+  </sql>
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by createTime asc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+  <!-- 根据ID获取 -->
+  <select id="get" resultType="freightCompareRate" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from freight_compare_rate
+    where compare_id = #{compareId}
+  </select>
+  <!-- 删除 -->
+  <delete id="delete" parameterType="freightCompareRate" >
+    delete from freight_compare_rate where compare_id = #{compareId}
+  </delete>
+  <!-- 添加 -->
+  <insert id="insert" parameterType="freightCompareRate" useGeneratedKeys="true" keyProperty="compareId">
+    insert into freight_compare_rate (compare_rate, compare_name, compare_key, descr,is_delete, create_time, create_user_id)
+    values (#{compareRate}, #{compareName}, #{compareKey}, #{descr}, false, now(), #{createUserId})
+  </insert>
+  <!-- 修改 -->
+  <update id="update" parameterType="freightCompareRate" >
+    update freight_compare_rate
+      <set>
+      <if test="compareRate != null">compare_rate = #{compareRate},</if>
+      <if test="compareName != null">compare_name = #{compareName},</if>
+      <if test="compareKey != null">compare_key = #{compareKey},</if>
+      <if test="descr != null">descr = #{descr},</if>
+      <if test="isDelete != null">is_delete = #{isDelete},</if>
+      last_update_time = now(),
+      <if test="lastUpdateUserId != null">last_update_user_id = #{lastUpdateUserId},</if>
+      </set>
+      where compare_id = #{compareId}
+  </update>
+  <!-- 根据条件分页获价格对比度配置数据 -->
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="freightCompareRate">
+    select
+    <include refid="Base_Column_List"></include>
+    from freight_compare_rate
+    <include refid="SearchWhereSql"></include>
+    <include refid="searchorderByAndLimitSql"></include>
+  </select>
+  <!-- 根据条件获取价格对比度配置总数 -->
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.giants.common.tools.PageCondition">
+    select count(1) from freight_compare_rate
+    <include refid="SearchWhereSql" />
+  </select>
+</mapper>

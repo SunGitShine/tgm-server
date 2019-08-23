@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:kie="http://drools.org/schema/kie-spring" xmlns:apollo="http://www.ctrip.com/schema/apollo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://drools.org/schema/kie-spring
+    http://juma-tgm.oss-cn-shenzhen.aliyuncs.com/kie-spring-6.0.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd
+    http://www.ctrip.com/schema/apollo http://www.ctrip.com/schema/apollo.xsd">
+
+	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+	<context:component-scan base-package="com.juma.tgm" />
+
+	<apollo:config />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:application.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="gaoDeMapServiceImpl" class="com.juma.tgm.waybill.service.impl.GaoDeMapServiceImpl">
+		<constructor-arg index="0">
+			<value>${amap.ak}</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="slf4jFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+		<property name="connectionLogEnabled" value="false" />
+		<property name="dataSourceLogEnabled" value="false" />
+		<property name="resultSetLogEnabled" value="false" />
+		<property name="statementSqlPrettyFormat" value="true" />
+		<property name="statementExecutableSqlLogEnable" value="true" />
+		<property name="statementExecuteAfterLogEnabled" value="false" />
+		<property name="statementParameterSetLogEnabled" value="false" />
+		<property name="statementPrepareAfterLogEnabled" value="false" />
+		<property name="statementPrepareCallAfterLogEnabled" value="false" />
+		<property name="statementCloseAfterLogEnabled" value="false" />
+		<property name="connectionCloseAfterLogEnabled" value="false" />
+	</bean>
+
+	<!-- datasource define -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="filters" value="stat" />
+		<property name="maxActive" value="100" />
+		<property name="initialSize" value="10" />
+		<property name="minIdle" value="0" />
+		<!-- 1分钟 -->
+		<property name="maxWait" value="60000" />
+		<!-- 10分钟 -->
+		<property name="timeBetweenEvictionRunsMillis" value="600000" />
+		<!-- 15分钟 -->
+		<property name="minEvictableIdleTimeMillis" value="600000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="validationQueryTimeout" value="5"/>
+		<!-- 单位:秒   15分钟-->
+        <property name="removeAbandonedTimeout" value="900" />
+		<property name="testWhileIdle" value="true" />
+		<property name="removeAbandoned" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
+		<property name="proxyFilters">
+			<list>
+				<ref bean="slf4jFilter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:META-INF/sqlmap-config.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:META-INF/sqlmap/**/*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.juma.tgm.*.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sessionFactory" />
+	</bean>
+
+	<bean id="enterExecutionTimeProfilerAop" class="com.giants.analyse.aop.EnterExecutionTimeProfilerAop">
+		<property name="threshold" value="${profiler.executionTime.threshold}" />
+		<property name="showArguments" value="false" />
+	</bean>
+
+	<bean id="redisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="hostName" value="${redis.ip}" />
+		<property name="port" value="${redis.port}" />
+		<property name="password" value="${redis.password}" />
+	</bean>
+
+	<bean id="redisClient" class="com.giants.cache.redis.SpringDataRedisClient">
+		<property name="redisTemplate">
+			<bean class="org.springframework.data.redis.core.RedisTemplate">
+				<property name="connectionFactory" ref="redisConnectionFactory" />
+			</bean>
+		</property>
+	</bean>
+
+
+	<bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory">
+			<bean
+				class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+				<property name="hostName" value="${redis.ip}" />
+				<property name="port" value="${redis.port}" />
+				<property name="password" value="${redis.password}" />
+			</bean>
+		</property>
+		<property name="keySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashKeySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashValueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+	</bean>
+
+	<bean class="com.giants.cache.core.GiantsCacheManager">
+		<constructor-arg index="0">
+			<bean class="com.giants.cache.redis.impl.GiantsRedisImpl">
+				<property name="redisClient" ref="redisClient" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="giantsCache" class="com.giants.cache.redis.impl.GiantsRedisImpl">
+		<property name="redisClient" ref="redisClient" />
+	</bean>
+
+	<bean id="giantsCacheDaoAop" class="com.giants.cache.core.aop.GiantsCacheAop">
+		<property name="cacheModelName" value="dao" />
+	</bean>
+
+	<bean id="giantsCacheServiceAop" class="com.giants.cache.core.aop.GiantsCacheAop">
+		<property name="cacheModelName" value="service" />
+	</bean>
+
+	<bean id="resourceBundleMessageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>tgm-customer-resources</value>
+				<value>tgm-manage-resources</value>
+				<value>tgm-gateway-resources</value>
+				<value>tgm-waybill-resources</value>
+				<value>tgm-service-resources</value>
+				<value>tgm-configure-resources</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.giants.common.SpringContextHelper" />
+
+	<kie:kmodule id="kmodule">
+		<kie:kbase name="kbase" packages="drools.rules">
+			<kie:ksession name="ksession"></kie:ksession>
+		</kie:kbase>
+	</kie:kmodule>
+
+	<!-- <bean id="kiePostProcessor" class="org.kie.spring.KModuleBeanFactoryPostProcessor" 
+		/> -->
+
+	<bean id="kiePostProcessor"
+		class="org.kie.spring.annotations.KModuleAnnotationPostProcessor" />
+
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="15" />
+		<property name="maxPoolSize" value="30" />
+		<property name="keepAliveSeconds" value="300" />
+	</bean>
+
+
+	<!-- 客户同步变化 观察这容器，以后看要不要 都用这样的方式， 可以减少代码的耦合 -->
+	<bean id="customerInfoObservable" class="com.juma.tgm.common.event.TMSObservable">
+		<property name="name" value="customerInfoObservable" />
+		<property name="observers">
+			<list>
+				<ref bean="customerManagerUserIdUpdateObserver" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 客户经理人 变化观察者 -->
+	<bean id="customerManagerUserIdUpdateObserver"
+		class="com.juma.tgm.crm.event.CustomerManagerUserIdUpdateObserver">
+		<property name="employeeService" ref="employeeService" />
+		<property name="taskWaybillTemplateService" ref="taskWaybillTemplateServiceImpl" />
+		<property name="task4WaybillService" ref="task4WaybillServiceImpl" />
+		<property name="projectService" ref="projectServiceImpl" />
+		<property name="fixedDemandService" ref="fixedDemandServiceImpl" />
+		<property name="customerInfoService" ref="customerInfoServiceImpl" />
+	</bean>
+
+	<bean class="com.third.eventbus.EventBus"/>
+	<bean class="com.third.service.boot.starter.ServiceConfigurer"/>
+	<bean class="com.third.service.boot.starter.eventbus.rabbit.RabbitConfigurer"/>
+</beans>

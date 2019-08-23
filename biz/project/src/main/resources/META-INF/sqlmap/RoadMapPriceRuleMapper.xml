@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.tgm.project.dao.RoadMapPriceRuleMapper" >
+  <resultMap id="BaseResultMap" type="com.juma.tgm.project.domain.RoadMapPriceRule" >
+    <id column="road_map_price_rule_id" property="roadMapPriceRuleId" jdbcType="INTEGER" />
+    <result column="road_map_id" property="roadMapId" jdbcType="INTEGER" />
+    <result column="valuation_way" property="valuationWay" jdbcType="TINYINT" />
+    <result column="truck_type_id" property="truckTypeId" jdbcType="INTEGER" />
+    <result column="valuation_model_json" property="valuationModelJson" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    road_map_price_rule_id, road_map_id, valuation_way, truck_type_id, valuation_model_json, 
+    create_user_id, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.juma.tgm.project.domain.RoadMapPriceRuleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from road_map_price_rule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet!=null" >
+      <if test="startOffSet>=0" >
+        limit ${startOffSet} , ${size}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.juma.tgm.project.domain.RoadMapPriceRuleExample" >
+    delete from road_map_price_rule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insertSelective" parameterType="com.juma.tgm.project.domain.RoadMapPriceRule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="roadMapPriceRuleId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into road_map_price_rule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roadMapId != null" >
+        road_map_id,
+      </if>
+      <if test="valuationWay != null" >
+        valuation_way,
+      </if>
+      <if test="truckTypeId != null" >
+        truck_type_id,
+      </if>
+      <if test="valuationModelJson != null" >
+        valuation_model_json,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roadMapId != null" >
+        #{roadMapId,jdbcType=INTEGER},
+      </if>
+      <if test="valuationWay != null" >
+        #{valuationWay,jdbcType=TINYINT},
+      </if>
+      <if test="truckTypeId != null" >
+        #{truckTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="valuationModelJson != null" >
+        #{valuationModelJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.tgm.project.domain.RoadMapPriceRuleExample" resultType="java.lang.Integer" >
+    select count(*) from road_map_price_rule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update road_map_price_rule
+    <set >
+      <if test="record.roadMapPriceRuleId != null" >
+        road_map_price_rule_id = #{record.roadMapPriceRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.roadMapId != null" >
+        road_map_id = #{record.roadMapId,jdbcType=INTEGER},
+      </if>
+      <if test="record.valuationWay != null" >
+        valuation_way = #{record.valuationWay,jdbcType=TINYINT},
+      </if>
+      <if test="record.truckTypeId != null" >
+        truck_type_id = #{record.truckTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.valuationModelJson != null" >
+        valuation_model_json = #{record.valuationModelJson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update road_map_price_rule
+    set road_map_price_rule_id = #{record.roadMapPriceRuleId,jdbcType=INTEGER},
+      road_map_id = #{record.roadMapId,jdbcType=INTEGER},
+      valuation_way = #{record.valuationWay,jdbcType=TINYINT},
+      truck_type_id = #{record.truckTypeId,jdbcType=INTEGER},
+      valuation_model_json = #{record.valuationModelJson,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.tgm.project.domain.RoadMapPriceRule" >
+    update road_map_price_rule
+    <set >
+      <if test="roadMapId != null" >
+        road_map_id = #{roadMapId,jdbcType=INTEGER},
+      </if>
+      <if test="valuationWay != null" >
+        valuation_way = #{valuationWay,jdbcType=TINYINT},
+      </if>
+      <if test="truckTypeId != null" >
+        truck_type_id = #{truckTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="valuationModelJson != null" >
+        valuation_model_json = #{valuationModelJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where road_map_price_rule_id = #{roadMapPriceRuleId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.DeliveryPointSupplementDao">
+  <sql id="QUERY_COLUMN_LIST">
+    delivery_point_supplement_id AS deliveryPointSupplementId, 
+    waybill_id AS waybillId, 
+    img AS img, 
+    orders AS orders,
+    is_delete AS isDelete,
+    create_time AS createTime, 
+    create_user_id AS createUserId, 
+    last_update_user_id AS lastUpdateUserId, 
+    last_update_time AS lastUpdateTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM delivery_point_supplement]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="deliveryPointSupplementId != null"><![CDATA[AND delivery_point_supplement_id = #{deliveryPointSupplementId}]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="img != null and img != ''"><![CDATA[AND img = #{img}]]></if>
+      <if test="orders != null"><![CDATA[AND orders = #{orders}]]></if>
+      <if test="isDelete != null"><![CDATA[AND is_delete = #{isDelete}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{lastUpdateUserId}]]></if>
+      <if test="lastUpdateTime != null"><![CDATA[AND last_update_time = #{lastUpdateTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.deliveryPointSupplementId != null"><![CDATA[AND delivery_point_supplement_id = #{filters.deliveryPointSupplementId}]]></if>
+      <if test="filters.waybillId != null"><![CDATA[AND waybill_id = #{filters.waybillId}]]></if>
+      <if test="filters.img != null and img != ''"><![CDATA[AND img = #{filters.img}]]></if>
+      <if test="filters.orders != null"><![CDATA[AND orders = #{filters.orders}]]></if>
+      <if test="filters.isDelete != null"><![CDATA[AND is_delete = #{filters.isDelete}]]></if>
+      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+      <if test="filters.lastUpdateUserId != null"><![CDATA[AND last_update_user_id = #{filters.lastUpdateUserId}]]></if>
+      <if test="filters.lastUpdateTime != null"><![CDATA[AND last_update_time = #{filters.lastUpdateTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="waybillId != null"><![CDATA[waybill_id = #{waybillId},]]></if>
+      <if test="img != null and img != ''"><![CDATA[img = #{img},]]></if>
+      <if test="orders != null"><![CDATA[orders = #{orders},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="deliveryPointSupplement" useGeneratedKeys = "true" keyProperty ="delivery_point_supplement_id">
+    <![CDATA[
+      insert into delivery_point_supplement
+		(waybill_id, img, orders,  is_delete, create_time, create_user_id, last_update_user_id, last_update_time)
+	values
+		(#{waybillId}, #{img}, #{orders}, #{isDelete}, now(),#{createUserId}, #{lastUpdateUserId}, #{lastUpdateTime})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="deliveryPointSupplement" >
+    <![CDATA[UPDATE delivery_point_supplement]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE delivery_point_supplement_id = #{deliveryPointSupplementId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="deliveryPointSupplement">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE delivery_point_supplement_id = #{deliveryPointSupplementId}]]>
+  </select>
+  <select id="loadAll" resultType="deliveryPointSupplement">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="deliveryPointSupplement" resultType="deliveryPointSupplement">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchDetails" parameterType="com.giants.common.tools.PageCondition" resultType="deliveryPointSupplement">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

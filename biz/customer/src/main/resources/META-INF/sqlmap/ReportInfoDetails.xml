@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.reportInfo.dao.ReportInfoDetailsDao">
+  <sql id="QUERY_COLUMN_LIST">
+    report_detail_id AS reportDetailId, 
+    report_info_id AS reportInfoId, 
+    report_info_type AS reportInfoType, 
+    image_url AS imageUrl, 
+    coordinate AS coordinate, 
+    address_detail AS addressDetail, 
+    device_no AS deviceNo, 
+    device_type AS deviceType, 
+    report_time AS reportTime, 
+    remark AS remark, 
+    create_user_id AS createUserId
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM report_info_details]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="reportDetailId != null"><![CDATA[AND report_detail_id = #{reportDetailId}]]></if>
+      <if test="reportInfoId != null"><![CDATA[AND report_info_id = #{reportInfoId}]]></if>
+      <if test="reportInfoType != null"><![CDATA[AND report_info_type = #{reportInfoType}]]></if>
+      <if test="imageUrl != null and imageUrl != ''"><![CDATA[AND image_url = #{imageUrl}]]></if>
+      <if test="coordinate != null and coordinate != ''"><![CDATA[AND coordinate = #{coordinate}]]></if>
+      <if test="addressDetail != null and addressDetail != ''"><![CDATA[AND address_detail = #{addressDetail}]]></if>
+      <if test="deviceNo != null and deviceNo != ''"><![CDATA[AND device_no = #{deviceNo}]]></if>
+      <if test="deviceType != null"><![CDATA[AND device_type = #{deviceType}]]></if>
+      <if test="reportTime != null"><![CDATA[AND report_time = #{reportTime}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.reportDetailId != null"><![CDATA[AND report_detail_id = #{filters.reportDetailId}]]></if>
+      <if test="filters.reportInfoId != null"><![CDATA[AND report_info_id = #{filters.reportInfoId}]]></if>
+      <if test="filters.reportInfoType != null"><![CDATA[AND report_info_type = #{filters.reportInfoType}]]></if>
+      <if test="filters.imageUrl != null and imageUrl != ''"><![CDATA[AND image_url = #{filters.imageUrl}]]></if>
+      <if test="filters.coordinate != null and coordinate != ''"><![CDATA[AND coordinate = #{filters.coordinate}]]></if>
+      <if test="filters.addressDetail != null and addressDetail != ''"><![CDATA[AND address_detail = #{filters.addressDetail}]]></if>
+      <if test="filters.deviceNo != null and deviceNo != ''"><![CDATA[AND device_no = #{filters.deviceNo}]]></if>
+      <if test="filters.deviceType != null"><![CDATA[AND device_type = #{filters.deviceType}]]></if>
+      <if test="filters.reportTime != null"><![CDATA[AND report_time = #{filters.reportTime}]]></if>
+      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by create_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="reportInfoId != null"><![CDATA[report_info_id = #{reportInfoId},]]></if>
+      <if test="reportInfoType != null"><![CDATA[report_info_type = #{reportInfoType},]]></if>
+      <if test="imageUrl != null"><![CDATA[image_url = #{imageUrl},]]></if>
+      <if test="coordinate != null"><![CDATA[coordinate = #{coordinate},]]></if>
+      <if test="addressDetail != null"><![CDATA[address_detail = #{addressDetail},]]></if>
+      <if test="deviceNo != null"><![CDATA[device_no = #{deviceNo},]]></if>
+      <if test="deviceType != null"><![CDATA[device_type = #{deviceType},]]></if>
+      <if test="reportTime != null"><![CDATA[report_time = #{reportTime},]]></if>
+      <if test="remark != null"><![CDATA[remark = #{remark},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="reportInfoDetails" useGeneratedKeys = "true" keyProperty ="reportDetailId">
+    <![CDATA[
+      insert into report_info_details
+		(report_info_id, report_info_type, image_url, coordinate, address_detail, device_no, device_type, report_time, remark, create_user_id)
+	values
+		(#{reportInfoId}, #{reportInfoType}, #{imageUrl}, #{coordinate}, #{addressDetail}, #{deviceNo}, #{deviceType}, #{reportTime}, #{remark}, #{createUserId})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="reportInfoDetails" >
+    <![CDATA[UPDATE report_info_details]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE report_detail_id = #{reportDetailId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="reportInfoDetails">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE report_detail_id = #{reportDetailId}]]>
+  </select>
+  <select id="loadAll" resultType="reportInfoDetails">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="reportInfoDetails" resultType="reportInfoDetails">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="reportInfoDetails">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+  <select id="findAllBy" parameterType="reportInfoDetails" resultType="reportInfoDetails">
+    <![CDATA[
+      SELECT
+      rid.report_detail_id as reportDetailId,
+      rid.report_info_id AS reportInfoId,
+      ri.report_info_type as reportInfoType,
+      rid.image_url as imageUrl,
+      rid.coordinate as coordinate,
+      rid.report_time as reportTime,
+      rid.address_detail as addressDetail,
+      rid.remark as remark
+      from report_info_details rid LEFT JOIN report_info ri
+      on rid.report_info_id = ri.report_info_id
+      where ri.waybill_id = #{waybillId}
+    ]]>
+    <![CDATA[ order by rid.report_time ${orderDesc} ]]>
+  </select>
+</mapper>

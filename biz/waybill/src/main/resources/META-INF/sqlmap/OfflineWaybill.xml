@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.waybill.dao.OfflineWaybillDao">
+  <sql id="QUERY_COLUMN_LIST">
+    offline_waybill_id AS offlineWaybillId, 
+    customer_manager_id AS customerManagerId,
+    owner_employee_id AS ownerEmployeeId,
+    plan_delivery_time AS planDeliveryTime, 
+    driver_id AS driverId, 
+    driver_name AS driverName,
+    driver_phone AS driverPhone, 
+    driver_type AS driverType, 
+    truck_id AS truckId,
+    truck_type_id AS truckTypeId,
+    plate_number AS plateNumber, 
+    estimate_freight AS estimateFreight, 
+    tax_rate_id AS taxRateId, 
+    tax_rate_value AS taxRateValue, 
+    after_tax_freight AS afterTaxFreight, 
+    show4_driver_freight AS show4DriverFreight,
+    receipt_type AS receiptType,
+    receipt_type_value AS receiptTypeValue, 
+    customer_id AS customerId, 
+    customer_name AS customerName,
+    project_id AS projectId,
+    project_name AS projectName,
+    business_branch AS businessBranch,
+    region_code AS regionCode,
+    province AS province, 
+    city AS city, 
+    district AS district, 
+    street AS street, 
+    goods_weight AS goodsWeight, 
+    goods_type AS goodsType, 
+    goods_volume AS goodsVolume, 
+    is_back AS isBack, 
+    is_back_value AS isBackValue,
+    is_carry AS isCarry, 
+    is_carry_value AS isCarryValue, 
+    reconciliation_status AS reconciliationStatus,
+    driver_handling_cost AS driverHandlingCost, 
+    laborer_name AS laborerName,
+    laborer_handling_cost AS laborerHandlingCost, 
+    distribution_point_no AS distributionPointNo, 
+    area_code AS areaCode,
+    remark AS remark, 
+    result AS result,
+    status AS status,
+    opt_user_id AS optUserId,
+    tenant_id AS tenantId,
+    tenant_code AS tenantCode,
+    create_user_id AS createUserId, 
+    create_time AS createTime,
+    vehicle_type AS vehicleType,
+    vehicle_to_vendor AS vehicleToVendor,
+    vendor_name as vendorName,
+    logistics_label AS logisticsLabel
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM offline_waybill]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="offlineWaybillId != null"><![CDATA[AND offline_waybill_id = #{offlineWaybillId}]]></if>
+      <if test="customerManagerId != null"><![CDATA[AND customer_manager_id = #{customerManagerId}]]></if>
+      <if test="planDeliveryTime != null"><![CDATA[AND plan_delivery_time = #{planDeliveryTime}]]></if>
+      <if test="driverId != null"><![CDATA[AND driver_id = #{driverId}]]></if>
+      <if test="driverPhone != null and driverPhone != ''"><![CDATA[AND driver_phone = #{driverPhone}]]></if>
+      <if test="plateNumber != null and plateNumber != ''"><![CDATA[AND plate_number = #{plateNumber}]]></if>
+      <if test="vehicleToVendor != null"><![CDATA[AND vehicle_to_vendor = #{vehicleToVendor}]]></if>
+      <if test="tenantId != null"><![CDATA[AND tenant_id = #{tenantId}]]></if>
+      <if test="tenantCode != null"><![CDATA[AND tenant_code = #{tenantCode}]]></if>
+      <if test="estimateFreight != null"><![CDATA[AND estimate_freight = #{estimateFreight}]]></if>
+      <if test="taxRateId != null"><![CDATA[AND tax_rate_id = #{taxRateId}]]></if>
+      <if test="afterTaxFreight != null"><![CDATA[AND after_tax_freight = #{afterTaxFreight}]]></if>
+      <if test="receiptType != null"><![CDATA[AND receipt_type = #{receiptType}]]></if>
+      <if test="customerId != null"><![CDATA[AND customer_id = #{customerId}]]></if>
+      <if test="province != null and province != ''"><![CDATA[AND province = #{province}]]></if>
+      <if test="city != null and city != ''"><![CDATA[AND city = #{city}]]></if>
+      <if test="district != null and district != ''"><![CDATA[AND district = #{district}]]></if>
+      <if test="street != null and street != ''"><![CDATA[AND street = #{street}]]></if>
+      <if test="goodsWeight != null and goodsWeight != ''"><![CDATA[AND goods_weight = #{goodsWeight}]]></if>
+      <if test="goodsType != null and goodsType != ''"><![CDATA[AND goods_type = #{goodsType}]]></if>
+      <if test="goodsVolume != null and goodsVolume != ''"><![CDATA[AND goods_volume = #{goodsVolume}]]></if>
+      <if test="isBack != null"><![CDATA[AND is_back = #{isBack}]]></if>
+      <if test="isCarry != null"><![CDATA[AND is_carry = #{isCarry}]]></if>
+      <if test="driverHandlingCost != null"><![CDATA[AND driver_handling_cost = #{driverHandlingCost}]]></if>
+      <if test="laborerHandlingCost != null"><![CDATA[AND laborer_handling_cost = #{laborerHandlingCost}]]></if>
+      <if test="distributionPointNo != null"><![CDATA[AND distribution_point_no = #{distributionPointNo}]]></if>
+      <if test="remark != null and remark != ''"><![CDATA[AND remark = #{remark}]]></if>
+      <if test="result != null and result != ''"><![CDATA[AND result = #{result}]]></if>
+      <if test="createUserId != null"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+      <if test="createTime != null"><![CDATA[AND create_time = #{createTime}]]></if>
+      <if test="vehicleType != null"><![CDATA[AND vehicle_type = #{vehicleType}]]></if>
+      <if test="logisticsLabel != null"><![CDATA[AND logistics_label = #{logisticsLabel}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+  	<if test="filters != null">
+	    <where>
+	      <if test="filters.offlineWaybillId != null"><![CDATA[AND offline_waybill_id = #{filters.offlineWaybillId}]]></if>
+	      <if test="filters.planDeliveryTime != null"><![CDATA[AND plan_delivery_time = #{filters.planDeliveryTime}]]></if>
+	      <if test="filters.driverId != null"><![CDATA[AND driver_id = #{filters.driverId}]]></if>
+	      <if test="filters.driverPhone != null and driverPhone != ''"><![CDATA[AND driver_phone = #{filters.driverPhone}]]></if>
+	      <if test="filters.plateNumber != null and plateNumber != ''"><![CDATA[AND plate_number = #{filters.plateNumber}]]></if>
+	      <if test="filters.vehicleType != null"><![CDATA[AND vehicle_to_vendor = #{filters.vehicleType}]]></if>
+	      <if test="filters.vehicleToVendor != null"><![CDATA[AND tenant_id = #{filters.vehicleToVendor}]]></if>
+	      <if test="filters.tenantId != null"><![CDATA[AND tenant_id = #{filters.tenantId}]]></if>
+	      <if test="filters.tenantCode != null"><![CDATA[AND tenant_code = #{filters.tenantCode}]]></if>
+	      <if test="filters.estimateFreight != null"><![CDATA[AND estimate_freight = #{filters.estimateFreight}]]></if>
+	      <if test="filters.taxRateId != null"><![CDATA[AND tax_rate_id = #{filters.taxRateId}]]></if>
+	      <if test="filters.afterTaxFreight != null"><![CDATA[AND after_tax_freight = #{filters.afterTaxFreight}]]></if>
+	      <if test="filters.receiptType != null"><![CDATA[AND receipt_type = #{filters.receiptType}]]></if>
+	      <if test="filters.customerId != null"><![CDATA[AND customer_id = #{filters.customerId}]]></if>
+	      <if test="filters.province != null and province != ''"><![CDATA[AND province = #{filters.province}]]></if>
+	      <if test="filters.city != null and city != ''"><![CDATA[AND city = #{filters.city}]]></if>
+	      <if test="filters.district != null and district != ''"><![CDATA[AND district = #{filters.district}]]></if>
+	      <if test="filters.street != null and street != ''"><![CDATA[AND street = #{filters.street}]]></if>
+	      <if test="filters.goodsWeight != null and goodsWeight != ''"><![CDATA[AND goods_weight = #{filters.goodsWeight}]]></if>
+	      <if test="filters.goodsType != null and goodsType != ''"><![CDATA[AND goods_type = #{filters.goodsType}]]></if>
+	      <if test="filters.goodsVolume != null and goodsVolume != ''"><![CDATA[AND goods_volume = #{filters.goodsVolume}]]></if>
+	      <if test="filters.isBack != null"><![CDATA[AND is_back = #{filters.isBack}]]></if>
+	      <if test="filters.isCarry != null"><![CDATA[AND is_carry = #{filters.isCarry}]]></if>
+	      <if test="filters.driverHandlingCost != null"><![CDATA[AND driver_handling_cost = #{filters.driverHandlingCost}]]></if>
+	      <if test="filters.laborerHandlingCost != null"><![CDATA[AND laborer_handling_cost = #{filters.laborerHandlingCost}]]></if>
+	      <if test="filters.distributionPointNo != null"><![CDATA[AND distribution_point_no = #{filters.distributionPointNo}]]></if>
+	      <if
+                  test="filters.logisticsLabel != null and remark != ''"><![CDATA[AND logistics_label = #{filters.logisticsLabel}]]></if>
+	      <if test="filters.remark != null and remark != ''"><![CDATA[AND remark = #{filters.remark}]]></if>
+	      <if test="filters.optUserId != null"><![CDATA[AND opt_user_id = #{filters.optUserId}]]></if>
+	      <if test="filters.createUserId != null"><![CDATA[AND create_user_id = #{filters.createUserId}]]></if>
+	      <if test="filters.createTime != null"><![CDATA[AND create_time = #{filters.createTime}]]></if>
+	    </where>
+    </if>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by status asc, plan_delivery_time desc  
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="customerManagerId != null"><![CDATA[customer_manager_id = #{customerManagerId},]]></if>
+      <if test="planDeliveryTime != null"><![CDATA[plan_delivery_time = #{planDeliveryTime},]]></if>
+      <if test="driverId != null"><![CDATA[driver_id = #{driverId},]]></if>
+      <if test="driverType != null"><![CDATA[driver_type = #{driverType},]]></if>
+      <if test="driverPhone != null and driverPhone != ''"><![CDATA[driver_phone = #{driverPhone},]]></if>
+      <if test="plateNumber != null and plateNumber != ''"><![CDATA[plate_number = #{plateNumber},]]></if>
+      <if test="estimateFreight != null"><![CDATA[estimate_freight = #{estimateFreight},]]></if>
+      <if test="taxRateId != null"><![CDATA[tax_rate_id = #{taxRateId},]]></if>
+      <if test="afterTaxFreight != null"><![CDATA[after_tax_freight = #{afterTaxFreight},]]></if>
+      <if test="receiptType != null"><![CDATA[receipt_type = #{receiptType},]]></if>
+      <if test="customerId != null"><![CDATA[customer_id = #{customerId},]]></if>
+      <if test="province != null and province != ''"><![CDATA[province = #{province},]]></if>
+      <if test="city != null and city != ''"><![CDATA[city = #{city},]]></if>
+      <if test="district != null and district != ''"><![CDATA[district = #{district},]]></if>
+      <if test="street != null and street != ''"><![CDATA[street = #{street},]]></if>
+      <if test="goodsWeight != null and goodsWeight != ''"><![CDATA[goods_weight = #{goodsWeight},]]></if>
+      <if test="goodsType != null and goodsType != ''"><![CDATA[goods_type = #{goodsType},]]></if>
+      <if test="goodsVolume != null and goodsVolume != ''"><![CDATA[goods_volume = #{goodsVolume},]]></if>
+      <if test="isBack != null"><![CDATA[is_back = #{isBack},]]></if>
+      <if test="isCarry != null"><![CDATA[is_carry = #{isCarry},]]></if>
+      <if test="driverHandlingCost != null"><![CDATA[driver_handling_cost = #{driverHandlingCost},]]></if>
+      <if test="laborerHandlingCost != null"><![CDATA[laborer_handling_cost = #{laborerHandlingCost},]]></if>
+      <if test="distributionPointNo != null"><![CDATA[distribution_point_no = #{distributionPointNo},]]></if>
+      <if test="remark != null and remark != ''"><![CDATA[remark = #{remark},]]></if>
+      <if test="result != null and result != ''"><![CDATA[result = #{result},]]></if>
+      <if test="status != null"><![CDATA[status = #{status},]]></if>
+      <if test="tenantId != null"><![CDATA[tenant_id = #{tenantId},]]></if>
+      <if test="tenantCode != null"><![CDATA[tenant_code = #{tenantCode},]]></if>
+      <if test="createUserId != null"><![CDATA[create_user_id = #{createUserId},]]></if>
+      <if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+      <if test="vehicleType != null"><![CDATA[vehicle_type = #{vehicleType},]]></if>
+      <if test="vehicleToVendor != null"><![CDATA[vehicle_to_vendor = #{vehicleToVendor},]]></if>
+      <if test="vendorName != null"><![CDATA[endor_name = #{vendorName},]]></if>
+      <if test="logisticsLabel != null"><![CDATA[logistics_label = #{logisticsLabel},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="offlineWaybill" useGeneratedKeys = "true" keyProperty ="offline_waybill_id">
+    <![CDATA[
+      insert into offline_waybill
+		(customer_manager_id,owner_employee_id, plan_delivery_time, driver_id,driver_name, driver_phone,driver_type,truck_id,truck_type_id, plate_number, estimate_freight,show4_driver_freight, tax_rate_id,tax_rate_value, after_tax_freight, receipt_type, receipt_type_value,customer_id,customer_name, project_id, project_name, business_branch, province, city, district, street,region_code, goods_weight, goods_type, goods_volume, is_back, is_back_value,is_carry,is_carry_value,reconciliation_status, driver_handling_cost,laborer_name, laborer_handling_cost, distribution_point_no,area_code, remark,result, status,opt_user_id,tenant_id,tenant_code,create_user_id, create_time,vehicle_type,vehicle_to_vendor, vendor_name, logistics_label)
+	values
+		(#{customerManagerId},#{ownerEmployeeId}, #{planDeliveryTime}, #{driverId},#{driverName}, #{driverPhone},
+		#{driverType},#{truckId},#{truckTypeId}, #{plateNumber}, #{estimateFreight},#{show4DriverFreight}, #{taxRateId},#{taxRateValue}, #{afterTaxFreight}, #{receiptType},#{receiptTypeValue}, #{customerId},#{customerName},#{projectId},#{projectName},#{businessBranch}, #{province}, #{city}, #{district}, #{street},#{regionCode}, #{goodsWeight}, #{goodsType}, #{goodsVolume}, #{isBack},#{isBackValue}, #{isCarry},#{isCarryValue},#{reconciliationStatus}, #{driverHandlingCost}, #{laborerName}, #{laborerHandlingCost}, #{distributionPointNo},#{areaCode}, #{remark},#{result},#{status},#{optUserId}, #{tenantId},#{tenantCode},#{createUserId}, now(),#{vehicleType},#{vehicleToVendor}, #{vendorName}, #{logisticsLabel})
+
+	]]>
+  </insert>
+  <insert id="insertAll"  parameterType="java.util.List">
+  <![CDATA[
+    	 insert into offline_waybill(customer_manager_id,owner_employee_id, plan_delivery_time, driver_id, driver_name,
+    	 driver_phone,driver_type,truck_id,truck_type_id, plate_number, estimate_freight,show4_driver_freight, tax_rate_id,tax_rate_value, after_tax_freight, receipt_type,receipt_type_value, customer_id,customer_name, project_id, project_name, business_branch, province, city, district, street,region_code, goods_weight, goods_type, goods_volume, is_back,is_back_value, is_carry,is_carry_value,reconciliation_status, driver_handling_cost, laborer_name, laborer_handling_cost, distribution_point_no,area_code, remark,result, status,opt_user_id,tenant_id,tenant_code,create_user_id, create_time,vehicle_type,vehicle_to_vendor, vendor_name, logistics_label)
+	values
+    ]]>
+    <foreach collection="list" item="item" index="index" separator=",">
+		(#{item.customerManagerId},#{item.ownerEmployeeId}, #{item.planDeliveryTime},
+      #{item.driverId},#{item.driverName},#{item.driverPhone},#{item.driverType},#{item.truckId},#{item.truckTypeId},
+      #{item.plateNumber}, #{item.estimateFreight}, #{item.show4DriverFreight},#{item.taxRateId},
+      #{item.taxRateValue},#{item.afterTaxFreight},#{item.receiptType},#{item.receiptTypeValue},#{item.customerId},#{item.customerName},#{item.projectId},#{item.projectName},#{item.businessBranch}, #{item.province}, #{item.city}, #{item.district}, #{item.street},#{item.regionCode}, #{item.goodsWeight}, #{item.goodsType}, #{item.goodsVolume}, #{item.isBack},#{item.isBackValue}, #{item.isCarry},#{item.isCarryValue},#{item.reconciliationStatus},#{item.driverHandlingCost},#{item.laborerName}, #{item.laborerHandlingCost}, #{item.distributionPointNo},#{item.areaCode}, #{item.remark},#{item.result},#{item.status},#{item.optUserId}, #{item.tenantId},#{item.tenantCode},#{item.createUserId}, now(),#{item.vehicleType},#{item.vehicleToVendor},#{item.vendorName}, #{item.logisticsLabel})
+    </foreach>
+ </insert>
+  <update id="update" parameterType="offlineWaybill" >
+    <![CDATA[UPDATE offline_waybill]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE offline_waybill_id = #{offlineWaybillId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="offlineWaybill">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE offline_waybill_id = #{offlineWaybillId}]]>
+  </select>
+  
+  <select id="findOfflineWaybillByIds"  resultType="offlineWaybill" parameterType="list">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <where>
+   		<![CDATA[ AND offline_waybill_id in]]>
+     		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+				#{item}
+  		</foreach>
+    </where>
+  </select>
+  
+  <delete id="deleteByIds"  parameterType="list">
+	  <![CDATA[DELETE]]>
+	  <include refid="QUERY_FROM_TABLE"/>
+	  <where>
+    		<![CDATA[ AND offline_waybill_id in]]>
+      		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+ 				#{item}
+	  		</foreach>
+	    </where>
+  </delete>
+  
+  <select id="loadAll" resultType="offlineWaybill">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="offlineWaybill" resultType="offlineWaybill">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="offlineWaybill">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

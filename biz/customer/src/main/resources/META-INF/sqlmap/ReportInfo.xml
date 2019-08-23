@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.reportInfo.dao.ReportInfoDao">
+  <sql id="QUERY_COLUMN_LIST">
+    report_info_id AS reportInfoId, 
+    report_info_type AS reportInfoType, 
+    driver_id AS driverId, 
+    customer_id AS customerId, 
+    customer_name AS customerName, 
+    waybill_id AS waybillId, 
+    waybil_no AS waybilNo, 
+    plate_number AS plateNumber, 
+    region_code AS regionCode, 
+    tenant_id AS tenantId, 
+    tenant_code AS tenantCode, 
+    area_code AS areaCode,
+    remark As remark,
+    first_report_time AS firstReportTime
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[FROM report_info]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="tenantId != null"><![CDATA[AND tenant_id = #{tenantId}]]></if>
+      <if test="reportInfoId != null"><![CDATA[AND report_info_id = #{reportInfoId}]]></if>
+      <if test="reportInfoType != null"><![CDATA[AND report_info_type = #{reportInfoType}]]></if>
+      <if test="driverId != null"><![CDATA[AND driver_id = #{driverId}]]></if>
+      <if test="customerId != null"><![CDATA[AND customer_id = #{customerId}]]></if>
+      <if test="customerName != null"><![CDATA[AND customer_name like CONCAT('%', #{customerName}, '%')]]></if>
+      <if test="waybillId != null"><![CDATA[AND waybill_id = #{waybillId}]]></if>
+      <if test="waybilNo != null and waybilNo != ''"><![CDATA[AND waybil_no = #{waybilNo}]]></if>
+      <if test="plateNumber != null and plateNumber != ''"><![CDATA[AND plate_number = #{plateNumber}]]></if>
+      <if test="regionCode != null"><![CDATA[AND region_code = #{regionCode}]]></if>
+      <if test="tenantCode != null"><![CDATA[AND tenant_code = #{tenantCode}]]></if>
+      <if test="areaCode != null"><![CDATA[AND area_code = #{areaCode}]]></if>
+      <if test="firstReportTime != null"><![CDATA[AND first_report_time = #{firstReportTime}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters.tenantId != null"><![CDATA[AND tenant_id = #{filters.tenantId}]]></if>
+      <if test="filters.reportInfoId != null"><![CDATA[AND report_info_id = #{filters.reportInfoId}]]></if>
+      <if test="filters.reportInfoType != null"><![CDATA[AND report_info_type = #{filters.reportInfoType}]]></if>
+      <if test="filters.driverId != null"><![CDATA[AND driver_id = #{filters.driverId}]]></if>
+      <if test="filters.customerId != null"><![CDATA[AND customer_id = #{filters.customerId}]]></if>
+      <if test="filters.customerName != null"><![CDATA[AND customer_name like CONCAT('%', #{filters.customerName}, '%')]]></if>
+      <if test="filters.waybillId != null"><![CDATA[AND waybill_id = #{filters.waybillId}]]></if>
+      <if test="filters.waybilNo != null and waybilNo != ''"><![CDATA[AND waybil_no = #{filters.waybilNo}]]></if>
+      <if test="filters.plateNumber != null"><![CDATA[AND plate_number = #{filters.plateNumber}]]></if>
+      <if test="filters.regionCode != null"><![CDATA[AND region_code = #{filters.regionCode}]]></if>
+      <if test="filters.tenantCode != null"><![CDATA[AND tenant_code = #{filters.tenantCode}]]></if>
+      <if test="filters.areaCode != null"><![CDATA[AND area_code = #{filters.areaCode}]]></if>
+      <if test="filters.startTime != null"><![CDATA[AND first_report_time >= #{filters.startTime}]]></if>
+      <if test="filters.endTime != null"><![CDATA[AND first_report_time <= #{filters.endTime}]]></if>
+      <if test="filters.driverIdList != null">
+        and driver_id in
+        <foreach collection="filters.driverIdList" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="filters.customerIdList != null">
+        and customer_id in
+        <foreach collection="filters.customerIdList" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="filters.areaCodeList != null">
+        AND
+        <foreach collection="filters.areaCodeList" item="code" open="(" close=")" separator=" or">
+          area_code like concat(#{code},'%')
+        </foreach>
+      </if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDERBY_LIMIT">
+    <choose>
+       <when test="orderBy == null">
+          order by first_report_time desc
+       </when>
+       <otherwise>
+          order by ${orderBy} ${orderSort}  
+       </otherwise>
+    </choose>
+        limit #{startOffSet}, #{endOffSet} 
+  </sql>
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="reportInfoType != null"><![CDATA[report_info_type = #{reportInfoType},]]></if>
+      <if test="driverId != null"><![CDATA[driver_id = #{driverId},]]></if>
+      <if test="customerId != null"><![CDATA[customer_id = #{customerId},]]></if>
+      <if test="customerName != null"><![CDATA[customer_name = #{customerName},]]></if>
+      <if test="waybillId != null"><![CDATA[waybill_id = #{waybillId},]]></if>
+      <if test="waybilNo != null and waybilNo != ''"><![CDATA[waybil_no = #{waybilNo},]]></if>
+      <if test="plateNumber != null and waybilNo != ''"><![CDATA[plate_number = #{plateNumber},]]></if>
+      <if test="regionCode != null"><![CDATA[ region_code = #{regionCode},]]></if>
+      <if test="tenantCode != null"><![CDATA[ tenant_code = #{tenantCode},]]></if>
+      <if test="tenantId != null"><![CDATA[ tenant_id = #{tenantId},]]></if>
+      <if test="remark != null"><![CDATA[ remark = #{remark},]]></if>
+      <if test="areaCode != null"><![CDATA[area_code = #{areaCode},]]></if>
+      <if test="firstReportTime != null"><![CDATA[first_report_time = #{firstReportTime},]]></if>
+    </set>
+  </sql>
+  <insert id="insert" parameterType="reportInfo" useGeneratedKeys = "true" keyProperty ="reportInfoId">
+    <![CDATA[
+      insert into report_info
+		(report_info_type, driver_id, customer_id, customer_name, waybill_id, waybil_no, plate_number, region_code, tenant_id, tenant_code, area_code, first_report_time,remark)
+	values
+		(#{reportInfoType}, #{driverId}, #{customerId}, #{customerName}, #{waybillId}, #{waybilNo}, #{plateNumber}, #{regionCode}, #{tenantId}, #{tenantCode}, #{areaCode}, #{firstReportTime},#{remark})
+
+	]]>
+  </insert>
+  <update id="update" parameterType="reportInfo" >
+    <![CDATA[UPDATE report_info]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE report_info_id = #{reportInfoId}]]>
+  </update>
+  <select id="get" parameterType="int" resultType="reportInfo">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[WHERE report_info_id = #{reportInfoId}]]>
+  </select>
+  <select id="loadAll" resultType="reportInfo">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+  <select id="findByExample" parameterType="reportInfo" resultType="reportInfo">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+  </select>
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[SELECT COUNT(1)]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+  </select>
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="reportInfo">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/> 
+    <include refid="SEARCH_ORDERBY_LIMIT"/> 
+  </select>
+</mapper>

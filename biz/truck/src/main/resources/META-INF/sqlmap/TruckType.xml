@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.truck.dao.TruckTypeDao">
+  <sql id="QUERY_COLUMN_LIST">
+    truck_type_id AS truckTypeId, 
+    truck_length_id AS truckLengthId, 
+    vehicle_box_type AS vehicleBoxType, 
+    type_description AS typeDescription,
+    tenant_id AS tenantId, 
+    tenant_code AS tenantCode, 
+    truck_type_load AS truckTypeLoad, 
+    truck_type_volume AS truckTypeVolume, 
+    redundancy_load AS redundancyLoad,
+    redundancy_volume AS redundancyVolume,
+    order_num AS orderNum,
+    is_delete AS isDelete
+  </sql>
+
+  <sql id="QUERY_FROM_TABLE"><![CDATA[ FROM truck_type ]]></sql>
+
+  <sql id="QUERY_WHERE_CLAUSE">
+    <where>
+      <if test="truckTypeId != null"><![CDATA[ AND truck_type_id = #{truckTypeId}]]></if>
+      <if test="truckLengthId != null"><![CDATA[ AND truck_length_id = #{truckLengthId}]]></if>
+      <if test="vehicleBoxType != null"><![CDATA[ AND vehicle_box_type = #{vehicleBoxType}]]></if>
+      <if test="tenantId != null"><![CDATA[ AND tenant_id = #{tenantId}]]></if>
+      <if test="tenantCode != null"><![CDATA[ AND tenant_code = #{tenantCode}]]></if>
+      <if test="isDelete != null"><![CDATA[ AND is_delete = #{isDelete}]]></if>
+      <if test="orderNum != null"><![CDATA[ AND order_num = #{orderNum}]]></if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_WHERE_CLAUSE">
+    <where>
+      <if test="filters != null">
+        <if test="filters.truckLengthId != null">AND truck_length_id = #{filters.truckLengthId}</if>
+        <if test="filters.vehicleBoxType != null">AND vehicle_box_type = #{filters.vehicleBoxType}</if>
+        <if test="filters.tenantId != null">AND tenant_id = #{filters.tenantId}</if>
+        <if test="filters.tenantCode != null">AND tenant_code = #{filters.tenantCode}</if>
+        <if test="filters.isDelete != null">AND is_delete = #{filters.isDelete}</if>
+      </if>
+    </where>
+  </sql>
+
+  <sql id="SEARCH_ORDER_BY_AND_LIMIT_SQL">
+    <choose>
+        <when test="orderBy == null">
+            order by order_num asc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>  	
+    limit #{startOffSet}, #{endOffSet}
+  </sql>
+
+  <sql id="UPDATE_COLUMN_SET">
+    <set>
+      <if test="truckLengthId != null"><![CDATA[truck_length_id = #{truckLengthId},]]></if>
+      <if test="vehicleBoxType != null"><![CDATA[vehicle_box_type = #{vehicleBoxType},]]></if>
+      <if test="typeDescription != null"><![CDATA[type_description = #{typeDescription},]]></if>
+      <if test="tenantId != null"><![CDATA[tenant_id = #{tenantId},]]></if>
+      <if test="tenantCode != null"><![CDATA[tenant_code = #{tenantCode},]]></if>
+      <if test="truckTypeLoad != null"><![CDATA[truck_type_load = #{truckTypeLoad},]]></if>
+      <if test="truckTypeVolume != null"><![CDATA[truck_type_volume = #{truckTypeVolume},]]></if>
+      <if test="redundancyLoad != null"><![CDATA[redundancy_load = #{redundancyLoad},]]></if>
+      <if test="redundancyVolume != null"><![CDATA[redundancy_volume = #{redundancyVolume},]]></if>
+      <if test="orderNum != null"><![CDATA[order_num = #{orderNum},]]></if>
+      <if test="isDelete != null"><![CDATA[is_delete = #{isDelete},]]></if>
+      <![CDATA[last_update_time = now(),]]>
+      <if test="lastUpdateUserId != null"><![CDATA[last_update_user_id = #{lastUpdateUserId},]]></if>
+    </set>
+  </sql>
+
+  <insert id="insert" parameterType="truckType" useGeneratedKeys = "true" keyProperty ="truckTypeId">
+      insert into truck_type (truck_length_id, vehicle_box_type, type_description, tenant_id, tenant_code, truck_type_load, truck_type_volume, redundancy_load, redundancy_volume, order_num, is_delete, create_time, create_user_id)
+        values (#{truckLengthId}, #{vehicleBoxType}, #{typeDescription}, #{tenantId}, #{tenantCode}, #{truckTypeLoad}, #{truckTypeVolume}, #{redundancyLoad}, #{redundancyVolume}, #{orderNum}, false, now(), #{createUserId})
+  </insert>
+
+  <update id="update" parameterType="truckType" >
+    <![CDATA[UPDATE truck_type]]>
+    <include refid="UPDATE_COLUMN_SET"/>
+    <![CDATA[WHERE truck_type_id = #{truckTypeId}]]>
+  </update>
+
+  <update id="delete" parameterType="truckType" >
+  	<![CDATA[delete from truck_type where truck_type_id = #{truckTypeId}]]>
+  </update>
+
+  <select id="get" parameterType="int" resultType="truckType">
+    <![CDATA[SELECT]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <![CDATA[where truck_type_id=#{id}]]>
+  </select>
+
+  <select id="findByExample" parameterType="truckType" resultType="truckType">
+    <![CDATA[ SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/> 
+    <![CDATA[ ORDER BY order_num ASC ]]>
+  </select>
+
+  <select id="search" parameterType="com.giants.common.tools.PageCondition" resultType="truckType">
+    <![CDATA[ SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+    <include refid="SEARCH_ORDER_BY_AND_LIMIT_SQL"/>
+  </select>
+
+  <select id="searchCount" parameterType="com.giants.common.tools.PageCondition" resultType="int">
+    <![CDATA[ SELECT COUNT(1) ]]>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="SEARCH_WHERE_CLAUSE"/>
+  </select>
+
+  <!-- 获取最大的排序码 -->
+  <select id="findMaxOrderNo" resultType="int">
+    <![CDATA[SELECT max(order_num) AS orderNum ]]>
+    <include refid="QUERY_FROM_TABLE"/>
+  </select>
+
+
+  <select id="findByExampleGroupByBoxType" parameterType="truckType" resultType="truckType">
+    <![CDATA[ SELECT ]]>
+    <include refid="QUERY_COLUMN_LIST"/>
+    <include refid="QUERY_FROM_TABLE"/>
+    <include refid="QUERY_WHERE_CLAUSE"/>
+    <![CDATA[ GROUP by vehicle_box_type ORDER BY order_num ASC ]]>
+  </select>
+</mapper>

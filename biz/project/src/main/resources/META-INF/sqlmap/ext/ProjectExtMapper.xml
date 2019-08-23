@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.tgm.project.dao.ext.ProjectExtMapper">
+    <sql id="QUERY_COLUMN_LIST">
+    project_id AS projectId,
+    name AS name,
+    project_no AS projectNo,
+    project_type AS projectType,
+    project_status AS projectStatus,
+    pay_to_company AS payToCompany,
+    contract_no AS contractNo,
+    contract_to_company AS contractToCompany,
+    try_work_pass_attachment AS tryWorkPassAttachment,
+    try_work_protocol AS tryWorkProtocol,
+    project_start_date AS projectStartDate,
+    project_end_date AS projectEndDate,
+    business_linkman AS businessLinkman,
+    business_linktel AS businessLinktel,
+    business_linkemail AS businessLinkemail,
+    finance_linkman AS financeLinkman,
+    finance_linktel AS financeLinktel,
+    finance_linkemail AS financelinkemail,
+    area_code AS areaCode,
+    tenant_id AS tenantId,
+    customer_id AS customerId,
+    manager_id AS managerId,
+    project_manager_user_id as projectManagerUserId,
+    tax_rate_value AS taxRateValue,
+    estimate_time_consumption AS estimateTimeConsumption,
+    truck_require_remark AS truckRequireRemark,
+    additional_function_ids AS additionalFunctionIds,
+    is_enable AS isEnable,
+    logistics_label AS logisticsLabel
+  </sql>
+
+    <sql id="QUERY_JOIN_COLUMN_LIST">
+        p.project_id AS projectId,
+        p.name AS name,
+        p.project_no AS projectNo,
+        p.project_type AS projectType,
+        p.project_status AS projectStatus,
+        p.pay_to_company AS payToCompany,
+        p.contract_no AS contractNo,
+        p.contract_to_company AS contractToCompany,
+        p.try_work_pass_attachment AS tryWorkPassAttachment,
+        p.try_work_protocol AS tryWorkProtocol,
+        p.project_start_date AS projectStartDate,
+        p.project_end_date AS projectEndDate,
+        p.business_linkman AS businessLinkman,
+        p.business_linktel AS businessLinktel,
+        p.business_linkemail AS businessLinkemail,
+        p.finance_linkman AS financeLinkman,
+        p.finance_linktel AS financeLinktel,
+        p.finance_linkemail AS financelinkemail,
+        p.area_code AS areaCode,
+        p.tenant_id AS tenantId,
+        p.customer_id AS customerId,
+        p.manager_id AS managerId,
+        p.project_manager_user_id as projectManagerUserId,
+        p.tax_rate_value AS taxRateValue,
+        p.estimate_time_consumption AS estimateTimeConsumption,
+        p.truck_require_remark AS truckRequireRemark,
+        p.additional_function_ids AS additionalFunctionIds,
+        p.is_enable AS isEnable,
+        p.logistics_label AS logisticsLabel
+    </sql>
+
+    <sql id="QUERY_JOIN_COLUMN_LIST_APP">
+        p.project_id AS projectId,
+        p.name AS name,
+        p.customer_id AS customerId,
+        p.truck_customer_id AS truckCustomerId,
+        p.manager_id AS managerId,
+        p.goods_type AS goodsType,
+        p.tax_rate_value AS taxRateValue,
+        p.rebate_rate AS rebateRate,
+        p.truck_require_remark AS truckRequireRemark,
+        p.additional_function_ids AS additionalFunctionIds,
+        p.only_load_cargo AS onlyLoadCargo,
+        p.need_delivery_point_note AS needDeliveryPointNote,
+        p.fixed_no as fixedNo,
+        p.is_enable AS isEnable,
+        p.area_code AS areaCode,
+        p.create_time AS createTime,
+        p.create_user_id AS createUserId,
+        ci.customer_name as customerName,
+        p.is_receivable_first AS isReceivableFirst,
+        p.logistics_label AS logisticsLabel,
+        p.project_status AS projectStatus,
+        p.project_end_date AS projectEndDate,
+        p.project_start_date AS projectStartDate,
+        p.bill_period AS billPeriod,
+        p.project_manager_user_id AS projectManagerUserId
+    </sql>
+
+    <sql id="SEARCH_ORDERBY_LIMIT">
+        <choose>
+            <when test="orderBy == null">
+                order by project_id desc
+            </when>
+            <otherwise>
+                order by ${orderBy} ${orderSort}
+            </otherwise>
+        </choose>
+        limit #{startOffSet}, #{endOffSet}
+    </sql>
+
+    <select id="listProjectBy" parameterType="com.juma.tgm.project.vo.ProjectFilter" resultType="com.juma.tgm.project.domain.v2.Project">
+        <![CDATA[ SELECT ]]>
+        <include refid="QUERY_JOIN_COLUMN_LIST"/>
+        <![CDATA[ FROM project p left join project_member m on p.project_id = m.project_id ]]>
+        <where>
+            <![CDATA[ AND m.user_id = #{userId} ]]>
+            <if test="name != null"><![CDATA[AND p.name like concat('%', #{name}, '%')]]></if>
+            <![CDATA[ AND p.tenant_id = #{tenantId} ]]>
+            <![CDATA[ AND p.project_status = #{projectStatus} ]]>
+            <![CDATA[ AND p.is_enable = #{isEnable} ]]>
+        </where>
+        <![CDATA[ group by p.project_id order by p.project_id desc limit #{backPageSize} ]]>
+    </select>
+
+    <select id="joinSearch" parameterType="com.juma.tgm.common.query.QueryCond" resultType="com.juma.tgm.project.domain.v2.Project">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_JOIN_COLUMN_LIST_APP"/>
+        FROM
+        project p
+        <include refid="PROJECT_jOIN_TABLE"/>
+        <include refid="SEARCH_JOIN_WHERE_CLAUSE"/>
+        GROUP BY p.project_id
+        order by p.project_id desc
+        limit #{startOffset}, #{pageSize}
+    </select>
+
+    <select id="joinSearchCount" parameterType="com.juma.tgm.common.query.QueryCond" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM (
+        SELECT COUNT(1) FROM
+        project p
+        <include refid="PROJECT_jOIN_TABLE"/>
+        <include refid="SEARCH_JOIN_WHERE_CLAUSE"/>
+        GROUP BY p.project_id
+        ) tmp
+    </select>
+
+    <sql id="PROJECT_jOIN_TABLE">
+        LEFT JOIN customer_info ci ON ci.customer_id = p.customer_id
+    </sql>
+
+    <sql id="SEARCH_JOIN_WHERE_CLAUSE">
+        <where>
+            <if test="filters.tenantId != null"><![CDATA[AND p.tenant_id = #{filters.tenantId}]]></if>
+            <if test="filters.projectId != null"><![CDATA[AND p.project_id = #{filters.projectId}]]></if>
+            <if test="filters.managerId != null"><![CDATA[AND p.manager_id = #{filters.managerId}]]></if>
+            <if test="filters.customerId != null"><![CDATA[AND p.customer_id = #{filters.customerId}]]></if>
+            <if test="filters.crmCustomerId != null"><![CDATA[AND ci.crm_customer_id = #{filters.crmCustomerId}]]></if>
+            <if test="filters.truckCustomerId != null">
+                <![CDATA[AND p.truck_customer_id = #{filters.truckCustomerId}]]></if>
+            <if test="filters.customerManagerId != null">
+                <![CDATA[AND ci.customer_manager_user_id = #{filters.customerManagerId}]]></if>
+            <if test="filters.customerName != null">
+                <![CDATA[AND ci.customer_name like concat(#{filters.customerName}, '%')]]></if>
+            <if test="filters.name != null"><![CDATA[AND p.name like concat(#{filters.name}, '%')]]></if>
+            <if test="filters.goodsType != null">
+                <![CDATA[AND p.goods_type = #{filters.goodsType}]]></if>
+            <if test="filters.onlyLoadCargo != null"><![CDATA[AND p.only_load_cargo = #{filters.onlyLoadCargo}]]></if>
+            <if test="filters.logisticsLabel != null"><![CDATA[AND p.logistics_label = #{filters.logisticsLabel}]]></if>
+            <if test="filters.needDeliveryPointNote != null"><![CDATA[AND need_delivery_point_note = #{filters.needDeliveryPointNote}]]></if>
+            <if test="filters.createTime != null"><![CDATA[AND p.create_time = #{filters.createTime}]]></if>
+            <if test="filters.createUserId != null"><![CDATA[AND p.create_user_id = #{filters.createUserId}]]></if>
+            <if test="filters.customerIds != null and !filters.customerIds.isEmpty">
+                AND ci.customer_id IN
+                <foreach collection="filters.customerIds" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+
+            <if test="filters.customerManagerIdList != null">
+                and ci.customer_manager_user_id in
+                <foreach collection="filters.customerManagerIdList" item="code" open="(" close=")" separator=",">
+                    #{code}
+                </foreach>
+            </if>
+            <if test="filters.customerAreaCodeList != null">
+                <foreach collection="filters.customerAreaCodeList" item="code" separator="or" open="and (" close=")">
+                    ci.area_code like concat(#{code},'%')
+                </foreach>
+            </if>
+            <if test="filters.areaCodeList != null">
+                and
+                <foreach collection="filters.areaCodeList" item="code" open="(" close=")" separator="or">
+                    p.area_code like concat(#{code},'%')
+                </foreach>
+            </if>
+            <if test="filters.isEnable != null"><![CDATA[AND p.is_enable = #{filters.isEnable}]]></if>
+            <if test="filters.projectStatusList != null and !filters.projectIdList.isEmpty">
+                and p.project_status in
+                <foreach collection="filters.projectStatusList" item="status" open="(" close=")" separator=",">
+                    #{status}
+                </foreach>
+            </if>
+            <if test="filters.projectIdList != null and !filters.projectIdList.isEmpty">
+                and p.project_id in
+                <foreach collection="filters.projectIdList" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="filters.projectManagerUserId != null"><![CDATA[AND p.project_manager_user_id = #{filters.projectManagerUserId}]]></if>
+        </where>
+    </sql>
+
+    <select id="listProjectDailySms" resultType="com.juma.tgm.project.domain.v2.Project" parameterType="java.lang.String">
+        SELECT w.`tenant_id` tenantId,p.`project_id` projectId,p.business_linktel businessLinktel
+        FROM waybill w
+        LEFT JOIN project p ON p.project_id = w.project_id
+        WHERE w.`status_view` IN(2, 3, 4, 5)
+        AND p.`is_receive_daily_sms` = 1
+        AND p.`project_status` = 2
+        AND w.`plan_delivery_time` &gt;= #{startTime}
+        AND w.`plan_delivery_time` &lt;= #{endTime}
+        GROUP BY p.project_id
+    </select>
+</mapper>
